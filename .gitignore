@@ -1,0 +1,50 @@
+# Ignore binaries and executable files
+*.native
+*.byte
+*.exe
+*.o
+*.cmx
+*.cmi
+*.cmo
+*.cmx*
+*.a
+*.out
+*.opt
+*.prof
+*.annot
+*.dll
+*.so
+*.obj
+
+# Dune/OPAM specific files
+_build/
+.opam/
+*.install
+*.merlin
+*.cmt
+*.cmti
+
+# IDE/Editor specific files
+*~
+\#*\#
+.*.swp
+.idea/
+.vscode/
+
+# Ignore compiled dependencies
+*.deps
+*.cache
+
+# Ignore log files
+*.log
+
+# Ignore documentation artifacts
+*.docdir
+
+# Generated files for OCaml findlib
+META
+
+# Ignore Makefile products
+Makefile~
+
+.DS_Store
