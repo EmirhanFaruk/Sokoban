@@ -1,0 +1,16 @@
+# dune exec sukoban
+# OCAMLPARAM: unset
+# Shared cache: disabled
+# Shared cache location: /Users/alexis/.cache/dune/db
+# Workspace root: "/Users/alexis/Documents/L3/Semestre 5/Ocaml/sukoban"
+# Auto-detected concurrency: 10
+# Dune context:
+#  { name = "default"
+#  ; kind = "default"
+#  ; profile = Dev
+#  ; merlin = true
+#  ; fdo_target_exe = None
+#  ; build_dir = In_build_dir "default"
+#  ; instrument_with = []
+#  }
+$ /opt/homebrew/bin/ocamlc.opt -config > /var/folders/sm/s3yswp2j24xcc_vw5hvppqw80000gn/T/dune_6e9769_output
