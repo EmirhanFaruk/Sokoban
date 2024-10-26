@@ -1,4 +1,4 @@
-(* GameState.ml *)
+(* lib/GameState.ml *)
 
 (*Représentation des éléments de la carte*)
 type map = {
