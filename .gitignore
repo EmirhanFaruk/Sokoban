@@ -1,0 +1,45 @@
+# Dune build artifacts
+_build/
+*.exe
+*.bc
+*.o
+*.a
+*.cm*
+*.annot
+
+# Editor and IDE files
+*.swp
+*.swo
+*.~*
+*.vscode/
+*.idea/
+
+# OCaml REPL history
+.ocamlinit
+.ocaml_history
+
+# Dune-related files
+dune-project.lock
+.opam/
+
+# Logs and temp files
+*.log
+*.tmp
+*.cache
+
+# macOS specific files
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# macOS Finder related
+._*
+.Spotlight-V100
+.Trashes
+
+# macOS files that store resource fork and metadata
+.DocumentRevisions-V100/
+.fseventsd/
+.TemporaryItems/
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
