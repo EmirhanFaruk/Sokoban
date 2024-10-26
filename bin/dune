@@ -1,4 +1,5 @@
 (executable
  (name main)
- (libraries lib)  
- (modules main)) 
+ (libraries sokoban_lib)
+ (modules main))
+

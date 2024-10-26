@@ -1,8 +1,8 @@
-(* main.ml *)
+(* bin/main.ml *)
 
-(* Modules *)
-module GameState = GameState
-module GameView = GameView
+
+open Sokoban_lib
+
 
 let () = 
   let filename = "./assert/levels.txt" in
