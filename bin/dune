@@ -1,4 +1,4 @@
 (executable
- (name main)               
- (public_name sukoban)     
- (libraries sukoban))      
+ (name main)
+ (libraries lib)  
+ (modules main)) 

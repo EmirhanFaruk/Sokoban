@@ -1,4 +1,4 @@
-(* gameView *)
+(* GameView *)
 
 (*Affichage la map par defaut*)
 let getMap map   = 

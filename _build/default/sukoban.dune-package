@@ -1,4 +1,4 @@
 (lang dune 3.16)
 (name sukoban)
-(sections (lib .) (bin ../../bin) (doc ../../doc/sukoban))
-(files (lib (META dune-package opam)) (bin (sukoban)) (doc (README.md)))
+(sections (lib .) (doc ../../doc/sukoban))
+(files (lib (META dune-package opam)) (doc (README.md)))

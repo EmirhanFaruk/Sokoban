@@ -1,12 +1,15 @@
 (* main.ml *)
 
 (* Modules *)
-module GameState = GameState
-module GameView = GameView
+open GameState
+open GameView
 
 let () = 
-  let filename = "./assert/levels.txt" in  (* Remplacez avec le chemin de votre fichier de carte *)
-  let niveau = 1 in  (* Numéro du niveau à charger *)
+  let filename = "./assert/levels.txt" in
+  let niveau = 1 in
+  
   match GameState.loadMap filename niveau with
-  | Some map -> GameView.getMap map  (* Appel de la fonction pour afficher la carte *)
-  | None -> Printf.eprintf "Erreur : Impossible de charger le niveau %d depuis %s\n" niveau filename
+  | Some map -> 
+      GameView.getMap map  (* Assurez-vous que cette fonction est bien définie dans GameView.ml *)
+  | None -> 
+      Printf.eprintf "Erreur : Impossible de charger le niveau %d depuis %s\n" niveau filename
