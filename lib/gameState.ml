@@ -1,5 +1,3 @@
-(* lib/GameState.ml *)
-
 (* Type qui représente la liste de la map modifiable quand on veut *)
 type level_map = {
   
