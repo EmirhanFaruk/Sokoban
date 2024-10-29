@@ -11,9 +11,9 @@
 
 (maintainers "Maintainer Name")
 
-(license LICENSE)
+(license "LICENSE")
 
-(documentation https://url/to/documentation)
+(documentation "https://url/to/documentation")
 
 (package
  (name sukoban)
@@ -22,5 +22,3 @@
  (depends ocaml dune)
  (tags
   (topics "to describe" your project)))
-
-; See the complete stanza docs at https://dune.readthedocs.io/en/stable/reference/dune-project/index.html

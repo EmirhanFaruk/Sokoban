@@ -1,2 +1,4 @@
 (library
- (name sukoban))
+ (name sokoban_lib)
+ (modules GameState GameView))
+

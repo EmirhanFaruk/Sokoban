@@ -1,4 +1,6 @@
 (executable
- (public_name sukoban)
  (name main)
- (libraries sukoban))
+  (public_name sokoban)  
+ (libraries sokoban_lib)
+ (modules main))
+
