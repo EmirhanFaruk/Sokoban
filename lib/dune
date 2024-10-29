@@ -1,4 +1,4 @@
 (library
  (name sokoban_lib)
- (modules GameState GameView))
+ (modules GameState GameView Menu))
 
