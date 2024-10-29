@@ -1,4 +1,5 @@
 (* Jeu principal *)
+
 let play () = 
   (* Fonction principale qui lance le jeu après l'affichage du menu. 
      1- On ne l'appelle que 1 fois au début après le menu.
@@ -6,19 +7,20 @@ let play () =
      3- Un loop qui demande h24 au joueur ses actions.
      4- S'arrête que quand le joueur veut s'arrêter. *)
 
-  let level = 1 inc (* La variable qui va représenter les niveaux*)
+  let level = 1 in (* La variable qui va représenter les niveaux*)
   let filename = "./assert/levels.txt" (* La variable qui représente le fichier de la map *) in
   let map = GameState.loadMap filename level (* La liste de liste qui va stocker la map qu'on va modifier*) in
 
   (* Fonction recursive qui représente le loop du jeu et qui va a chaque action indiqué modifier la carte et afficher la carte*)
   let rec loop () =
-    GameView.showMap map.grid;
+    GameView.printMap map.grid;
     (* Les actions du joueur, haut, bas, droite, gauche *)
+    print_string "\x1b[1m";
     print_string "Action (h/b/d/g pour déplacer, q pour quitter) : ";
     flush stdout;
     let action = read_line () in
     match action with
-    | "q" -> print_endline "Au revoir!"; exit 0
-    | _ -> print_endline "Action non reconnue."; loop ()
+    | "q" -> print_endline "Au revoir!";print_string "\x1b[0m"; exit 0
+    | _ -> print_endline "Action non reconnue."; print_string "\x1b[0m";loop ()
   in
   loop ()
