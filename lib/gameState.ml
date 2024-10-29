@@ -1,6 +1,5 @@
-(* Type qui représente la liste de la map modifiable quand on veut *)
+(* Type pour représenter la grille d'un niveau *)
 type level_map = {
-  
   mutable grid: char list list;
 }
 
@@ -10,9 +9,9 @@ exception Isnt_in_the_list of (int * int)
 
 (* Fonction pour charger une carte d'un fichier texte *)
 let loadMap filename niveau =
-  (* Principe : Nous cherchons dans filename le niveau demandé en parcourant chaque block de niveau,
-  une fois trouvé nous ajoutons le block de niveau dans une liste puis inversions le contenu de la liste
-  afin que cela soit dans l'ordre. Si le niveau n'existe pas on renvoit une erreur. *)
+  (* Principe : Nous cherchons dans filename le niveau demandé en parcourant chaque bloc de niveau.
+     Une fois trouvé, nous ajoutons le bloc de niveau dans une liste puis inversions le contenu de la liste
+     afin que cela soit dans l'ordre. Si le niveau n'existe pas, on renvoie une erreur. *)
   let ic = open_in filename in
   let rec loop current_level current_map =
     try
@@ -39,13 +38,11 @@ let loadMap filename niveau =
     | End_of_file ->
         close_in ic;
         if current_map = [] then
-          raise (Level_not_found niveau)   (* Si le niveau n'est pas trouvé alors on renvoit une erreur *)
+          raise (Level_not_found niveau)   (* Si le niveau n'est pas trouvé alors on renvoie une erreur *)
         else
           List.rev current_map  (* Retourner la carte trouvée dans l'ordre *)
   in
   { grid = loop (-1) [] }  (* On retourne un level_map avec la grille construite *)
-
-
 
 (* Fonction qui permet de modifier les éléments de la liste level_map *)
 let modifyList (list_map : level_map) x y element =
@@ -59,4 +56,3 @@ let modifyList (list_map : level_map) x y element =
       raise (Isnt_in_the_list (x, y))  (* Lever une erreur pour indices invalides *)
   else
     raise (Isnt_in_the_list (x, y))  (* Lever une erreur pour indices invalides *)
-
