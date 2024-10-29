@@ -15,9 +15,10 @@ let showMenu () =
   print_endline "";
 
   print_string "Choisissez une option : ";
-  flush stdout;  (* Assurez-vous que l'invite s'affiche avant de lire l'entrée *)
+  flush stdout;  (* On s'assure que ca s'affiche bien avant de lire l'entré *)
 
   read_line ()  (* Lis ce que le joueur a entré dans le terminale pour ensuite être traité dans handleChoice*)
+
 
 
 
@@ -37,21 +38,21 @@ let handleChoice (choice : string) : bool =
   | _ -> 
       print_endline "";
       print_endline "----------Choix invalide. Veuillez réessayer.----------";
-      true  (* Continuer le menu *)
+      true  (* Continue le menu *)
 
 
 
-(* Fonction principale qui affiche le menu et traite le choix du joueur*)
+(* Fonction principale qui affiche le menu et traite le choix du joueur *)
 let mainMenu =
   let rec loop () =
 
     let choice = showMenu () in  (* Afficher le menu et récupérer le choix *)
-    if handleChoice choice then  (* Traiter le choix et vérifier si l'utilisateur veut continuer *)
-      loop ()  (* Continuer à redemander le choix *)
+    if handleChoice choice then  (* Traiter le choix et vérifie si l'utilisateur a bien mis un des choix indiqués *)
+      loop ()  (* Continuer à redemander le choix si l'utilisateur n'a pas choisit parmis les choix indiqués *)
     else
-      ()  (* Sortir de la boucle si l'utilisateur choisit de quitter *)
+      ()  (* Une fois que le joueur a choisit, on lance ce qu'il a indiqué*)
 
   in
-  loop ()  (* Démarrer la boucle *)
+  loop ()  
 
 
