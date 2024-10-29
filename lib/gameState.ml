@@ -33,9 +33,9 @@ let load_line_to_tiles line =
 
 (* Fonction pour charger une carte d'un fichier texte *)
 let loadMap filename niveau =
-  (* Principe : Nous cherchons dans filename le niveau demandé en parcourant chaque block de niveau,
-  une fois trouvé nous ajoutons le block de niveau dans une liste puis inversions le contenu de la liste
-  afin que cela soit dans l'ordre. Si le niveau n'existe pas on renvoit une erreur. *)
+  (* Principe : Nous cherchons dans filename le niveau demandé en parcourant chaque bloc de niveau.
+     Une fois trouvé, nous ajoutons le bloc de niveau dans une liste puis inversions le contenu de la liste
+     afin que cela soit dans l'ordre. Si le niveau n'existe pas, on renvoie une erreur. *)
   let ic = open_in filename in
   let rec loop current_level current_map =
     try
@@ -63,7 +63,7 @@ let loadMap filename niveau =
     | End_of_file ->
         close_in ic;
         if current_map = [] then
-          raise (Level_not_found niveau)   (* Si le niveau n'est pas trouvé alors on renvoit une erreur *)
+          raise (Level_not_found niveau)   (* Si le niveau n'est pas trouvé alors on renvoie une erreur *)
         else
           List.rev current_map  (* Retourner la carte trouvée dans l'ordre *)
   in
