@@ -1,5 +1,3 @@
-(* bin/main.ml *)
-
 open Sokoban_lib
 
 let () =
@@ -12,14 +10,14 @@ let () =
 
     (* Afficher la carte initiale *)
     Printf.printf "Carte initiale:\n";
-    GameView.getMap level_map.grid;
+    GameView.printMap level_map.grid;
 
     (* Modifier un élément à une position spécifique *)
-    GameState.modifyList level_map 1 2 '$';  (* Modifier l'élément à la position (1, 2) en '$' *)
+    GameState.modifyList level_map 1 2 Box;  (* Modifier l'élément à la position (1, 2) en '$' *)
 
     (* Afficher la carte mise à jour *)
     Printf.printf "\nCarte mise à jour:\n";
-    GameView.getMap level_map.grid;
+    GameView.printMap level_map.grid;
 
   with
   | GameState.Level_not_found lvl ->
