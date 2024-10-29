@@ -1,11 +1,35 @@
-(* Type pour représenter la grille d'un niveau *)
+(* Les différents éléments de la carte *)
+type tile = Wall | Ground | Box | BoxGround | Player
+
+(* Type qui représente la liste de la map modifiable quand on veut *)
 type level_map = {
-  mutable grid: char list list;
+  mutable grid: tile list list;
 }
 
 (* Exception pour signaler qu'un niveau n'a pas été trouvé *)
 exception Level_not_found of int
 exception Isnt_in_the_list of (int * int)
+
+(* Convertir une chaîne en liste de caractères *)
+let string_to_char_list s =
+  List.init (String.length s) (fun i -> s.[i])
+
+(* Extraire le numéro de niveau à partir d'une ligne *)
+let get_level_number line =
+  let level_str = String.trim (String.sub line 2 (String.length line - 2)) in
+  int_of_string level_str
+
+(* Charge une ligne de caractères en une liste de tuiles *)
+let load_line_to_tiles line =
+  List.fold_right (fun c acc ->
+    match c with
+    | '#' -> Wall::acc
+    | ' ' -> Ground::acc
+    | '$' -> Box::acc
+    | '.' -> BoxGround::acc
+    | '@' -> Player::acc
+    | _ -> acc
+  ) (string_to_char_list line) []
 
 (* Fonction pour charger une carte d'un fichier texte *)
 let loadMap filename niveau =
@@ -18,7 +42,7 @@ let loadMap filename niveau =
       let line = input_line ic in
       if String.length line > 0 && line.[0] = ';' then
         (* Si on trouve une nouvelle déclaration de niveau *)
-        let level_num = int_of_string (String.sub line 2 (String.length line - 2)) in
+        let level_num = get_level_number line in
         if level_num = niveau then
           (* Si le niveau est celui que l'on cherche, on continue à remplir `current_map` *)
           loop niveau []
@@ -30,7 +54,8 @@ let loadMap filename niveau =
           loop level_num current_map
       else if current_level = niveau then
         (* Ajouter la ligne à la carte du niveau en cours *)
-        loop niveau ((List.init (String.length line) (fun i -> line.[i])) :: current_map)  (* Convertir la ligne en char list *)
+        let row = load_line_to_tiles line in
+        loop niveau (row :: current_map)
       else
         (* Continuer le parcours du fichier *)
         loop current_level current_map
