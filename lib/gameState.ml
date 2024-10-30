@@ -80,7 +80,7 @@ let loadMap filename niveau player =
   { grid = map ; original = List.map (fun x -> x) map}   (* On retourne un level_map avec la grille construite *)
 
 (* Fonction qui permet de modifier les éléments de la liste level_map *)
-let modifyList (list_map : level_map) x y element =
+let modifyList (list_map : level_map) y x element =
   (* On vérifie que list_map.grid[x][y] fait bien partie de la liste puis on change l'élément de la list_map.grid[x][y] par element *)
   if x >= 0 && x < List.length list_map.grid then
     let row = List.nth list_map.grid x in
@@ -93,7 +93,7 @@ let modifyList (list_map : level_map) x y element =
     raise (Isnt_in_the_list (x, y))  (* Lever une erreur pour indices invalides *)
 
   
-
+(* Fonction qui renvoit la dimension de la map *)
 let get_dim grid =
   let height = List.length grid in
   let width = 
@@ -103,6 +103,7 @@ let get_dim grid =
   in
   (width, height)
 
+(* Fonction qui vérifie si les coordonnées correspondent à un chemin valide *)
 let isPath grid (x,y) =
   let (width,height) = get_dim grid in
   if x<0 || y<0 || x>= width|| y>= height then false
@@ -110,25 +111,60 @@ let isPath grid (x,y) =
     match List.nth (List.nth grid y) x with
     | Wall -> false  
     | _ -> true
+    
+(* Foncition qui met à jour la position du joueur dans la carte *)
+let updatePlayerPosition list_map player new_x new_y current_tile =
+  modifyList list_map new_x new_y current_tile;  (* On met à jour la position du joueur dans la map *)
+  updatePlayer player (new_x, new_y)  (* On met à jour les coordonées joueur *)
 
-(* Fonction qui met à jour la carte et la position du joueur *)
+(* Fonction qui met à jour l'ancienne case du joueur *)
+let updateOriginalTile list_map old_x old_y =
+  (* On réccupère la case d'origine à la position actuelle du joueur*)
+  let old_original = List.nth (List.nth list_map.original old_y) old_x in
+  (* Si c'est un joueur ou une boite on change en Ground sinon on me tl'original*)
+  if old_original = Player || old_original = Box then
+    modifyList list_map old_x old_y Ground
+  else
+    modifyList list_map old_x old_y old_original
+
+(* Fonction qui met à jour la carte, la position du joueur et le mouvement des boîtes *)
 let updateMap (list_map : level_map) player direction =
   let (width, height) = get_dim list_map.grid in
-  (* On obtient la position suivante du joueur *)
+  (* On réccupère la position suivante du joueur *)
   let new_x, new_y = Player.get_next_pos (player.x, player.y) direction (width, height) in
-  
+
   (* Si la prochaine position est un chemin *)
   if isPath list_map.grid (new_x, new_y) then
-    (* Ancienne position du player *)
     let old_x, old_y = player.x, player.y in
+    let current_tile = List.nth (List.nth list_map.grid old_y) old_x in
+    let next_tile = List.nth (List.nth list_map.grid new_y) new_x in
 
-    (* Mise à jour de la position du joueur *)
-    updatePlayer player (new_x,new_y);
+    let isBoxBlocked = ref false in
+    if next_tile = Box then
+      (* On essaie de déplacer la boîte *)
+      let box_new_x, box_new_y = Player.get_next_pos (new_x, new_y) direction (width, height) in
+      (* On vérifie si la nouvelle position de la boîte est un chemin valide *)
+      if isPath list_map.grid (box_new_x, box_new_y) && not (List.nth (List.nth list_map.grid box_new_y) box_new_x = Box) then
+        (* Ancienne position de la boîte *)
+        let box_current_tile = List.nth (List.nth list_map.grid new_y) new_x in
+        
+        (* On déplace la boîte *)
+        modifyList list_map box_new_x box_new_y box_current_tile;
+        
+        (* On met à jour la position du joueur *)
+        updatePlayerPosition list_map player new_x new_y current_tile;
 
-    (* On remplace l'ancienne position par l'anciennne tuile et la nouvelle par Player *)
-    modifyList list_map old_y old_x (List.nth (List.nth list_map.original old_y) old_x);
-    modifyList list_map new_y new_x Player;
-    
-    list_map.grid  (* On retourne la carte mise à jour *)
+        (* On met à jour de l'ancienne position du joueur *)
+        updateOriginalTile list_map old_x old_y
+      else 
+        isBoxBlocked := true  (* On marque que la boîte est bloquée *)
+    else 
+      (* On déplace seulement le joueur s'il n'y a pas de boîte *)
+      updatePlayerPosition list_map player new_x new_y current_tile;
+
+    (* Si la boîte n'est pas bloquée, on met à jour l'ancienne position *)
+    if not !isBoxBlocked then
+      updateOriginalTile list_map old_x old_y;  
+      list_map.grid  (*Carte mise à jour *)
   else
-    list_map.grid
+    list_map.grid  (*Carte sans modification sinon *)
