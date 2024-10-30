@@ -1,4 +1,5 @@
 (* Jeu principal *)
+open Player
 
 let play () = 
   (* Fonction principale qui lance le jeu après l'affichage du menu. 
@@ -9,18 +10,28 @@ let play () =
 
   let level = 1 in (* La variable qui va représenter les niveaux*)
   let filename = "./assert/levels.txt" (* La variable qui représente le fichier de la map *) in
-  let map = GameState.loadMap filename level (* La liste de liste qui va stocker la map qu'on va modifier*) in
+  let player = { x = 0; y = 0} in
+  let map = GameState.loadMap filename level player (* La liste de liste qui va stocker la map qu'on va modifier*) in
 
   (* Fonction recursive qui représente le loop du jeu et qui va a chaque action indiqué modifier la carte et afficher la carte*)
   let rec loop () =
     GameView.printMap map.grid;
-    (* Les actions du joueur, haut, bas, droite, gauche *)
-    print_string "\x1b[1m";
-    print_string "Action (h/b/d/g pour déplacer, q pour quitter) : ";
+    print_string "\x1b[1mAction (h/b/d/g pour déplacer, q pour quitter) : ";
     flush stdout;
     let action = read_line () in
     match action with
-    | "q" -> print_endline "Au revoir!";print_string "\x1b[0m"; exit 0
-    | _ -> print_endline "Action non reconnue."; print_string "\x1b[0m";loop ()
+    | "q" -> print_endline "Au revoir!"; exit 0
+    | "h" | "b" | "d" | "g" as dir ->
+        let direction = match dir with
+          | "h" -> Haut
+          | "b" -> Bas
+          | "d" -> Droite
+          | "g" -> Gauche
+          | _ -> failwith "Impossible"  (* Ne devrait jamais arriver *)
+        in 
+        map.grid <- GameState.updateMap map player direction;
+        loop ()
+    | _ -> print_endline "Action non reconnue."; loop ()
   in
+  print_endline ("PLAYER (" ^ string_of_int player.x ^ "," ^ string_of_int player.y ^ " )");
   loop ()
