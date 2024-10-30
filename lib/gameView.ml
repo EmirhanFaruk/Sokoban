@@ -8,8 +8,6 @@ let cell_to_emoji cell =
   | Box -> "\xF0\x9F\x93\xA6"
   | BoxGround ->  "\xF0\x9F\x9F\xA9"
   | Player -> "\xF0\x9F\x9A\xB6"
-  | PlayerOnBoxGround -> "\xF0\x9F\x9A\xB6"
-  | BoxOnBoxGround -> "\xF0\x9F\x93\xA6"
   | Null -> ""
 
 (* Affichage de la carte par défaut *)

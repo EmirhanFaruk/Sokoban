@@ -1,6 +1,6 @@
 (* Les différents éléments de la carte *)
 open Player
-type tile = Wall | Ground | Box | BoxGround | Player | PlayerOnBoxGround | BoxOnBoxGround |Null
+type tile = Wall | Ground | Box | BoxGround | Player | Null
 
 (* Type qui représente la liste de la map modifiable quand on veut *)
 type level_map = {
