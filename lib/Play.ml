@@ -33,5 +33,4 @@ let play () =
         loop ()
     | _ -> print_endline "Action non reconnue."; loop ()
   in
-  print_endline ("PLAYER (" ^ string_of_int player.x ^ "," ^ string_of_int player.y ^ " )");
   loop ()
