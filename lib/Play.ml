@@ -15,22 +15,23 @@ let play () =
 
   (* Fonction recursive qui représente le loop du jeu et qui va a chaque action indiqué modifier la carte et afficher la carte*)
   let rec loop () =
+    GameView.showLevel level;
     GameView.printMap map.grid;
-    print_string "\x1b[1mAction (h/b/d/g pour déplacer, q pour quitter) : ";
+    print_string "\x1b[1mAction (z/s/d/q pour se déplacer, x pour quitter) : ";
     flush stdout;
     let action = read_line () in
     match action with
-    | "q" -> print_endline "Au revoir!"; exit 0
-    | "h" | "b" | "d" | "g" as dir ->
+    | "x" -> print_endline "Au revoir!"; exit 0
+    | "z" | "s" | "d" | "q" as dir ->
         let direction = match dir with
-          | "h" -> Haut
-          | "b" -> Bas
+          | "z" -> Haut
+          | "s" -> Bas
           | "d" -> Droite
-          | "g" -> Gauche
+          | "q" -> Gauche
           | _ -> failwith "Impossible"  (* Ne devrait jamais arriver *)
         in 
         map.grid <- GameState.updateMap map player direction;
         loop ()
-    | _ -> print_endline "Action non reconnue."; loop ()
+    | _ -> print_endline "Action non reconnue."; GameView.showLevel level; loop ()
   in
   loop ()

@@ -39,15 +39,7 @@ let showRules () =
   print_endline "";
   flush stdout;  (* S'assurer que l'affichage est fait *)
   print_string "\x1b[0m"
-(*----------------------------------------------------------- NIVEAUX ----------------------------------------------------------------------*)
 
-(* Affiche le niveau actuel *)
-let showLevel level =
-  print_string "\x1b[1m";
-  Printf.printf "\n    -------------------------------\n";
-  Printf.printf "    |           NIVEAU %d          |\n" level;
-  Printf.printf "    -------------------------------\n";
-  print_string "\x1b[0m"  
 (*------------------------------------------------------ FONCTION PRINCIPALE ----------------------------------------------------------------*)
 
 (* Fonction principale qui affiche le menu et traite le choix du joueur *)
@@ -56,7 +48,7 @@ let mainMenu () =
     let choice = showMenu () in
     (* Gére chaque option en fonction du choix de l'utilisateur *)
     match choice with
-    | "1" -> showLevel 1; Play.play () (* Démarre le jeu *)
+    | "1" -> Play.play () (* Démarre le jeu *)
     | "2" -> showRules (); loop ()     (* Affiche les règles *)
     | "3" -> print_string "\x1b[1m"; print_endline "Au revoir!"; print_string "\x1b[0m";  exit 0  (* Quitte le programme *)
     | _ -> print_string "\x1b[1m";print_endline "Choix invalide. Veuillez réessayer.";print_string "\x1b[0m";   loop ()  (* Redemande un choix *)
