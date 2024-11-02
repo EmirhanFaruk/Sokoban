@@ -10,7 +10,7 @@ let cell_to_emoji cell =
   | Player -> "\xF0\x9F\x9A\xB6"
 
 (* Affichage de la carte par défaut *)
-let showMap (map: tile list list) =
+let printMap (map: tile list list) =
   List.iter (fun row ->
     List.iter (fun cell -> print_string (cell_to_emoji cell)) row;  (* Correctement terminer la fonction interne *)
     print_newline ()) map
