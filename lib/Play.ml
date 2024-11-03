@@ -1,38 +1,36 @@
-open Player
-open GameState
-open GameView
+module Play = 
+struct 
+  open Player
+  open GameState
+  open GameView
 
-(* Fonction qui vérifie si le joueur a fini la partie et si il a fini un niveau*)
-let endGame level map filename =
-  (* Pour déterminer si le joueur a fini le niveay nous allons tout simplement passer au niveau suivant si il n'y a plus de BoxGround sur la carte*)
-  let level_completed = not (List.exists (List.exists ((=) GameState.BoxGround)) map.GameState.grid) in
-  if level_completed then
-    let new_level = level + 1 in
-    let new_map = GameState.loadMap filename new_level in
-    (new_level, new_map)  (* Renvoie le nouveau niveau et la nouvelle carte *)
-  else
-    (level, map)  (* Si le niveau n'est pas terminé, on retourne le niveau et la carte actuels *)
+(* Fonction qui vérifie si le joueur a fini la partie et si il a fini un niveau *)
+  let endGame level map filename =
+    (* Vérifie si toutes les cases BoxGround ont été recouvertes par une boîte *)
+    let level_completed = 
+      not (Array.exists (Array.exists ((=) GameState.BoxGround)) map.GameState.grid) in
+  
+    if level > 2000 && level_completed then begin
+      print_endline "Félicitations ! Vous avez terminé tous les niveaux disponibles.";
+      exit 0
+    end else if level_completed then
+      let new_level = level + 1 in
+      (* Charge la nouvelle carte pour le niveau suivant *)
+      let new_map = GameState.loadMap filename new_level { x = 0; y = 0 } in
+      (new_level, new_map)  (* Retourne le nouveau niveau et la nouvelle carte *)
+    else
+      (level, map)  (* Retourne le niveau actuel et la carte inchangée *)
+  
 
-
-(* Jeu principal *)
-module Play =
-struct
   let play () = 
-    (* Fonction principale qui lance le jeu après l'affichage du menu. 
-      1- On ne l'appelle que 1 fois au début après le menu.
-      2- On va stocker la liste de listes ici (la map du jeu qu'on va modifier dans le futur).
-      3- Un loop qui demande h24 au joueur ses actions.
-      4- S'arrête que quand le joueur veut s'arrêter. *)
+    let level = ref 1 in
+    let filename = "./assert/levels.txt" in
+    let player = { x = 0; y = 0 } in
+    let map = loadMap filename !level player in
 
-    let level = 1 in (* La variable qui va représenter les niveaux*)
-    let filename = "./assert/levels.txt" (* La variable qui représente le fichier de la map *) in
-    let (player : Player.pos) = { x = 0; y = 0} in
-    let map = GameState.loadMap filename level player (* La liste de liste qui va stocker la map qu'on va modifier*) in
-
-    (* Fonction recursive qui représente le loop du jeu et qui va a chaque action indiqué modifier la carte et afficher la carte*)
     let rec loop () =
-      GameView.showLevel level;
-      GameView.printMap map.grid;
+      GameView.showLevel !level;
+      GameView.printMap map.grid;  (* Assurez-vous que map est du bon type *)
       print_string "\x1b[1mAction (z/s/d/q pour se déplacer, x pour quitter) : ";
       flush stdout;
       let action = read_line () in
@@ -41,16 +39,22 @@ struct
       | "z" | "s" | "d" | "q" as dir ->
           let direction = 
             match dir with
-            | "z" -> (Haut : Player.direction)
-            | "s" -> (Bas : Player.direction)
-            | "d" -> (Droite : Player.direction)
-            | "q" -> (Gauche : Player.direction)
+            | "z" -> Haut
+            | "s" -> Bas
+            | "d" -> Droite
+            | "q" -> Gauche
             | _ -> failwith "Impossible"  (* Ne devrait jamais arriver *)
           in 
-          map.grid <- GameState.updateMap map player direction;
+          (* Met à jour la carte en fonction de la direction *)
+          let new_map = GameState.updateMap map player direction in  
+          (* Appelle la fonction endGame pour vérifier si le niveau est terminé *)
+          let (new_level, updated_map) = endGame !level new_map filename in  
+          (* Mettez à jour la carte et le niveau courant *)
+          map.grid <- updated_map.grid;  (* Assurez-vous que updated_map est du bon type *)
+          level := new_level;  (* Mettre à jour le niveau courant *)
           loop ()
-      | _ -> print_endline "Action non reconnue."; GameView.showLevel level; loop ()
+      | _ -> print_endline "Action non reconnue."; GameView.showLevel !level; loop ()
+    
     in
     loop ()
-
 end

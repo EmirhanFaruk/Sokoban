@@ -8,10 +8,10 @@ module Player = struct
   (* Fonction pour obtenir la prochaine position en fonction de la direction et des dimensions *)
   let get_next_pos (x, y) dir (width, height) =
     match dir with
-    | Haut when y > 0 -> (x, y - 1)
-    | Bas when y < height - 1 -> (x, y + 1)
-    | Droite when x < width - 1 -> (x + 1, y)
-    | Gauche when x > 0 -> (x - 1, y)
+    | Haut when y > 0 -> (x, y - 1)  (* Déplacement vers le haut quand c'est possible *)
+    | Bas when y < height - 1 -> (x, y + 1) (* Déplacement vers le bas quand c'est possible *)
+    | Droite when x < width - 1 -> (x + 1, y) (* Déplacement vers la droite quand c'est possible *)
+    | Gauche when x > 0 -> (x - 1, y) (* Déplacement vers la gauche quand c'est possible *)
     | _ -> (x, y)
 
   (* Fonction pour mettre à jour la position du joueur *)

@@ -1,4 +1,3 @@
-
 (* Les différents éléments de la carte *)
 module GameState =
 struct
