@@ -85,6 +85,41 @@ struct
         !res
 
 
+
+
+    (* Compares maps *)
+    let are_equal_maps (map1 : GameState.tile array array) (map2 : GameState.tile array array) =
+        Array.for_all2 (fun row1 row2 -> Array.for_all2 ( = ) row1 row2) map1 map2
+
+    (* Gets the possible neighbors. Ik its extremely expensive, gonna opt it later(never) *)
+    let get_neighbors (state : current_state) =
+        let res = ref [] in
+        let directions = [|Player.Gauche; Player.Droite; Player.Haut; Player.Bas|] in
+        for i = 0 to 3 do
+            let direction = directions.(i) in
+            let temp_player = { Player.x = state.player.x; Player.y = state.player.y } in
+        	let temp_map = GameState.updateMap temp_map state temp_player direction
+
+        	if not (are_equal_maps temp_map state.level_map.grid) then
+        	    let new_moves = temp_player :: state.moves in
+                let new_state = { level_map = temp_map; player = temp_player; moves = new_moves } in
+                res := new_state :: !res
+        done
+        !res
+
+
+
+    (* Turns tile array into string(to change later if its too expensive) *)
+    let arr_to_st (row : GameState.tile array) =
+        Array.fold_left (fun obj ->
+                            match obj with
+                            | GameState.Wall -> acc ^ "W"
+                            | GameState.Player -> acc ^ "P"
+                            | GameState.BoxGround -> acc ^ "X"
+                            | GameState.Box -> acc ^ "B"
+                            | _ -> "N"
+                         ) "" row
+
     (* Makes a unique key for the map(basically the whole thing in a string lol)
        which makes it "better" to find the right key in hash table ig *)
     let make_hash_key (state : current_state) =
@@ -93,17 +128,10 @@ struct
 
         (* Map part of the key. I really hope this part
            does not make it really bad in optimisation *)
-        let km = Array.fold_left (fun st -> acc ^ st)
-        (
-            Array.fold_left (fun obj ->
-                                match obj with
-                                | GameState.Wall -> acc ^ "W"
-                                | GameState.Player -> acc ^ "P"
-                                | GameState.BoxGround -> acc ^ "X"
-                                | GameState.Box -> acc ^ "B"
-                                | _ -> "N"
-                             ) "" state.level_map.grid
-        ) ""
+        let km = Array.fold_left (fun acc row -> acc ^ (arr_to_st row))
+                    "" state.level_map.grid in
+
+        kp ^ "|" ^ km
 
     (* Breadth first search algorithm to solve the given state *)
     let bfs (state : current_state) =
@@ -111,7 +139,26 @@ struct
         (* To not revisit the visited states *)
         let visited = Hashtbl.create 10000 in
         Queue.add state queue;
-        Hashtbl.add
+        Hashtbl.add visited (make_hash_key state) state;
+
+        let rec search () =
+            if Queue.is_empty queue then None
+            else
+                let cs = Queue.take queue in
+                if is_solved cs then Some (List.rev cs.steps)
+                else
+                    let neighbors = get_neighbors current_state in
+                    List.iter (fun neighbor ->
+                        let key = make_hash_key neighbor in
+                        if not (Hashtbl.mem visited key) then
+                            (
+                                Queue.add neighbor queue;
+                                Hashtbl.add visited key true
+                            )
+                        ) neighbors;
+                    search ()
+        in
+        search ()
 
 
 end
