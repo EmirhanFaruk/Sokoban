@@ -13,7 +13,7 @@ struct
   (* Exception pour signaler qu'un niveau n'a pas été trouvé *)
   exception Level_not_found of int
   exception Isnt_in_the_list of (int * int)
-
+  
   (* Convertir une chaîne en liste de caractères *)
   let string_to_char_list s =
     List.init (String.length s) (fun i -> s.[i])
@@ -169,4 +169,25 @@ struct
         list_map.grid  (*Carte mise à jour *)
     else
       list_map.grid  (*Carte sans modification sinon *)
+
+  (* Fonction pour trouver toutes les coordonnées de BoxGround dans la carte d'origine *)
+  let find_boxground_positions (map: level_map) =
+    let positions = ref [] in
+    Array.iteri (fun y row ->
+      Array.iteri (fun x cell ->
+        match cell with
+        | BoxGround -> positions := (x, y) :: !positions
+        | _ -> ()
+      ) row
+    ) map.original;
+    !positions
+
+  (* Fonction pour vérifier si toutes les positions de BoxGround dans original_map contiennent une Box *)
+  let isAllBox (map: level_map) =
+    let boxground_positions = find_boxground_positions map in
+    List.for_all (fun (x, y) ->
+      match (map.grid).(y).(x) with
+      | Box -> true
+      | _ -> false
+    ) boxground_positions
 end
