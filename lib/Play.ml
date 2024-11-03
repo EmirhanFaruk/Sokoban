@@ -1,4 +1,4 @@
-(* Jeu principal *)
+(* Fonction qui vérifie si le joueur a fini la partie et si il a fini un niveau*)
 let endGame level map filename =
   (* Pour déterminer si le joueur a fini le niveay nous allons tout simplement passer au niveau suivant si il n'y a plus de BoxGround sur la carte*)
   let level_completed = not (List.exists (List.exists ((=) GameState.BoxGround)) map.GameState.grid) in
@@ -9,7 +9,7 @@ let endGame level map filename =
   else
     (level, map)  (* Si le niveau n'est pas terminé, on retourne le niveau et la carte actuels *)
 
-
+(* Jeu principal *)
 let play () = 
   (* Fonction principale qui lance le jeu après l'affichage du menu. 
      1- On ne l'appelle que 1 fois au début après le menu.
