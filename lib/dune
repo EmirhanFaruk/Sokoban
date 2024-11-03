@@ -1,4 +1,5 @@
 (library
  (name sokoban_lib)
- (modules GameState GameView Menus Play))
+  (libraries unix)
+ (modules GameState GameView Menu Play Player))
 

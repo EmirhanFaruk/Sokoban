@@ -1,3 +1,7 @@
+open Player
+open GameState
+open GameView
+
 (* Fonction qui vérifie si le joueur a fini la partie et si il a fini un niveau*)
 let endGame level map filename =
   (* Pour déterminer si le joueur a fini le niveay nous allons tout simplement passer au niveau suivant si il n'y a plus de BoxGround sur la carte*)
@@ -9,33 +13,44 @@ let endGame level map filename =
   else
     (level, map)  (* Si le niveau n'est pas terminé, on retourne le niveau et la carte actuels *)
 
+
 (* Jeu principal *)
-let play () = 
-  (* Fonction principale qui lance le jeu après l'affichage du menu. 
-     1- On ne l'appelle que 1 fois au début après le menu.
-     2- On va stocker la liste de listes ici (la map du jeu qu'on va modifier dans le futur).
-     3- Un loop qui demande h24 au joueur ses actions.
-     4- S'arrête que quand le joueur veut s'arrêter. *)
+module Play =
+struct
+  let play () = 
+    (* Fonction principale qui lance le jeu après l'affichage du menu. 
+      1- On ne l'appelle que 1 fois au début après le menu.
+      2- On va stocker la liste de listes ici (la map du jeu qu'on va modifier dans le futur).
+      3- Un loop qui demande h24 au joueur ses actions.
+      4- S'arrête que quand le joueur veut s'arrêter. *)
 
-  let level = 1 in (* La variable qui va représenter les niveaux*)
-  let filename = "./assert/levels.txt" in (* La variable qui représente le fichier de la map *) 
-  let map = GameState.loadMap filename level in(* La liste de liste qui va stocker la map qu'on va modifier*) 
+    let level = 1 in (* La variable qui va représenter les niveaux*)
+    let filename = "./assert/levels.txt" (* La variable qui représente le fichier de la map *) in
+    let (player : Player.pos) = { x = 0; y = 0} in
+    let map = GameState.loadMap filename level player (* La liste de liste qui va stocker la map qu'on va modifier*) in
 
-  (* Fonction recursive qui représente le loop du jeu et qui va a chaque action indiqué modifier la carte et afficher la carte*)
-  let rec loop level map =
-    GameView.printMap map.GameState.grid;
-    (* Les actions du joueur, haut, bas, droite, gauche *)
-    print_string "Action (h/b/d/g pour déplacer, q pour quitter) : ";
-    flush stdout;
-    let action = read_line () in
-    match action with
-    | "q" -> print_endline "Au revoir!"; exit 0
-    | _ ->
-        print_endline "Action non reconnue.";
-        let (new_level, new_map) = endGame level map filename in
-        loop new_level new_map  
-  in
-  loop level map  
+    (* Fonction recursive qui représente le loop du jeu et qui va a chaque action indiqué modifier la carte et afficher la carte*)
+    let rec loop () =
+      GameView.showLevel level;
+      GameView.printMap map.grid;
+      print_string "\x1b[1mAction (z/s/d/q pour se déplacer, x pour quitter) : ";
+      flush stdout;
+      let action = read_line () in
+      match action with
+      | "x" -> print_endline "Au revoir!"; exit 0
+      | "z" | "s" | "d" | "q" as dir ->
+          let direction = 
+            match dir with
+            | "z" -> (Haut : Player.direction)
+            | "s" -> (Bas : Player.direction)
+            | "d" -> (Droite : Player.direction)
+            | "q" -> (Gauche : Player.direction)
+            | _ -> failwith "Impossible"  (* Ne devrait jamais arriver *)
+          in 
+          map.grid <- GameState.updateMap map player direction;
+          loop ()
+      | _ -> print_endline "Action non reconnue."; GameView.showLevel level; loop ()
+    in
+    loop ()
 
-
-
+end

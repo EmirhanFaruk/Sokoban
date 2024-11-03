@@ -1,3 +1,3 @@
-open Sokoban_lib
+open Sokoban_lib.Menu
 
-let () = Menus.mainMenu ();
+let () = Menu.mainMenu ();
