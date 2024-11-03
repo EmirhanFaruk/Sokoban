@@ -7,9 +7,9 @@ struct
     (* The state of the map, player and moves throughout the whole algorithm *)
     type current_state =
     {
-        level_map = GameState.level_map;
-        player = Player.pos;
-        moves = Player.pos list;
+        level_map: GameState.level_map;
+        player: Player.pos;
+        moves: Player.pos list;
     }
 
     (* Returns true if the given position is BoxGround in the original(untouched) map *)
@@ -98,7 +98,7 @@ struct
         for i = 0 to 3 do
             let direction = directions.(i) in
             let temp_player = { Player.x = state.player.x; Player.y = state.player.y } in
-        	let temp_map = GameState.updateMap temp_map state temp_player direction
+        	let temp_map = GameState.updateMap temp_map state temp_player direction in
 
         	if not (are_equal_maps temp_map state.level_map.grid) then
         	    let new_moves = temp_player :: state.moves in
