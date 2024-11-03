@@ -91,13 +91,18 @@ struct
         Array.iter (fun direction ->
             let temp_player = { Player.x = state.player.x; Player.y = state.player.y } in
             let temp_map = GameState.updateMap state.level_map temp_player direction in
+            let new_original = Array.map Array.copy state.level_map.original in
 
-            if not (are_equal_maps temp_map state.level_map.grid) then
+            (* IM LOSING IT OVER THIS LINE WHY DONT YOU WORKA LJHDSNVJKLVADF FLJKHBAF LVKFFDV *)
+            let new_level_map = { grid = temp_map; original = new_original } in
+
+            if not (are_equal_maps temp_map state.level_map.grid) && (has_box_cornered new_level_map) then
                 let new_moves = temp_player :: state.moves in
-                let new_state = { level_map = state.level_map; player = temp_player; moves = new_moves } in
+                let new_state = { level_map = new_level_map; player = temp_player; moves = new_moves } in
                 res := new_state :: !res
         ) directions;
         !res
+
 
 
 
@@ -149,4 +154,32 @@ struct
                     search ()
         in
         search ()
+
+
+
+
+    let lets_try level =
+        let filename = "./assert/levels.txt" in
+        let (player : Player.pos) = { x = 0; y = 0 } in
+        let map = GameState.loadMap filename level player in
+
+        let initial_state =
+        {
+            level_map = map;
+            player = player;
+            moves = []
+        } in
+
+        match bfs initial_state with
+        | Some solution ->
+            Printf.printf "Solution found with %d moves:\n" (List.length solution);
+            List.iter (fun (el : Player.pos) ->
+                Printf.printf "Move to (%d, %d)\n" el.x el.y
+            ) solution;
+        | None ->
+            Printf.printf "No solution found.\n"
+
+
 end
+
+
