@@ -34,7 +34,7 @@ struct
         !res
 
 
-    (* Checks if the box is cornered and cannot be moved *)
+    (* Checks if the given box is cornered and cannot be moved *)
     let box_cornered (box_pos : Player.pos) (map : GameState.tile array array) =
         let x = box_pos.x in
         let y = box_pos.y in
@@ -70,7 +70,7 @@ struct
 
         cornered
 
-    (* Checks if the game is done *)
+    (* Checks if the state has a box cornered *)
     let has_box_cornered (state : current_state) =
         let res = ref false in
         let map = state.level_map.grid in
@@ -85,6 +85,33 @@ struct
         !res
 
 
-    
+    (* Makes a unique key for the map(basically the whole thing in a string lol)
+       which makes it "better" to find the right key in hash table ig *)
+    let make_hash_key (state : current_state) =
+        (* Player part of the key. Easier to find the key starting from the player *)
+        let kp = (string_of_int state.player.x) ^ "," ^ (string_of_int state.player.y) in
+
+        (* Map part of the key. I really hope this part
+           does not make it really bad in optimisation *)
+        let km = Array.fold_left (fun st -> acc ^ st)
+        (
+            Array.fold_left (fun obj ->
+                                match obj with
+                                | GameState.Wall -> acc ^ "W"
+                                | GameState.Player -> acc ^ "P"
+                                | GameState.BoxGround -> acc ^ "X"
+                                | GameState.Box -> acc ^ "B"
+                                | _ -> "N"
+                             ) "" state.level_map.grid
+        ) ""
+
+    (* Breadth first search algorithm to solve the given state *)
+    let bfs (state : current_state) =
+        let queue = Queue.create in
+        (* To not revisit the visited states *)
+        let visited = Hashtbl.create 10000 in
+        Queue.add state queue;
+        Hashtbl.add
+
 
 end
