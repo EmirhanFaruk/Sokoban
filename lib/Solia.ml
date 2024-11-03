@@ -13,24 +13,78 @@ struct
     }
 
     (* Returns true if the given position is BoxGround in the original(untouched) map *)
-    let is_box_on_ground (box_pos : Player.pos) (map : GameState.level_map) =
-        map.(box_pos.x).(box_pos.y) = GameState.BoxGround
+    let is_box_on_ground (box_pos : Player.pos) (map : GameState.tile array array) =
+        map.(box_pos.y).(box_pos.x) = GameState.BoxGround
 
 
     (* Checks if the game is done *)
     let is_finished (state : current_state) =
-        let mutable res = true in
+        let res = ref true in
         let map = state.level_map.grid in
         let omap = state.level_map.original in
         for y = 0 to Array.length map.grid - 1 do
         	for x = 0 to Array.length map.grid.(y) - 1 do
-        		if map.(y).(x) = GameState.Box then
-        		if omap.(y).(x) <> GameState.BoxGround then
-        		    res <- false
+        	    (* If the object is a box and it is not on a boxground,
+        	       then the game is not finished *)
+        		if map.(y).(x) = GameState.Box &&
+        		not (is_box_on_ground ({Player.x = x; Player.y = y} : Player.pos) omap) then
+        		    res := false
         	done
         done;
-        res
+        !res
 
 
+    (* Checks if the box is cornered and cannot be moved *)
+    let box_cornered (box_pos : Player.pos) (map : GameState.tile array array) =
+        let x = box_pos.x in
+        let y = box_pos.y in
+        let width = Array.length map.(0) in
+        let height = Array.length map in
+
+        (* Getting the objects around the box.
+           If out of boundries(which should not happen), it counts it as a wall *)
+        let left = if x > 0 then map.(y).(x - 1) else GameState.Wall in
+        let right = if x < width - 1 then map.(y).(x + 1) else GameState.Wall in
+        let up = if y > 0 then map.(y - 1).(x) else GameState.Wall in
+        let down = if y < height - 1 then map.(y + 1).(x) else GameState.Wall in
+
+        (* Checking if the boundries are walls or not.
+           Not counting if they are boxes because
+           there are cases where the adjacent cases can be pushed
+           and the box can be freed from being cornered. Ex:
+
+             B B
+             B
+                 *)
+        let left_wall = (left = GameState.Wall) in
+        let right_wall = (right = GameState.Wall) in
+        let up_wall = (up = GameState.Wall) in
+        let down_wall = (down = GameState.Wall) in
+
+        (* If adjacent directions are walls, then box is cornered *)
+        let cornered =
+        (left_wall && up_wall) ||
+        (left_wall && down_wall) ||
+        (right_wall && up_wall) ||
+        (right_wall && down_wall) in
+
+        cornered
+
+    (* Checks if the game is done *)
+    let has_box_cornered (state : current_state) =
+        let res = ref false in
+        let map = state.level_map.grid in
+        for y = 0 to Array.length map.grid - 1 do
+            for x = 0 to Array.length map.grid.(y) - 1 do
+                (* If the object is a box and it is cornered,
+                   then res = true *)
+                if box_cornered ({Player.x = x; Player.y = y} : Player.pos) map then
+                    res := true
+            done
+        done;
+        !res
+
+
+    
 
 end
