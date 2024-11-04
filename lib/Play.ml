@@ -1,16 +1,35 @@
-(* Jeu principal *)
-open Player
-open GameState
-open GameView
+module Play = 
+struct 
+  open Player
+  open GameState
+  open GameView
 
-module Play =
-struct
+  (* Fonction qui met à jour le niveau au suivant et la map *)
+  let updateMap (level : int ref) (map : GameState.level_map) filename (player: Player.pos)  =
+    let new_level = !level + 1 in
+        (* Charge la nouvelle carte pour le niveau suivant *)
+        let new_map = GameState.loadMap filename new_level player in
+        map.grid <- new_map.grid;
+        map.original <- new_map.original;
+        level := new_level  (*On met à jour le niveau*)
+
+  (* Fonction qui vérifie si le joueur a fini un niveau et le jeu*)
+  let endGame (level : int ref) (map : GameState.level_map) =
+    (* On vérifie si toutes les cases BoxGround ont été recouverte par une boîte *)
+    let level_completed = 
+      GameState.isAllBox map in
+  
+    if !level == 999 && level_completed then begin
+      print_endline "Félicitations ! Vous avez terminé tous les niveaux disponibles.";
+      exit 0
+    end else level_completed
+  
+   (* Fonction qui s'occupe de la boucle du jeu *)   
   let play () = 
-    (* Fonction principale qui lance le jeu après l'affichage du menu. 
-      1- On ne l'appelle que 1 fois au début après le menu.
-      2- On va stocker la liste de listes ici (la map du jeu qu'on va modifier dans le futur).
-      3- Un loop qui demande h24 au joueur ses actions.
-      4- S'arrête que quand le joueur veut s'arrêter. *)
+    let level = ref 1 in
+    let filename = "./assert/levels.txt" in
+    let (player : Player.pos) = { x = 0; y = 0 } in
+    let map = GameState.loadMap filename !level player in
 
     let level = 0 in (* La variable qui va représenter les niveaux*)
     let filename = "./assert/levels.txt" (* La variable qui représente le fichier de la map *) in
@@ -30,11 +49,11 @@ struct
       | "z" | "s" | "d" | "q" as dir ->
           let direction = 
             match dir with
-            | "z" -> (Haut : Player.direction)
-            | "s" -> (Bas : Player.direction)
-            | "d" -> (Droite : Player.direction)
-            | "q" -> (Gauche : Player.direction)
-            | _ -> failwith "Impossible"  (* Ne devrait jamais arriver *)
+            | "z" -> Player.Haut
+            | "s" -> Player.Bas
+            | "d" -> Player.Droite
+            | "q" -> Player.Gauche
+            | _ -> failwith "Impossible"
           in 
           current_map.grid <- GameState.updateMap current_map player direction;
           loop current_map
