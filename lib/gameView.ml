@@ -13,7 +13,6 @@ struct
   (* Affichage de la carte par défaut *)
   let printMap (map: GameState.tile array array) =
     Array.iter (fun row ->
-        (* Ajouter "    " au début de chaque ligne *)
         print_string "         ";  (* Affiche les espaces au début de la ligne *)
         Array.iter (fun cell -> print_string (cell_to_emoji cell)) row;  (* Affiche chaque cellule *)
         print_newline ()) map  (* On passe à la ligne suivante *)
