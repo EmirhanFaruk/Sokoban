@@ -121,5 +121,24 @@ struct
 
 
 
+    let center_text text length =
+        let len = String.length text in
+        let border = (length - len) / 2 in
+        (String.make border ' ') ^
+                    (score_to_str score max_name max_move padding) ^
+                    (String.make border ' ')
+
+
     (* Prints given level's scoreboard. Level will be printed as if it's +1 *)
+    let print_level_scoreboard level =
+    let scores = get_level_scoreboard level in
+
+    print_string "\x1b[1m";
+    scoreboard
+
+
+
+
+    print_string "\x1b[0m";
+    flush stdout;
 end
