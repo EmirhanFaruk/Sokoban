@@ -23,6 +23,11 @@ struct
       print_endline "Félicitations ! Vous avez terminé tous les niveaux disponibles.";
       exit 0
     end else level_completed
+    
+  (* Fonction qui reinitialise la partie *)
+  let restart (map : GameState.level_map) (player : Player.pos) (playerCopy : Player.pos) =
+    map.grid <- GameState.copyMap map.original;
+    Player.updatePlayer player (playerCopy.x,playerCopy.y)
   
    (* Fonction qui s'occupe de la boucle du jeu *)   
   let play () = 
@@ -30,22 +35,17 @@ struct
     let filename = "./assert/levels.txt" in
     let (player : Player.pos) = { x = 0; y = 0 } in
     let map = GameState.loadMap filename !level player in
+    let playerCopy = Player.copyPlayer player in
 
-    let level = 0 in (* La variable qui va représenter les niveaux*)
-    let filename = "./assert/levels.txt" (* La variable qui représente le fichier de la map *) in
-    let (player : Player.pos) = { x = 0; y = 0} in
-    let current_map = GameState.loadMap filename level player (* La liste de liste qui va stocker la map qu'on va modifier*) in
-
-    (* Fonction recursive qui représente le loop du jeu et qui va a chaque action indiqué modifier la carte et afficher la carte*)
-    let rec loop  (current_map : GameState.level_map)  =
-      GameView.showLevel level;
-      GameView.printMap current_map.grid;
-      print_string "\x1b[1m\n- z/s/d/q pour se déplacer.\n- r pour recommencer le niveau.\n- x pour quitter\nAction : ";
+    let rec loop () =
+      GameView.showLevel (!level -1);
+      GameView.printMap map.grid;
+      print_string "\x1b[1mAction (z/s/d/q pour se déplacer, x pour quitter) : ";
       flush stdout;
       let action = read_line () in
       match action with
       | "x" -> print_endline "Au revoir!"; exit 0
-      | "r" -> let restartMap = GameState.loadMap filename level player in loop restartMap (* On relance le loop avec la map reset *)
+      | "r" -> restart map player playerCopy; loop () (* On relance le loop avec la map reset *)
       | "z" | "s" | "d" | "q" as dir ->
           let direction = 
             match dir with
@@ -55,10 +55,14 @@ struct
             | "q" -> Player.Gauche
             | _ -> failwith "Impossible"
           in 
-          current_map.grid <- GameState.updateMap current_map player direction;
-          loop current_map
-      | _ -> print_endline "Action non reconnue."; GameView.showLevel level; loop current_map
+          (* Met à jour la carte en fonction de la direction *)
+          map.grid <- GameState.updateMap map player direction;
+          (* Appelle la fonction endGame pour vérifier si le niveau/jeu est terminé *)
+          if endGame level map then updateMap level map filename player 
+          else ();
+          loop ()
+      | _ -> print_endline "Action non reconnue."; GameView.showLevel !level; loop ()
+    
     in
-    loop current_map
-
+    loop ()
 end

@@ -190,4 +190,8 @@ struct
       | Box -> true
       | _ -> false
     ) boxground_positions
+
+  (* Fonction qui renvoie la copie d'une map*)
+  let copyMap map =
+    Array.map Array.copy map
 end
