@@ -12,20 +12,21 @@ struct
       3- Un loop qui demande h24 au joueur ses actions.
       4- S'arrête que quand le joueur veut s'arrêter. *)
 
-    let level = 1 in (* La variable qui va représenter les niveaux*)
+    let level = 0 in (* La variable qui va représenter les niveaux*)
     let filename = "./assert/levels.txt" (* La variable qui représente le fichier de la map *) in
     let (player : Player.pos) = { x = 0; y = 0} in
-    let map = GameState.loadMap filename level player (* La liste de liste qui va stocker la map qu'on va modifier*) in
+    let current_map = GameState.loadMap filename level player (* La liste de liste qui va stocker la map qu'on va modifier*) in
 
     (* Fonction recursive qui représente le loop du jeu et qui va a chaque action indiqué modifier la carte et afficher la carte*)
-    let rec loop () =
+    let rec loop  (current_map : GameState.level_map)  =
       GameView.showLevel level;
-      GameView.printMap map.grid;
-      print_string "\x1b[1mAction (z/s/d/q pour se déplacer, x pour quitter) : ";
+      GameView.printMap current_map.grid;
+      print_string "\x1b[1m\n- z/s/d/q pour se déplacer.\n- r pour recommencer le niveau.\n- x pour quitter\nAction : ";
       flush stdout;
       let action = read_line () in
       match action with
       | "x" -> print_endline "Au revoir!"; exit 0
+      | "r" -> let restartMap = GameState.loadMap filename level player in loop restartMap
       | "z" | "s" | "d" | "q" as dir ->
           let direction = 
             match dir with
@@ -35,10 +36,10 @@ struct
             | "q" -> (Gauche : Player.direction)
             | _ -> failwith "Impossible"  (* Ne devrait jamais arriver *)
           in 
-          map.grid <- GameState.updateMap map player direction;
-          loop ()
-      | _ -> print_endline "Action non reconnue."; GameView.showLevel level; loop ()
+          current_map.grid <- GameState.updateMap current_map player direction;
+          loop current_map
+      | _ -> print_endline "Action non reconnue."; GameView.showLevel level; loop current_map
     in
-    loop ()
+    loop current_map
 
 end
