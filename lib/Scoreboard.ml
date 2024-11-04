@@ -55,8 +55,26 @@ struct
         !score_arr_list
 
 
-    (* Gets top 10 of a level and puts a format to it *)
-    let print_level_scoreboard level =
+
+    (* Turns score into str for scoreboard.
+       Adds enough space after and before the variables to make them look good *)
+    let score_to_str score max_name max_move extra_padding =
+        let name_rest = 0 in
+        if max_name > (String.length score.name) then
+            name_rest = max_name - (String.length score.name)
+
+        let move_rest = 0 in
+        if max_move > String.length (string_of_int el.move) then
+            move_rest = max_move - String.length (string_of_int el.move)
+
+        let name = score.name ^ (String.make name_rest ' ') in
+        let score = (String.make move_rest ' ') ^ (string_of_int el.move) in
+
+        name ^ (String.make extra_padding ' ') ^ score
+
+
+    (* Gets top 10 of a level and puts them in a string list *)
+    let get_level_scoreboard level =
         let all_scores = get_score_data "./assert/levels.txt" in
         let wanted_scores_full =
             List.filter (fun s -> s.level = level) all_scores in
@@ -70,7 +88,36 @@ struct
         (fun acc el ->
             if (String.length el.name) > acc then
             acc = (String.length el.name)
-        ) 0 top_10_scores
+        ) 0 top_10_scores in
+
+        let longest_move_len =
+        List.fold_left
+        (fun acc el ->
+            let len = String.length (string_of_int el.move) in
+            if len > acc then
+            acc = len
+        ) 0 top_10_scores in
+
+        let total_len = 41 in
+        let diff = (total_len - longest_move_len - longest_name_len) in
+        let border = diff / 2 in
+        let padding = 2 in
+        if diff mod 2 = 1 then
+        padding = 3
+
+
+        let res = Array.fold_left
+        (
+            fun acc score ->
+            let scstr =
+            (String.make border ' ') ^
+            (score_to_str score max_name max_move padding) ^
+            (String.make border ' ') in
+            scstr :: acc
+
+        ) [] top_10_scores in
+        res
+
 
 
 
