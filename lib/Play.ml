@@ -58,7 +58,9 @@ struct
           (* Met à jour la carte en fonction de la direction *)
           map.grid <- GameState.updateMap map player direction;
           (* Appelle la fonction endGame pour vérifier si le niveau/jeu est terminé *)
-          if endGame level map then updateMap level map filename player 
+          if endGame level map then 
+            (updateMap level map filename player;
+            Player.updatePlayer playerCopy (player.x,player.y))
           else ();
           loop ()
       | _ -> print_endline "Action non reconnue."; GameView.showLevel !level; loop ()
