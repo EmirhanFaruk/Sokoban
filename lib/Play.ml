@@ -26,7 +26,7 @@ struct
       let action = read_line () in
       match action with
       | "x" -> print_endline "Au revoir!"; exit 0
-      | "r" -> let restartMap = GameState.loadMap filename level player in loop restartMap
+      | "r" -> let restartMap = GameState.loadMap filename level player in loop restartMap (* On relance le loop avec la map reset *)
       | "z" | "s" | "d" | "q" as dir ->
           let direction = 
             match dir with
