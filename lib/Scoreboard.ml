@@ -1,5 +1,7 @@
 module Scoreboard =
 struct
+    open GameView
+
     type score =
     {
         name: string;
@@ -132,14 +134,55 @@ struct
     (* Prints given level's scoreboard. Level will be printed as if it's +1 *)
     let print_level_scoreboard level =
     let scores = get_level_scoreboard level in
-    let sb_text = "Scoreboard of level " ^ (string_of_int (level + 1))
+    let sb_text = "Top 10 of level " ^ (string_of_int (level + 1))
 
     print_string "\x1b[1m";
-    print_string center_text "Scoreboard of level "
+    print_endline (center_text sb_text 41);
 
+    let lines_left = 10 - List.length scores in
 
+    let print_scores scores =
+        match scores with
+        | [] -> ()
+        | s :: xs -> print_endline s; print_scores xs
+    in print_scores scores
 
-
+    for i = 0 to lines_left do
+    	print_endline "";
+    done
     print_string "\x1b[0m";
-    flush stdout;
+    flush stdout
+
+
+    let get_levels () =
+    let res = [] in
+    for i = 0 to 999 do
+    	if List.length (get_level_scoreboard i) > 0 then
+    	res = i :: res
+    done
+    res
+
+    let scoreboard_menu () =
+        let levels = Array.of_list get_levels in
+        let index = 0 in
+        if Array.length levels = 0
+        then
+            print_endline "No scores found"
+        else
+            while index <> -1 do
+                GameView.clear_terminal ();
+                print_level_scoreboard levels.(index);
+                print_endline "(Previous: b, Next: n, Quit: x) : ";
+                let choice = read_line () in
+                match choice with
+                | b -> if index = 0
+                        then index = (Array.length levels) - 1
+                        else index = index - 1
+                | n -> if index = (Array.length levels) - 1
+                        then index = 0
+                        else index = index + 1
+                | x -> GameView.clear_terminal (); index = -1
+                | _ -> GameView.clear_terminal ()
+            done
+
 end
