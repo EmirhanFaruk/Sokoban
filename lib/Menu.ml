@@ -2,6 +2,7 @@ open Play
 
 module Menu =
 struct
+  open Scoreboard
   (*----------------------------------------------------------- MENU PRINCIPAL -------------------------------------------------------------------*)
   (* Affiche le menu et retourne le choix de l'utilisateur *)
   let showMenu () = 
@@ -14,7 +15,8 @@ struct
 
     print_endline "     1. Commencer le jeu";
     print_endline "     2. Règles";
-    print_endline "     3. Quitter";
+    print_endline "     3. Scoreboard";
+    print_endline "     4. Quitter";
     print_endline "";
 
     print_string "Choisissez une option : ";
@@ -54,7 +56,8 @@ struct
       match choice with
       | "1" -> Play.play () (* Démarre le jeu *)
       | "2" -> showRules (); loop ()     (* Affiche les règles *)
-      | "3" -> print_string "\x1b[1m"; print_endline "Au revoir!"; print_string "\x1b[0m";  exit 0  (* Quitte le programme *)
+      | "3" -> Scoreboard.scoreboard_menu (); loop() (* Affiche le scoreboard *)
+      | "4" -> print_string "\x1b[1m"; print_endline "Au revoir!"; print_string "\x1b[0m";  exit 0  (* Quitte le programme *)
       | _ -> print_string "\x1b[1m";print_endline "Choix invalide. Veuillez réessayer.";print_string "\x1b[0m";   loop ()  (* Redemande un choix *)
     in
     loop ()  (* Lance la boucle pour afficher le menu en continu jusqu'à ce que l'utilisateur choisisse de quitter *)

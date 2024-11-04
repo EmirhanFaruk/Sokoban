@@ -1,9 +1,7 @@
-open Player
-open GameState
-
 module Solia =
 struct
-
+    open Player
+    open GameState
     (* The state of the map, player and moves throughout the whole algorithm *)
     type current_state =
     {
