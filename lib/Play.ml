@@ -17,7 +17,6 @@ struct
     let filename = "./assert/levels.txt" (* La variable qui représente le fichier de la map *) in
     let (player : Player.pos) = { x = 0; y = 0} in
     let map = GameState.loadMap filename level player (* La liste de liste qui va stocker la map qu'on va modifier*) in
-    Solia.lets_try level;
 
     (* Fonction recursive qui représente le loop du jeu et qui va a chaque action indiqué modifier la carte et afficher la carte*)
     let rec loop () =
