@@ -37,22 +37,24 @@ struct
     let map = GameState.loadMap filename !level player in
     let playerCopy = Player.copyPlayer player in
 
+    (try
+
     let rec loop () =
-      GameView.showLevel (!level -1);
+      GameView.showLevel !level;
       GameView.printMap map.grid;
       print_string "\x1b[1m\n- z/s/d/q pour se déplacer.\n- r pour recommencer le niveau.\n- x pour quitter\nAction : ";
       flush stdout;
-      let action = read_line () in
+      let action = input_char stdin in
       match action with
-      | "x" -> print_endline "Au revoir!"; exit 0
-      | "r" -> restart map player playerCopy; loop () (* On relance le loop avec la map reset *)
-      | "z" | "s" | "d" | "q" as dir ->
+      | 'x' -> print_endline "Au revoir!"; exit 0
+      | 'r' -> restart map player playerCopy; loop () (* On relance le loop avec la map reset *)
+      | 'z' | 's' | 'd' | 'q' as dir ->
           let direction = 
             match dir with
-            | "z" -> Player.Haut
-            | "s" -> Player.Bas
-            | "d" -> Player.Droite
-            | "q" -> Player.Gauche
+            | 'z' -> Player.Haut
+            | 's' -> Player.Bas
+            | 'd' -> Player.Droite
+            | 'q' -> Player.Gauche
             | _ -> failwith "Impossible"
           in 
           (* Met à jour la carte en fonction de la direction *)
@@ -67,4 +69,11 @@ struct
     
     in
     loop ()
+
+  with
+  | Exit -> ()  (* Gère la sortie normale *)
+  | exn -> prerr_endline ("Erreur inattendue : " ^ Printexc.to_string exn)
+  );
 end
+
+
