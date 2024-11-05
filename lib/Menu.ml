@@ -29,10 +29,11 @@ struct
     print_string "\x1b[1m";
     print_endline "";
     print_endline "    -------------------------------";
-    print_endline "    |          R U L E S          |";
+    print_endline "    |         R È G L E S         |";
     print_endline "    -------------------------------";
     print_endline "";
-    print_endline "***     Principe du jeu     ***";
+    print_endline "    ***     Principe du jeu     ***";
+    print_endline "";
     print_endline "Sokoban est un jeu de puzzle où le joueur pousse des caisses vers des emplacements cibles dans un labyrinthe.";
     print_endline "";
     print_endline "      - Placez chaque caisse sur une cible pour gagner.";
@@ -41,6 +42,27 @@ struct
     print_endline "";
     print_endline "Le but : planifier les déplacements pour ne rien bloquer en chemin !";
     print_endline "";
+
+    print_endline "    ***     Déplacements possibles     ***";
+    print_endline "";
+    print_endline "Nous pouvons pousser les caisses dans les directions suivantes :";
+    print_endline "      - Haut (Z) : vers le haut du labyrinthe.";
+    print_endline "      - Bas (S) : vers le bas du labyrinthe.";
+    print_endline "      - Gauche (Q) : vers la gauche du labyrinthe.";
+    print_endline "      - Droite (D) : vers la droite du labyrinthe.";
+    print_endline "/!\\ Le déplacement ne peut pas se faire sur les caisses ou les murs. /!\\";
+    print_endline "";
+
+    print_endline "    ***     Pousser les caisses     ***";
+    print_endline "";
+    print_endline "Le joueur peut pousser les caisses seulement s'il n'y a pas d'obstacle derriere la caisse tel que un mur ou une autre caisse.";
+    print_endline "      - Si vous êtes bloqué appuyez vous pouvez recommencer le niveau (R)";
+    print_endline "      - Vous pouvez quitter le jeu (X)";
+    print_endline "";
+
+    print_endline "  ------[      Amusez vous bien !       ]------";
+    print_endline "";
+
     flush stdout;  (* S'assurer que l'affichage est fait *)
     print_string "\x1b[0m"
   
