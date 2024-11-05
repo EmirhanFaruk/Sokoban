@@ -43,3 +43,6 @@ dune-project.lock
 .TemporaryItems/
 .VolumeIcon.icns
 .com.apple.timemachine.donotpresent
+
+
+sokoban.opam
