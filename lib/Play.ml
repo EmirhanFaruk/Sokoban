@@ -44,7 +44,7 @@ struct
       flush stdout;
       let action = read_line () in
       match action with
-      | "x" -> print_endline "Au revoir!"; exit 0
+      | "x" -> ()
       | "r" -> restart map player playerCopy; loop () (* On relance le loop avec la map reset *)
       | "z" | "s" | "d" | "q" as dir ->
           let direction = 

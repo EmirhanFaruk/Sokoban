@@ -199,8 +199,9 @@ struct
         !res
 
     let scoreboard_menu () =
+        (* For some reason the levels are reversed *)
         let levels = Array.of_list (get_levels ()) in
-        let index = ref 0 in
+        let index = ref ((Array.length levels) - 1) in
         if Array.length levels = 0
         then
             print_endline "No scores found"
@@ -212,18 +213,18 @@ struct
                 let choice = read_line () in
                 if String.equal choice "b"
                 then
-                    if !index = 0
-                    then
-                        index := (Array.length levels) - 1
-                    else
-                        index := !index - 1
-                else if String.equal choice "n"
-                then
                     if !index = (Array.length levels) - 1
                     then
                         index := 0
                     else
                         index := !index + 1
+                else if String.equal choice "n"
+                then
+                    if !index = 0
+                    then
+                        index := (Array.length levels) - 1
+                    else
+                        index := !index - 1
                 else if String.equal choice "x"
                 then
                     index := -1
