@@ -31,7 +31,7 @@ struct
   
    (* Fonction qui s'occupe de la boucle du jeu *)   
   let play () = 
-    let level = ref 1 in
+    let level = ref 0 in
     let filename = "./assert/levels.txt" in
     let (player : Player.pos) = { x = 0; y = 0 } in
     let map = GameState.loadMap filename !level player in
@@ -40,7 +40,7 @@ struct
     let rec loop () =
       GameView.showLevel (!level -1);
       GameView.printMap map.grid;
-      print_string "\x1b[1mAction (z/s/d/q pour se déplacer, x pour quitter) : ";
+      print_string "\x1b[1m\n- z/s/d/q pour se déplacer.\n- r pour recommencer le niveau.\n- x pour quitter\nAction : ";
       flush stdout;
       let action = read_line () in
       match action with

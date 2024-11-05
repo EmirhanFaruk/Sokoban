@@ -54,15 +54,15 @@ struct
   
   (* Fonction principale qui affiche le menu et traite le choix du joueur *)
   let mainMenu () =
+    clear_terminal ();
     let rec loop () =
-      clear_terminal ();
       let choice = showMenu () in
       (* Gére chaque option en fonction du choix de l'utilisateur *)
       match choice with
-      | "1" -> Play.play () (* Démarre le jeu *)
-      | "2" -> showRules (); loop ()     (* Affiche les règles *)
+      | "1" -> clear_terminal ();Play.play () (* Démarre le jeu *)
+      | "2" -> clear_terminal (); showRules ();loop ()     (* Affiche les règles *)
       | "3" -> print_string "\x1b[1m"; print_endline "Au revoir!"; print_string "\x1b[0m";  exit 0  (* Quitte le programme *)
-      | _ -> print_string "\x1b[1m";print_endline "Choix invalide. Veuillez réessayer.";print_string "\x1b[0m";   loop ()  (* Redemande un choix *)
+      | _ ->clear_terminal (); print_string "\x1b[1m";print_endline "Choix invalide. Veuillez réessayer.";print_string "\x1b[0m";   loop ()  (* Redemande un choix *)
     in
     loop ()  (* Lance la boucle pour afficher le menu en continu jusqu'à ce que l'utilisateur choisisse de quitter *)
 
