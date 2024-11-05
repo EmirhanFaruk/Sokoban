@@ -41,7 +41,7 @@ struct
                 acc
         ) [] list in
         let arres = Array.of_list res in
-        Array.sort (fun s1 s2 -> compare s1.moves s2.moves) arres;
+        Array.sort (fun s1 s2 -> compare s2.moves s1.moves) arres;
         arres
 
 
@@ -90,7 +90,7 @@ struct
     let get_10_els arr =
         let len = Array.length arr in
         let res = Array.make len (arr.(0)) in
-        for i = 0 to len do
+        for i = 0 to len - 1 do
         	Array.set res i (arr.(i))
         done;
         res
@@ -101,54 +101,60 @@ struct
         let wanted_list =
         List.filter (fun x -> x.(0).level = level) all_scores in
 
-        let top_10_scores =
-            Array.to_list (get_10_els (List.hd wanted_list)) in
-
-
-        let longest_name_len =
-        List.fold_left
-        (fun acc el ->
-            if (String.length el.name) > acc
-            then
-                (String.length el.name)
-            else
-                acc
-        ) 0 top_10_scores in
-
-        let longest_move_len =
-        List.fold_left
-        (fun acc el ->
-            let len = String.length (string_of_int el.moves) in
-            if len > acc
-            then
-                len
-            else
-                acc
-        ) 0 top_10_scores in
-
-        let total_len = 41 in
-        let diff = (total_len - longest_move_len - longest_name_len) in
-        let border = diff / 2 in
-        let padding =
-        if diff mod 2 = 1
+        if List.length wanted_list <> 0
         then
-            3
+            begin
+                let top_10_scores =
+                    Array.to_list (get_10_els (List.hd wanted_list)) in
+
+
+                let longest_name_len =
+                List.fold_left
+                (fun acc el ->
+                    if (String.length el.name) > acc
+                    then
+                        (String.length el.name)
+                    else
+                        acc
+                ) 0 top_10_scores in
+
+                let longest_move_len =
+                List.fold_left
+                (fun acc el ->
+                    let len = String.length (string_of_int el.moves) in
+                    if len > acc
+                    then
+                        len
+                    else
+                        acc
+                ) 0 top_10_scores in
+
+                let total_len = 41 in
+                let diff = (total_len - longest_move_len - longest_name_len) in
+                let border = diff / 2 in
+                let padding =
+                if diff mod 2 = 1
+                then
+                    3
+                else
+                    2 in
+
+
+
+                let res = Array.fold_left
+                (
+                    fun acc score ->
+                    let scstr =
+                    (String.make border ' ') ^
+                    (score_to_str score longest_name_len longest_move_len padding) ^
+                    (String.make border ' ') in
+                    scstr :: acc
+
+                ) [] (Array.of_list top_10_scores) in
+                res
+            end
         else
-            2 in
-
-
-
-        let res = Array.fold_left
-        (
-            fun acc score ->
-            let scstr =
-            (String.make border ' ') ^
-            (score_to_str score longest_name_len longest_move_len padding) ^
-            (String.make border ' ') in
-            scstr :: acc
-
-        ) [] (Array.of_list top_10_scores) in
-        res
+            []
 
 
 
@@ -202,7 +208,7 @@ struct
             while !index <> -1 do
                 GameView.clear_terminal ();
                 print_level_scoreboard levels.(!index);
-                print_endline "(Previous: b, Next: n, Quit: x) : ";
+                print_string "(Previous: b, Next: n, Quit: x) : ";
                 let choice = read_line () in
                 if String.equal choice "b"
                 then
@@ -221,6 +227,6 @@ struct
                 else if String.equal choice "x"
                 then
                     index := -1
-            done
-
+            done;
+            GameView.clear_terminal ()
 end
