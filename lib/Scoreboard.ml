@@ -41,14 +41,20 @@ struct
     let list_to_score list level =
         let res = List.fold_left
         (fun acc line ->
-            let parts = Str.split (Str.regexp ";") line in
-            if int_of_string (List.nth parts 1) = level then
-                let new_score = {
-                                    name = List.nth parts 0;
-                                    level = int_of_string (List.nth parts 1);
-                                    moves = int_of_string (List.nth parts 2);
-                                } in
-                new_score::acc
+            if String.length line > 5
+            then
+                try
+                    let parts = Str.split (Str.regexp ";") line in
+                    if int_of_string (List.nth parts 1) = level then
+                        let new_score = {
+                                            name = List.nth parts 0;
+                                            level = int_of_string (List.nth parts 1);
+                                            moves = int_of_string (List.nth parts 2);
+                                        } in
+                        new_score::acc
+                    else
+                        acc
+                with _ -> acc
             else
                 acc
         ) [] list in
