@@ -2,21 +2,26 @@ module Canonique =
 struct
   open Unix
 
-  (* Met le terminal en mode non canonique *)
+  (* Met le terminal en mode non canonique, le terminal réagit directement *)
   let makeNoCanonique () = 
     let para = tcgetattr stdin in 
     let newPara = { para with 
-      c_icanon = false; (* Désactiver le mode canonique pour réagir immédiatement *)
-      c_echo = false;   (* Désactiver l'écho pour ne pas afficher les caractères *)
+    (* Désactiver le mode canonique pour réagir immédiatement *)
+      c_icanon = false; 
+    (* Désactiver l'écho pour ne pas afficher les caractères *)
+      c_echo = false;  
     } in
-    tcsetattr stdin TCSANOW newPara  (* Appliquer les nouveaux paramètres *)
+    (* Appliquer les nouveaux paramètres *)
+    tcsetattr stdin TCSANOW newPara  
 
-  (* Remet le terminal en mode canonique *)
+  (* Remet le terminal en mode canonique, il faut appuyer sur entrée a chaque fois*)
   let makeCanonique () =
     let para = tcgetattr stdin in 
     let newPara = { para with 
-      c_icanon = true;  (* Activer le mode canonique *)
-      c_echo = true;    (* Activer l'écho pour afficher les caractères *)
+    (* Activer le mode canonique *)
+      c_icanon = true;  
+     (* Activer l'écho pour afficher les caractères *)
+      c_echo = true;   
     } in
     tcsetattr stdin TCSANOW newPara  (* Appliquer les nouveaux paramètres *)
 end

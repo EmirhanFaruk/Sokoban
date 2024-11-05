@@ -44,7 +44,7 @@ struct
       GameView.printMap map.grid;
       print_string "\x1b[1m\n- z/s/d/q pour se déplacer.\n- r pour recommencer le niveau.\n- x pour quitter\nAction : ";
       flush stdout;
-      let action = input_char stdin in
+      let action = input_char stdin in (* Lit l'entrée du terminal *)
       match action with
       | 'x' -> print_endline "Au revoir!"; exit 0
       | 'r' -> restart map player playerCopy; loop () (* On relance le loop avec la map reset *)
