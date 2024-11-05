@@ -33,7 +33,7 @@ struct
 
     print_string "\x1b[1m";  (* Met le texte en gras *)
     Printf.printf "\n    %s\n" (String.make border_length '-');  (* Affiche la bordure *)
-    Printf.printf "    |           NIVEAU %s          |\n" level_str;  (* Affiche le niveau *)
+    Printf.printf "    |           NIVEAU %s          |\n" level_str ;  (* Affiche le niveau *)
     Printf.printf "    %s\n" (String.make border_length '-');  (* Affiche la bordure *)
     print_string "\x1b[0m";  (* Réinitialise les styles de texte *)
     print_newline ()

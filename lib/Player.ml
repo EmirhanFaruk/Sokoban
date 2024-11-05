@@ -18,4 +18,7 @@ module Player = struct
   let updatePlayer (player : pos) (x, y) =
     player.x <- x; 
     player.y <- y
+
+  let copyPlayer player =
+    {x = player.x; y = player.y}
 end
