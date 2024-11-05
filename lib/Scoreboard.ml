@@ -1,6 +1,7 @@
 module Scoreboard =
 struct
     open GameView
+    open Player
 
     type score =
     {
@@ -9,6 +10,17 @@ struct
         mutable moves: int;
     }
 
+
+    let save_score (stat : Player.stat) level =
+    let ochnl =
+    open_out_gen [Open_append; Open_creat] 0o666 "./assert/scores.txt" in
+    let res =
+    stat.name ^ ";" ^
+    (string_of_int level) ^ ";" ^
+    (string_of_int stat.moves) ^ "\n" in
+
+    output_string ochnl res;
+    close_out ochnl
 
 
     (* Reads the given file *)

@@ -2,6 +2,8 @@ module Player = struct
   (* Définition du type pour représenter la position du joueur *)
   type pos = { mutable x : int; mutable y : int }
 
+  type stat = { name : string; mutable moves : int }
+
   (* Définition du type pour représenter les directions possibles *)
   type direction = Haut | Bas | Droite | Gauche
 
@@ -21,4 +23,11 @@ module Player = struct
 
   let copyPlayer player =
     {x = player.x; y = player.y}
+
+
+  let reset_stat stat =
+    stat.moves <- 0
+
+  let stat_upt stat =
+    stat.moves <- stat.moves + 1
 end

@@ -3,6 +3,7 @@ struct
   open Player
   open GameState
   open GameView
+  open Scoreboard
 
   (* Fonction qui met à jour le niveau au suivant et la map *)
   let updateMap (level : int ref) (map : GameState.level_map) filename (player: Player.pos)  =
@@ -28,9 +29,20 @@ struct
   let restart (map : GameState.level_map) (player : Player.pos) (playerCopy : Player.pos) =
     map.grid <- GameState.copyMap map.original;
     Player.updatePlayer player (playerCopy.x,playerCopy.y)
+
+  (* I HATE 2 SPACE TABS *)
+  (* Gets name from the player *)
+  let get_name () =
+    GameView.clear_terminal ();
+    print_string "Entrez votre nom: ";
+    flush stdout;
+    let name = read_line () in
+    GameView.clear_terminal ();
+    name
   
    (* Fonction qui s'occupe de la boucle du jeu *)   
-  let play () = 
+  let play () =
+    let (stat : Player.stat) = { name = get_name (); moves = 0 } in
     let level = ref 0 in
     let filename = "./assert/levels.txt" in
     let (player : Player.pos) = { x = 0; y = 0 } in
@@ -40,12 +52,13 @@ struct
     let rec loop () =
       GameView.showLevel (!level -1);
       GameView.printMap map.grid;
+      print_endline ("Deplacements: " ^ (string_of_int stat.moves));
       print_string "\x1b[1m\n- z/s/d/q pour se déplacer.\n- r pour recommencer le niveau.\n- x pour quitter\nAction : ";
       flush stdout;
       let action = read_line () in
       match action with
       | "x" -> ()
-      | "r" -> restart map player playerCopy; loop () (* On relance le loop avec la map reset *)
+      | "r" -> restart map player playerCopy; Player.reset_stat stat; loop () (* On relance le loop avec la map reset *)
       | "z" | "s" | "d" | "q" as dir ->
           let direction = 
             match dir with
@@ -57,9 +70,13 @@ struct
           in 
           (* Met à jour la carte en fonction de la direction *)
           map.grid <- GameState.updateMap map player direction;
+          Player.stat_upt stat;
           (* Appelle la fonction endGame pour vérifier si le niveau/jeu est terminé *)
-          if endGame level map then 
-            (updateMap level map filename player;
+          if endGame level map then
+            (
+            Scoreboard.save_score stat !level;
+            Player.reset_stat stat;
+            updateMap level map filename player;
             Player.updatePlayer playerCopy (player.x,player.y))
           else ();
           loop ()
