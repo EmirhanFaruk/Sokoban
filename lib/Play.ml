@@ -4,6 +4,7 @@ struct
   open GameState
   open GameView
   open Scoreboard
+  open Canonique
 
   (* Fonction qui met à jour le niveau au suivant et la map *)
   let updateMap (level : int ref) (map : GameState.level_map) filename (player: Player.pos)  =
@@ -42,7 +43,9 @@ struct
   
    (* Fonction qui s'occupe de la boucle du jeu *)   
   let play () =
+    Canonique.makeCanonique ();
     let (stat : Player.stat) = { name = get_name (); moves = 0 } in
+    Canonique.makeNoCanonique (); (* For the get_name func *)
     let level = ref 0 in
     let filename = "./assert/levels.txt" in
     let (player : Player.pos) = { x = 0; y = 0 } in
