@@ -3,30 +3,48 @@ struct
     open Scoreboard
     open GameView
 
+
+    (* Mettre un string au milieu par rapport au longueur donné.
+       Mettre espace autour de string. Mettre un string plus long
+       que length va lever une exception, il faut l'éviter *)
     let center_text text length =
         let len = String.length text in
         let border = (length - len) / 2 in
-        (String.make border ' ') ^
-        text ^
-        (String.make border ' ')
+        if (length - len) mod 2 = 0
+        then
+            (String.make border ' ') ^
+            text ^
+            (String.make border ' ')
+        else
+            (String.make (border + 1) ' ') ^
+            text ^
+            (String.make border ' ')
 
 
-    (* Prints given level's scoreboard. Level will be printed as if it's +1 *)
+    (* Afficher le scoreboard de niveau donné.
+       Ça sera affiché comme niveau + 1 pour que ça soit
+       syncronisé avec le jeu *)
     let print_level_scoreboard level =
+        (* Avoir top 10 d'un niveau dans une liste de string *)
         let scores = Scoreboard.get_level_scoreboard level in
-        let sb_text = "Top 10 of level " ^ (string_of_int (level + 1)) in
+        let sb_text = "Top 10 de niveau " ^ (string_of_int (level + 1)) in
 
         print_string "\x1b[1m";
         print_endline (center_text sb_text 41);
 
+        (* Calcul des lignes restant. A la place d'afficher les choix
+           juste après les scores pendant qu'il y a 2-3 scores,
+           on l'affiche comme s'il y avait 10 scores *)
         let lines_left = 10 - List.length scores in
 
+        (* Afficher les scores préfaites un par un *)
         let rec print_scores scores =
             match scores with
             | [] -> ()
             | s :: xs -> print_endline s; print_scores xs
         in print_scores scores;
 
+        (* Sauter les lignes restants *)
         for _ = 0 to lines_left - 1 do
             print_endline "";
         done;
@@ -34,18 +52,23 @@ struct
         flush stdout
 
 
+    (* Afficher le menu de scoreboard avec le premier niveau disponible *)
     let scoreboard_menu () =
-        (* For some reason the levels are reversed *)
         let levels = Array.of_list (Scoreboard.get_levels ()) in
+        (* Index de array de score *)
         let index = ref ((Array.length levels) - 1) in
         if Array.length levels = 0
         then
-            print_endline "No scores found"
+            (* Si pas de score, sortir de function et aller au menu *)
+            print_endline "Aucun score trouvé."
         else
+            (* On continue à afficher le scoreboard jusqu'à l'utilisateur veut quitter *)
             while !index <> -1 do
                 GameView.clear_terminal ();
+                (* Afficher le niveau *)
                 print_level_scoreboard levels.(!index);
-                print_string "(Previous: b, Next: n, Quit: x) : ";
+                print_string "(Précédent: b, Suivant: n, Quitter: x): ";
+                (* Gérer les choix. On compte a l'invers car la liste est à l'inverse. *)
                 let choice = read_line () in
                 if String.equal choice "b"
                 then
@@ -63,6 +86,7 @@ struct
                         index := !index - 1
                 else if String.equal choice "x"
                 then
+                    (* Pour quitter, on rend false le seul condition de while *)
                     index := -1
             done;
             GameView.clear_terminal ()
