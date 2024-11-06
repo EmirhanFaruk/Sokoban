@@ -77,7 +77,7 @@ struct
         else
           'a' in (* Une lettre au hasard pour que ça fasse rien *)
       match action with
-      | 'x' -> ()
+      | 'x' -> Canonique.makeCanonique ()
       | 'r' -> restart map player playerCopy; Player.reset_stat stat; loop () (* On relance le loop avec la map reset *)
       | 'z' | 's' | 'd' | 'q' as dir ->
           let direction = 
