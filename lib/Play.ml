@@ -34,6 +34,7 @@ struct
   (* I HATE 2 SPACE TABS *)
   (* Avoir le nom de joueur *)
   let get_name () =
+    if input_line stdin = "" then ();
     GameView.clear_terminal ();
     print_string "Entrez votre nom: ";
     flush stdout;
@@ -60,7 +61,17 @@ struct
       print_endline ("Deplacements: " ^ (string_of_int stat.moves));
       print_string "\x1b[1m\n- z/s/d/q pour se déplacer.\n- r pour recommencer le niveau.\n- x pour quitter\nAction : ";
       flush stdout;
-      let action = input_char stdin in (* Lit l'entrée du terminal *)
+      let action =
+      if Sys.os_type = "Unix"  (* Lit l'entrée du terminal *)
+      then
+          input_char stdin
+      else
+        let user_input = read_line () in
+        if String.length user_input > 0
+        then
+          user_input.[0]
+        else
+          'a' in (* Une lettre au hasard pour que ça fasse rien *)
       match action with
       | 'x' -> ()
       | 'r' -> restart map player playerCopy; Player.reset_stat stat; loop () (* On relance le loop avec la map reset *)
