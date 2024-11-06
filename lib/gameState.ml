@@ -114,9 +114,10 @@ struct
       | _ -> true
       
   (* Foncition qui met à jour la position du joueur dans la carte *)
-  let updatePlayerPosition list_map (player : Player.pos) new_x new_y current_tile =
+  let updatePlayerPosition list_map (player : Player.pos) new_x new_y current_tile (stat : Player.stat) =
     modifyList list_map new_x new_y current_tile;  (* On met à jour la position du joueur dans la map *)
-    Player.updatePlayer player (new_x, new_y)  (* On met à jour les coordonées joueur *)
+    Player.updatePlayer player (new_x, new_y);  (* On met à jour les coordonées joueur *)
+    Player.stat_upt stat
 
   (* Fonction qui met à jour l'ancienne case du joueur *)
   let updateOriginalTile list_map old_x old_y =
@@ -129,7 +130,7 @@ struct
       modifyList list_map old_x old_y old_original
 
   (* Fonction qui met à jour la carte, la position du joueur et le mouvement des boîtes *)
-  let updateMap (list_map : level_map) (player : Player.pos) direction =
+  let updateMap (list_map : level_map) (player : Player.pos) direction (stat : Player.stat) =
     let (width, height) = get_dim list_map.grid in
     (* On réccupère la position suivante du joueur *)
     let new_x, new_y = Player.get_next_pos (player.x, player.y) direction (width, height) in
@@ -153,7 +154,7 @@ struct
           modifyList list_map box_new_x box_new_y box_current_tile;
           
           (* On met à jour la position du joueur *)
-          updatePlayerPosition list_map player new_x new_y current_tile;
+          updatePlayerPosition list_map player new_x new_y current_tile stat;
 
           (* On met à jour de l'ancienne position du joueur *)
           updateOriginalTile list_map old_x old_y
@@ -161,7 +162,7 @@ struct
           isBoxBlocked := true  (* On marque que la boîte est bloquée *)
       else 
         (* On déplace seulement le joueur s'il n'y a pas de boîte *)
-        updatePlayerPosition list_map player new_x new_y current_tile;
+        updatePlayerPosition list_map player new_x new_y current_tile stat;
 
       (* Si la boîte n'est pas bloquée, on met à jour l'ancienne position *)
       if not !isBoxBlocked then

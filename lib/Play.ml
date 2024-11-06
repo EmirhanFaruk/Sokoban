@@ -31,7 +31,7 @@ struct
     Player.updatePlayer player (playerCopy.x,playerCopy.y)
 
   (* I HATE 2 SPACE TABS *)
-  (* Gets name from the player *)
+  (* Avoir le nom de joueur *)
   let get_name () =
     GameView.clear_terminal ();
     print_string "Entrez votre nom: ";
@@ -71,8 +71,7 @@ struct
             | _ -> failwith "Impossible"
           in 
           (* Met à jour la carte en fonction de la direction *)
-          map.grid <- GameState.updateMap map player direction;
-          Player.stat_upt stat;
+          map.grid <- GameState.updateMap map player direction stat;
           (* Appelle la fonction endGame pour vérifier si le niveau/jeu est terminé *)
           if endGame level map then
             (
