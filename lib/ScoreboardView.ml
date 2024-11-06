@@ -67,27 +67,31 @@ struct
                 GameView.clear_terminal ();
                 (* Afficher le niveau *)
                 print_level_scoreboard levels.(!index);
-                print_string "(Précédent: b, Suivant: n, Quitter: x): ";
+                print_endline "(Précédent: b, Suivant: n, Quitter: x): ";
                 (* Gérer les choix. On compte a l'invers car la liste est à l'inverse. *)
-                let choice = read_line () in
-                if String.equal choice "b"
+                let choice = if Sys.os_type = "Unix"
                 then
-                    if !index = (Array.length levels) - 1
+                    input_char stdin
+                else
+                    let user_input = read_line () in
+                    if String.length user_input > 0
                     then
-                        index := 0
+                        user_input.[0]
                     else
-                        index := !index + 1
-                else if String.equal choice "n"
-                then
-                    if !index = 0
-                    then
-                        index := (Array.length levels) - 1
-                    else
-                        index := !index - 1
-                else if String.equal choice "x"
-                then
-                    (* Pour quitter, on rend false le seul condition de while *)
-                    index := -1
+                        'a' in
+                match choice with
+                | 'b' -> if !index = (Array.length levels) - 1
+                         then
+                             index := 0
+                         else
+                             index := !index + 1
+                | 'n' -> if !index = 0
+                         then
+                             index := (Array.length levels) - 1
+                         else
+                             index := !index - 1
+                | 'x' -> index := -1 (* Pour quitter, on rend false le seul condition de while *)
+                | _ -> () (* Faire rien si touché à une autre touche *)
             done;
             GameView.clear_terminal ()
 

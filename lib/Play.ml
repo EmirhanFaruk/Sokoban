@@ -4,6 +4,7 @@ struct
   open GameState
   open GameView
   open Scoreboard
+  open Canonique
 
   (* Fonction qui met à jour le niveau au suivant et la map *)
   let updateMap (level : int ref) (map : GameState.level_map) filename (player: Player.pos)  =
@@ -31,8 +32,13 @@ struct
     Player.updatePlayer player (playerCopy.x,playerCopy.y)
 
   (* I HATE 2 SPACE TABS *)
-  (* Gets name from the player *)
+  (* Avoir le nom de joueur *)
   let get_name () =
+    if Sys.os_type <> "Unix"
+    then
+      (
+        if input_line stdin = "" then ()
+      );
     GameView.clear_terminal ();
     print_string "Entrez votre nom: ";
     flush stdout;
@@ -42,7 +48,9 @@ struct
   
    (* Fonction qui s'occupe de la boucle du jeu *)   
   let play () =
+    Canonique.makeCanonique ();
     let (stat : Player.stat) = { name = get_name (); moves = 0 } in
+    Canonique.makeNoCanonique (); (* For the get_name func *)
     let level = ref 0 in
     let filename = "./assert/levels.txt" in
     let (player : Player.pos) = { x = 0; y = 0 } in
@@ -57,9 +65,19 @@ struct
       print_endline ("Deplacements: " ^ (string_of_int stat.moves));
       print_string "\x1b[1m\n- z/s/d/q pour se déplacer.\n- r pour recommencer le niveau.\n- x pour quitter\nAction : ";
       flush stdout;
-      let action = input_char stdin in (* Lit l'entrée du terminal *)
+      let action =
+      if Sys.os_type = "Unix"  (* Lit l'entrée du terminal *)
+      then
+          input_char stdin
+      else
+        let user_input = read_line () in
+        if String.length user_input > 0
+        then
+          user_input.[0]
+        else
+          'a' in (* Une lettre au hasard pour que ça fasse rien *)
       match action with
-      | 'x' -> ()
+      | 'x' -> Canonique.makeCanonique ()
       | 'r' -> restart map player playerCopy; Player.reset_stat stat; loop () (* On relance le loop avec la map reset *)
       | 'z' | 's' | 'd' | 'q' as dir ->
           let direction = 
@@ -71,8 +89,7 @@ struct
             | _ -> failwith "Impossible"
           in 
           (* Met à jour la carte en fonction de la direction *)
-          map.grid <- GameState.updateMap map player direction;
-          Player.stat_upt stat;
+          map.grid <- GameState.updateMap map player direction stat;
           (* Appelle la fonction endGame pour vérifier si le niveau/jeu est terminé *)
           if endGame level map then
             (
@@ -88,8 +105,8 @@ struct
     loop ()
 
   with
-  | Exit -> ()  (* Gère la sortie normale *)
-  | exn -> prerr_endline ("Erreur inattendue : " ^ Printexc.to_string exn)
+  | Exit -> Canonique.makeCanonique (); ()  (* Gère la sortie normale *)
+  | exn -> Canonique.makeCanonique (); prerr_endline ("Erreur inattendue : " ^ Printexc.to_string exn)
   );
 end
 
