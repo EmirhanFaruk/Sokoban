@@ -88,7 +88,7 @@ struct
       | '1' -> clear_terminal (); Play.play () (* Démarre le jeu *)
       | '2' -> clear_terminal (); showRules (); loop ()     (* Affiche les règles *)
       | '3' -> ScoreboardView.scoreboard_menu (); loop() (* Affiche le scoreboard *)
-      | '4' -> print_string "\x1b[1m"; print_endline "Au revoir!"; print_string "\x1b[0m";  exit 0  (* Quitte le programme *)
+      | '4' -> Canonique.makeCanonique (); print_string "\x1b[1m"; print_endline "Au revoir!"; print_string "\x1b[0m";  exit 0  (* Quitte le programme *)
       | _ ->clear_terminal (); print_string "\x1b[1m";print_endline "Choix invalide. Veuillez réessayer.";print_string "\x1b[0m";   loop ()  (* Redemande un choix *)
     in
     loop ()  (* Lance la boucle pour afficher le menu en continu jusqu'à ce que l'utilisateur choisisse de quitter *)

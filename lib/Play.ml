@@ -34,7 +34,11 @@ struct
   (* I HATE 2 SPACE TABS *)
   (* Avoir le nom de joueur *)
   let get_name () =
-    if input_line stdin = "" then ();
+    if Sys.os_type <> "Unix"
+    then
+      (
+        if input_line stdin = "" then ()
+      );
     GameView.clear_terminal ();
     print_string "Entrez votre nom: ";
     flush stdout;
@@ -101,8 +105,8 @@ struct
     loop ()
 
   with
-  | Exit -> ()  (* Gère la sortie normale *)
-  | exn -> prerr_endline ("Erreur inattendue : " ^ Printexc.to_string exn)
+  | Exit -> Canonique.makeCanonique (); ()  (* Gère la sortie normale *)
+  | exn -> Canonique.makeCanonique (); prerr_endline ("Erreur inattendue : " ^ Printexc.to_string exn)
   );
 end
 
