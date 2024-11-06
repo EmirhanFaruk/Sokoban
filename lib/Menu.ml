@@ -1,8 +1,8 @@
-open Play
-
 module Menu =
 struct
   open ScoreboardView
+  open Play
+  open Canonique
   (*----------------------------------------------------------- MENU PRINCIPAL -------------------------------------------------------------------*)
   (* Affiche le menu et retourne le choix de l'utilisateur *)
   let showMenu () = 
@@ -22,7 +22,7 @@ struct
     print_string "Choisissez une option : ";
     print_string "\x1b[0m";
     flush stdout;  (* S'assurer que l'affichage est fait avant la lecture de l'entrée *)
-    read_line ()  (* Lit l'entrée du joueur *)
+    input_char stdin (* Lit l'entrée du terminal *)
 
   (*---------------------------------------------------------------- REGLES ----------------------------------------------------------------------*)
 
@@ -78,15 +78,16 @@ struct
   
   (* Fonction principale qui affiche le menu et traite le choix du joueur *)
   let mainMenu () =
+    Canonique.makeNoCanonique ();
     clear_terminal ();
     let rec loop () =
       let choice = showMenu () in
       (* Gére chaque option en fonction du choix de l'utilisateur *)
       match choice with
-      | "1" -> clear_terminal (); Play.play (); clear_terminal (); loop () (* Démarre le jeu *)
-      | "2" -> clear_terminal (); showRules (); loop ()     (* Affiche les règles *)
-      | "3" -> ScoreboardView.scoreboard_menu (); loop() (* Affiche le scoreboard *)
-      | "4" -> print_string "\x1b[1m"; print_endline "Au revoir!"; print_string "\x1b[0m";  exit 0  (* Quitte le programme *)
+      | '1' -> clear_terminal (); Play.play (); clear_terminal (); loop () (* Démarre le jeu *)
+      | '2' -> clear_terminal (); showRules (); loop ()     (* Affiche les règles *)
+      | '3' -> ScoreboardView.scoreboard_menu (); loop() (* Affiche le scoreboard *)
+      | '4' -> print_string "\x1b[1m"; print_endline "Au revoir!"; print_string "\x1b[0m";  exit 0  (* Quitte le programme *)
       | _ ->clear_terminal (); print_string "\x1b[1m";print_endline "Choix invalide. Veuillez réessayer.";print_string "\x1b[0m";   loop ()  (* Redemande un choix *)
     in
     loop ()  (* Lance la boucle pour afficher le menu en continu jusqu'à ce que l'utilisateur choisisse de quitter *)
