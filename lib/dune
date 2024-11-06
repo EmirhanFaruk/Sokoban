@@ -1,5 +1,5 @@
 (library
  (name sokoban_lib)
-  (libraries unix)
- (modules GameState GameView Menu Play Player Canonique))
+ (libraries unix str)
+ (modules GameState GameView Menu Play Player Canonique Scoreboard ScoreboardView))
 

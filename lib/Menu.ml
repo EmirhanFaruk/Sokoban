@@ -1,5 +1,6 @@
 module Menu =
 struct
+  open ScoreboardView
   open Play
   open Canonique
   (*----------------------------------------------------------- MENU PRINCIPAL -------------------------------------------------------------------*)
@@ -14,7 +15,8 @@ struct
 
     print_endline "     1. Commencer le jeu";
     print_endline "     2. Règles";
-    print_endline "     3. Quitter";
+    print_endline "     3. Scoreboard";
+    print_endline "     4. Quitter";
     print_endline "";
 
     print_string "Choisissez une option : ";
@@ -64,7 +66,8 @@ struct
     print_endline "";
 
     flush stdout;  (* S'assurer que l'affichage est fait *)
-    print_string "\x1b[0m"
+    print_string "\x1b[0m";
+    let _ = read_line() in ()
   
   (* Fonction pour nettoyer le terminal *)
   let clear_terminal () =
@@ -82,9 +85,10 @@ struct
       let choice = showMenu () in
       (* Gére chaque option en fonction du choix de l'utilisateur *)
       match choice with
-      | '1' -> clear_terminal ();Play.play () (* Démarre le jeu *)
-      | '2' -> clear_terminal (); showRules ();loop ()     (* Affiche les règles *)
-      | '3' -> print_string "\x1b[1m"; print_endline "Au revoir!"; print_string "\x1b[0m";  exit 0  (* Quitte le programme *)
+      | '1' -> clear_terminal (); Play.play (); clear_terminal (); loop () (* Démarre le jeu *)
+      | '2' -> clear_terminal (); showRules (); loop ()     (* Affiche les règles *)
+      | '3' -> ScoreboardView.scoreboard_menu (); loop() (* Affiche le scoreboard *)
+      | '4' -> print_string "\x1b[1m"; print_endline "Au revoir!"; print_string "\x1b[0m";  exit 0  (* Quitte le programme *)
       | _ ->clear_terminal (); print_string "\x1b[1m";print_endline "Choix invalide. Veuillez réessayer.";print_string "\x1b[0m";   loop ()  (* Redemande un choix *)
     in
     loop ()  (* Lance la boucle pour afficher le menu en continu jusqu'à ce que l'utilisateur choisisse de quitter *)
