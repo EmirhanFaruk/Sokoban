@@ -66,8 +66,7 @@ struct
     print_endline "";
 
     flush stdout;  (* S'assurer que l'affichage est fait *)
-    print_string "\x1b[0m";
-    let _ = read_line() in ()
+    print_string "\x1b[0m"
   
   (* Fonction pour nettoyer le terminal *)
   let clear_terminal () =
