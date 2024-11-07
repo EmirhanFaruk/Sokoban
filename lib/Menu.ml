@@ -3,6 +3,9 @@ struct
   open ScoreboardView
   open Play
   open Canonique
+
+
+
   (*----------------------------------------------------------- MENU PRINCIPAL -------------------------------------------------------------------*)
   (* Affiche le menu et retourne le choix de l'utilisateur *)
   let showMenu () = 
@@ -84,7 +87,7 @@ struct
       let choice = showMenu () in
       (* Gére chaque option en fonction du choix de l'utilisateur *)
       match choice with
-      | '1' -> clear_terminal (); Play.play () (* Démarre le jeu *)
+      | '1' ->clear_terminal (); Play.play (); clear_terminal (); loop () (* Démarre le jeu *)
       | '2' -> clear_terminal (); showRules (); loop ()     (* Affiche les règles *)
       | '3' -> ScoreboardView.scoreboard_menu (); loop() (* Affiche le scoreboard *)
       | '4' -> Canonique.makeCanonique (); print_string "\x1b[1m"; print_endline "Au revoir!"; print_string "\x1b[0m";  exit 0  (* Quitte le programme *)

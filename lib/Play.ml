@@ -60,7 +60,7 @@ struct
         if key = 'x' || key = 'r' || key = 'X' || key = 'R' then key else ' '
 
      (* Si il y a 3 en entrée alors on vérifie que c'est bien une fleche *)  
-    else if n = 3 then (
+    else if n = 3 then 
       match Bytes.sub_string buf 0 3 with
       | "\x1b[A" -> 'H'  (* Flèche haut *)
       | "\x1b[B" -> 'B'  (* Flèche bas *)
@@ -68,10 +68,10 @@ struct
       | "\x1b[D" -> 'G'  (* Flèche gauche *)
       | _ -> ' '
 
-      }
+      
 
       (* Si il y a 2 entrée alors on vérifie que c'est des fleches de Windows *)
-  else if n = 2 && Bytes.get buf 0 = '\xE0' then (
+  else if n = 2 && Bytes.get buf 0 = '\xE0' then 
     match Bytes.get buf 1 with
     | '\x48' -> 'H'  (* Flèche haut sous Windows *)
     | '\x50' -> 'B'  (* Flèche bas sous Windows *)
@@ -79,7 +79,7 @@ struct
     | '\x4B' -> 'G'  (* Flèche gauche sous Windows *)
     | _ -> ' '
 
-    ) else ' '
+     else ' '
 
 
    (* Fonction qui s'occupe de la boucle du jeu *)   
