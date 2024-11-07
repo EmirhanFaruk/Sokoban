@@ -4,6 +4,7 @@ struct
   open Play
   open Canonique
 
+
   (*--------------------------------------------------------------- TERMINALE ---------------------------------------------------------------------*)
 
   (* Fonction pour nettoyer le terminal *)
@@ -58,11 +59,20 @@ struct
 
     print_endline "    ***     Déplacements possibles     ***";
     print_endline "";
-    print_endline "Nous pouvons pousser les caisses dans les directions suivantes :";
-    print_endline "      - Haut (Z) : vers le haut du labyrinthe.";
-    print_endline "      - Bas (S) : vers le bas du labyrinthe.";
-    print_endline "      - Gauche (Q) : vers la gauche du labyrinthe.";
-    print_endline "      - Droite (D) : vers la droite du labyrinthe.";
+    print_endline "Nous pouvons nous déplacer sur 4 directions grace aux flèches directionnelles :";
+    print_endline "";
+    print_endline "   Unix :";
+    print_endline "      - Haut (↑) : vers le haut du labyrinthe.";
+    print_endline "      - Bas (↓) : vers le bas du labyrinthe.";
+    print_endline "      - Gauche (←) : vers la gauche du labyrinthe.";
+    print_endline "      - Droite (→) : vers la droite du labyrinthe.";
+    print_endline "";
+    print_endline "   Windows :";
+    print_endline "      - Haut (z/w) : vers le haut du labyrinthe.";
+    print_endline "      - Bas (s) : vers le bas du labyrinthe.";
+    print_endline "      - Gauche (q/a) : vers la gauche du labyrinthe.";
+    print_endline "      - Droite (d) : vers la droite du labyrinthe.";
+    print_endline "";
     print_endline "/!\\ Le déplacement ne peut pas se faire sur les caisses ou les murs. /!\\";
     print_endline "";
 
@@ -75,10 +85,12 @@ struct
 
     print_endline "  ------[      Amusez vous bien !       ]------";
     print_endline "";
-    print_string "\x1b[0m";
-    if Sys.os_type = "Unix" then (print_string "Appuyez sur Entrer pour retourner au menu..."; let _ = read_line () in (); clear_terminal ());
+
     flush stdout;  (* S'assurer que l'affichage est fait *)
+    print_string "\x1b[0m";
     if Sys.os_type <> "Unix" then (let _ = read_line () in ())
+    else (print_string "Appuyez sur Entrer pour retourner au menu..."; 
+    let _ = read_line () in (); clear_terminal ())
   
 
   (*------------------------------------------------------ FONCTION PRINCIPALE ----------------------------------------------------------------*)
@@ -91,7 +103,7 @@ struct
       let choice = showMenu () in
       (* Gére chaque option en fonction du choix de l'utilisateur *)
       match choice with
-      | '1' -> clear_terminal (); Play.play (); clear_terminal (); loop () (* Démarre le jeu *)
+      | '1' ->clear_terminal (); Play.play (); clear_terminal (); loop () (* Démarre le jeu *)
       | '2' -> clear_terminal (); showRules (); loop ()     (* Affiche les règles *)
       | '3' -> ScoreboardView.scoreboard_menu (); loop() (* Affiche le scoreboard *)
       | '4' -> Canonique.makeCanonique (); print_string "\x1b[1m"; print_endline "Au revoir!"; print_string "\x1b[0m";  exit 0  (* Quitte le programme *)

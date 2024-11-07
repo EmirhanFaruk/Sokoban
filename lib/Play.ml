@@ -59,6 +59,61 @@ let contains_only_spaces str =
     else if String.contains name ';' then begin print_endline "Erreur : Entrez un nom valide."; get_name () end
     else name
   
+
+
+    let readUnix () =
+      let buf = Bytes.create 3 in
+      let n = Unix.read Unix.stdin buf 0 3 in
+      if n = 1 then
+        (* Si un seul caractère est saisi, vérifie s’il s’agit de 'r' ou 'x' *)
+        let key = Bytes.get buf 0 in
+        if key = 'x' || key = 'r' || key = 'X' || key = 'R' then key else ' '
+      else if n = 3 then (
+        (* Sous Unix/Linux, les séquences de flèches sont précédées par \x1b *)
+        match Bytes.sub_string buf 0 3 with
+        | "\x1b[A" -> 'H'  (* Flèche haut *)
+        | "\x1b[B" -> 'B'  (* Flèche bas *)
+        | "\x1b[C" -> 'D'  (* Flèche droite *)
+        | "\x1b[D" -> 'G'  (* Flèche gauche *)
+        | _ -> ' '
+      )
+      else ' '
+    
+      (* Lecture du *)
+      let readWindows () =
+        let user_input = read_line () in
+        if String.length user_input > 0 then 
+          let first_char = user_input.[0] in
+          match first_char with
+          | 'x' | 'r' | 'X' | 'R' -> first_char (* Capture des touches 'r' et 'x' *)
+          | 'Z' | 'z' | 'W' | 'w' -> 'H'  (* Flèche haut *)
+          | 'S' | 's' -> 'B' (* Flèche bas *)
+          | 'D' | 'd' -> 'D'  (* Flèche droite *)
+          | 'Q' | 'q' | 'A' | 'a' -> 'G' (* Flèche gauche *)
+          | _ -> ' '   
+        else ' '
+      
+      (* Fonction principale qui appelle la bonne fonction en fonction de l'OS afin de donner les déplacements a faire *)
+      let readKey systeme =
+         (* On regarde si on est sur Unix *)
+        if systeme = "Unix" then
+          readUnix () 
+        
+          (* On regarde si on est sur Windows *)
+        else if systeme = "Win32" then
+          readWindows ()  
+        else ' '
+
+    
+
+  (* Fonction qui permet d'afficher les touches en fonction de l'OS*)
+  let affichageOS systeme =  
+    if systeme = "Unix" then 
+       "\x1b[1m\n- ↑↓←→ flèches directionnelles pour se déplacer.\n- r pour recommencer le niveau.\n- x pour retourner au menu.\nAction : " 
+    else "\x1b[1m\n- Haut: z/w |Bas: s |Droite: d |Gauche: q/a  pour se déplacer.\n- r pour recommencer le niveau.\n- x pour retourner au menu.\nAction : " 
+
+
+
    (* Fonction qui s'occupe de la boucle du jeu *)   
   let play () =
     Canonique.makeCanonique ();
@@ -70,36 +125,30 @@ let contains_only_spaces str =
     let (player : Player.pos) = { x = 0; y = 0 } in
     let map = GameState.loadMap filename !level player in
     let playerCopy = Player.copyPlayer player in
+    let systeme = Sys.os_type in
+    let affichageTouche = (affichageOS systeme) in
+
 
     (try
 
     let rec loop () =
-      GameView.showLevel !level;
-      GameView.printMap map.grid;
+      GameView.showLevel !level; (* Affiche le niveau courant *)
+      GameView.printMap map.grid; (* Affiche la carte du niveau courant *)
       print_endline ("Deplacements: " ^ (string_of_int stat.moves));
-      print_string "\x1b[1m\n- z/s/d/q pour se déplacer.\n- r pour recommencer le niveau.\n- x pour retourner au menu.\nAction : ";
+      print_string affichageTouche;
       flush stdout;
-      let action =
-      if Sys.os_type = "Unix"  (* Lit l'entrée du terminal *)
-      then
-          input_char stdin
-      else
-        let user_input = read_line () in
-        if String.length user_input > 0
-        then
-          user_input.[0]
-        else
-          'a' in (* Une lettre au hasard pour que ça fasse rien *)
+      let action = readKey systeme in (* Lit l'action du joueur *)
+
       match action with
-      | 'x' -> ()
-      | 'r' -> restart map player playerCopy; Player.reset_stat stat; loop () (* On relance le loop avec la map reset *)
-      | 'z' | 's' | 'd' | 'q' as dir ->
+      | 'x'|'X' -> ()
+      | 'r'|'R' -> restart map player playerCopy; Player.reset_stat stat; loop () (* On relance le loop avec la map reset *)
+      | 'H' | 'B' | 'D' | 'G' as dir ->
           let direction = 
             match dir with
-            | 'z' -> Player.Haut
-            | 's' -> Player.Bas
-            | 'd' -> Player.Droite
-            | 'q' -> Player.Gauche
+            | 'H' -> Player.Haut
+            | 'B' -> Player.Bas
+            | 'D' -> Player.Droite
+            | 'G' -> Player.Gauche
             | _ -> failwith "Impossible"
           in 
           (* Met à jour la carte en fonction de la direction *)
@@ -121,6 +170,7 @@ let contains_only_spaces str =
   with
   | Exit -> ()  (* Gère la sortie normale *)
   | exn -> prerr_endline ("Erreur inattendue : " ^ Printexc.to_string exn)
+
   );
 end
 
