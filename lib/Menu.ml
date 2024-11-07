@@ -87,7 +87,10 @@ struct
     print_endline "";
 
     flush stdout;  (* S'assurer que l'affichage est fait *)
-    print_string "\x1b[0m"
+    print_string "\x1b[0m";
+    if Sys.os_type <> "Unix" then (let _ = read_line () in ())
+    else (print_string "Appuyez sur Entrer pour retourner au menu..."; 
+    let _ = read_line () in (); clear_terminal ())
   
 
   (*------------------------------------------------------ FONCTION PRINCIPALE ----------------------------------------------------------------*)
