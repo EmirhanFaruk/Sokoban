@@ -31,7 +31,6 @@ struct
     map.grid <- GameState.copyMap map.original;
     Player.updatePlayer player (playerCopy.x,playerCopy.y)
 
-  (* I HATE 2 SPACE TABS *)
   (* Avoir le nom de joueur *)
   let get_name () =
     if Sys.os_type <> "Unix"
@@ -46,6 +45,30 @@ struct
     GameView.clear_terminal ();
     name
   
+
+    (* Fonction qui converti l'entrée du terminal en une direction/erreur *)
+  let read_key () =
+    (* On stock le contenu dans une variabke afin de savoir*)
+    let buf = Bytes.create 3 in
+    let n = Unix.read Unix.stdin buf 0 3 in
+
+    (* On regarde il y a combien d'entrée *)
+    if n = 1 then
+
+      (* Si on a un seul caractère, on verifie que c'est soit x ou soit r, sinon on renvoit rien *)
+       if (Bytes.get buf 0) = 'x' || (Bytes.get buf 0) = 'r' then Bytes.get buf 0 else ' '
+
+     (* Si il y a 3 en entrée alors on vérifie que c'est bien une fleche  *)  
+    else if n = 3 then (
+      match Bytes.sub_string buf 0 3 with
+      | "\x1b[A" -> 'H'  (* Flèche haut *)
+      | "\x1b[B" -> 'B'  (* Flèche bas *)
+      | "\x1b[C" -> 'D'  (* Flèche droite *)
+      | "\x1b[D" -> 'G'  (* Flèche gauche *)
+      | _ -> ' '
+    ) else ' '
+
+
    (* Fonction qui s'occupe de la boucle du jeu *)   
   let play () =
     Canonique.makeCanonique ();
@@ -65,27 +88,18 @@ struct
       print_endline ("Deplacements: " ^ (string_of_int stat.moves));
       print_string "\x1b[1m\n- z/s/d/q pour se déplacer.\n- r pour recommencer le niveau.\n- x pour retourner au menu.\nAction : ";
       flush stdout;
-      let action =
-      if Sys.os_type = "Unix"  (* Lit l'entrée du terminal *)
-      then
-          input_char stdin
-      else
-        let user_input = read_line () in
-        if String.length user_input > 0
-        then
-          user_input.[0]
-        else
-          'a' in (* Une lettre au hasard pour que ça fasse rien *)
+      let action = read_key() in
+
       match action with
       | 'x' -> ()
       | 'r' -> restart map player playerCopy; Player.reset_stat stat; loop () (* On relance le loop avec la map reset *)
-      | 'z' | 's' | 'd' | 'q' as dir ->
+      | 'H' | 'B' | 'D' | 'G' as dir ->
           let direction = 
             match dir with
-            | 'z' -> Player.Haut
-            | 's' -> Player.Bas
-            | 'd' -> Player.Droite
-            | 'q' -> Player.Gauche
+            | 'H' -> Player.Haut
+            | 'B' -> Player.Bas
+            | 'D' -> Player.Droite
+            | 'G' -> Player.Gauche
             | _ -> failwith "Impossible"
           in 
           (* Met à jour la carte en fonction de la direction *)
