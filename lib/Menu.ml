@@ -76,7 +76,7 @@ struct
     print_endline "  ------[      Amusez vous bien !       ]------";
     print_endline "";
     print_string "\x1b[0m";
-    if Sys.os_type = "Unix" then (print_string "Appuyez sur Entrer pour retourner au menu..."; clear_terminal ());
+    if Sys.os_type = "Unix" then (print_string "Appuyez sur Entrer pour retourner au menu..."; let _ = read_line () in (); clear_terminal ());
     flush stdout;  (* S'assurer que l'affichage est fait *)
     let _ = read_line () in ()
   
