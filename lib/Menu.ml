@@ -3,6 +3,17 @@ struct
   open ScoreboardView
   open Play
   open Canonique
+
+  (*--------------------------------------------------------------- TERMINALE ---------------------------------------------------------------------*)
+
+  (* Fonction pour nettoyer le terminal *)
+  let clear_terminal () =
+    let command =
+    if Sys.os_type = "Unix" then "clear"
+    else "cls" in
+    ignore (Unix.system command)
+
+
   (*----------------------------------------------------------- MENU PRINCIPAL -------------------------------------------------------------------*)
   (* Affiche le menu et retourne le choix de l'utilisateur *)
   let showMenu () = 
@@ -69,12 +80,7 @@ struct
     flush stdout;  (* S'assurer que l'affichage est fait *)
     let _ = read_line () in ()
   
-  (* Fonction pour nettoyer le terminal *)
-  let clear_terminal () =
-    let command = 
-    if Sys.os_type = "Unix" then "clear" 
-    else "cls" in
-    ignore (Unix.system command)
+
   (*------------------------------------------------------ FONCTION PRINCIPALE ----------------------------------------------------------------*)
   
   (* Fonction principale qui affiche le menu et traite le choix du joueur *)
