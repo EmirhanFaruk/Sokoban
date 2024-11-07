@@ -31,19 +31,33 @@ struct
     map.grid <- GameState.copyMap map.original;
     Player.updatePlayer player (playerCopy.x,playerCopy.y)
 
+
+let contains_only_spaces str =
+  let is_space c = c = ' ' in
+  let rec check_spaces i =
+    if i = String.length str then true
+    else if is_space str.[i] then check_spaces (i + 1)
+    else false
+  in
+  check_spaces 0
+
+  (* I HATE 2 SPACE TABS *)
   (* Avoir le nom de joueur *)
-  let get_name () =
+  let rec get_name () =
     if Sys.os_type <> "Unix"
     then
       (
         if input_line stdin = "" then ()
       );
-    GameView.clear_terminal ();
     print_string "Entrez votre nom(de longueur entre 1-20): ";
     flush stdout;
     let name = read_line () in
-    GameView.clear_terminal ();
-    name
+    (* #28 - Nom vide : Désormais il n'est plus possible d'avoir de nom vide, d'avoir un nom de + de 20 caractères, d'avoir un nom contenant seulement des espaces ou d'avoir un nom contenant des ; *)
+    if name = "" then begin print_endline "Erreur : Entrez un nom valide."; get_name () end
+    else if String.length name > 20 then begin print_endline "Erreur : Entrez un nom valide."; get_name () end
+    else if contains_only_spaces name then begin print_endline "Erreur : Entrez un nom valide."; get_name () end
+    else if String.contains name ';' then begin print_endline "Erreur : Entrez un nom valide."; get_name () end
+    else name
   
 
 
@@ -105,13 +119,6 @@ struct
     Canonique.makeCanonique ();
 
     let (stat : Player.stat) = { name = get_name (); moves = 0 } in
-    while String.length stat.name = 0 || String.length stat.name > 20 do
-
-        if Sys.os_type <> "Unix"
-            then (print_endline "Veuillez entrez un nom de longueur entre 1-20. Appuyer sur Entrer pour reessayer...");
-        stat.name <- get_name ()
-    done;
-
     Canonique.makeNoCanonique (); (* For the get_name func *)
     let level = ref 0 in
     let filename = "./assert/levels.txt" in
