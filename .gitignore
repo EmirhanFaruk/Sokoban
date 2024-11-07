@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Dune build artifacts
 _build/
 *.exe
@@ -46,3 +47,4 @@ dune-project.lock
 
 
 sokoban.opam
+.DS_Store
