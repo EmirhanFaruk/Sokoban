@@ -5,6 +5,15 @@ struct
   open Canonique
 
 
+  (*--------------------------------------------------------------- TERMINALE ---------------------------------------------------------------------*)
+
+  (* Fonction pour nettoyer le terminal *)
+  let clear_terminal () =
+    let command =
+    if Sys.os_type = "Unix" then "clear"
+    else "cls" in
+    ignore (Unix.system command)
+
 
   (*----------------------------------------------------------- MENU PRINCIPAL -------------------------------------------------------------------*)
   (* Affiche le menu et retourne le choix de l'utilisateur *)
@@ -71,12 +80,7 @@ struct
     flush stdout;  (* S'assurer que l'affichage est fait *)
     print_string "\x1b[0m"
   
-  (* Fonction pour nettoyer le terminal *)
-  let clear_terminal () =
-    let command = 
-    if Sys.os_type = "Unix" then "clear" 
-    else "cls" in
-    ignore (Unix.system command)
+
   (*------------------------------------------------------ FONCTION PRINCIPALE ----------------------------------------------------------------*)
   
   (* Fonction principale qui affiche le menu et traite le choix du joueur *)

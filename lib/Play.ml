@@ -46,41 +46,42 @@ struct
     name
   
 
-    (* Fonction qui converti l'entrée du terminal en une direction/erreur *)
-  let read_key () =
-    (* On stock le contenu dans une variabke afin de savoir*)
-    let buf = Bytes.create 3 in
-    let n = Unix.read Unix.stdin buf 0 3 in
 
-    (* On regarde il y a combien d'entrée *)
-    if n = 1 then
-
-      (* Si on a un seul caractère, on verifie que c'est soit x ou soit r, sinon on renvoit rien *)
-       let key = Bytes.get buf 0 in
+    let read_unix () =
+      let buf = Bytes.create 3 in
+      let n = Unix.read Unix.stdin buf 0 3 in
+      if n = 1 then
+        (* Si un seul caractère est saisi, vérifie s’il s’agit de 'r' ou 'x' *)
+        let key = Bytes.get buf 0 in
         if key = 'x' || key = 'r' || key = 'X' || key = 'R' then key else ' '
-
-     (* Si il y a 3 en entrée alors on vérifie que c'est bien une fleche *)  
-    else if n = 3 then 
-      match Bytes.sub_string buf 0 3 with
-      | "\x1b[A" -> 'H'  (* Flèche haut *)
-      | "\x1b[B" -> 'B'  (* Flèche bas *)
-      | "\x1b[C" -> 'D'  (* Flèche droite *)
-      | "\x1b[D" -> 'G'  (* Flèche gauche *)
-      | _ -> ' '
-
+      else if n = 3 then (
+        (* Sous Unix/Linux, les séquences de flèches sont précédées par \x1b *)
+        match Bytes.sub_string buf 0 3 with
+        | "\x1b[A" -> 'H'  (* Flèche haut *)
+        | "\x1b[B" -> 'B'  (* Flèche bas *)
+        | "\x1b[C" -> 'D'  (* Flèche droite *)
+        | "\x1b[D" -> 'G'  (* Flèche gauche *)
+        | _ -> ' '
+      )
+      else ' '
+    
+      let read_windows () =
+        let user_input = read_line () in
+        if String.length user_input > 0 then 
+          user_input.[0]
+        else 
+          ' '
       
 
-      (* Si il y a 2 entrée alors on vérifie que c'est des fleches de Windows *)
-  else if n = 2 && Bytes.get buf 0 = '\xE0' then 
-    match Bytes.get buf 1 with
-    | '\x48' -> 'H'  (* Flèche haut sous Windows *)
-    | '\x50' -> 'B'  (* Flèche bas sous Windows *)
-    | '\x4D' -> 'D'  (* Flèche droite sous Windows *)
-    | '\x4B' -> 'G'  (* Flèche gauche sous Windows *)
-    | _ -> ' '
-
-     else ' '
-
+    (* Fonction principale qui appelle la bonne fonction en fonction de l'OS *)
+    let read_key () =
+      if Sys.os_type = "Unix" then
+        read_unix ()
+      else if Sys.os_type = "Win32" then
+        read_windows ()
+      else ' '
+    
+    
 
    (* Fonction qui s'occupe de la boucle du jeu *)   
   let play () =
