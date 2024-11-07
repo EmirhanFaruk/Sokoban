@@ -67,7 +67,7 @@ struct
                 GameView.clear_terminal ();
                 (* Afficher le niveau *)
                 print_level_scoreboard levels.(!index);
-                print_endline "(Précédent: b, Suivant: n, Quitter: x): ";
+                print_endline "(Précédent: b, Suivant: n, Retour au menu: x): ";
                 (* Gérer les choix. On compte a l'invers car la liste est à l'inverse. *)
                 let choice = if Sys.os_type = "Unix"
                 then

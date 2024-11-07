@@ -63,7 +63,7 @@ struct
       GameView.showLevel !level;
       GameView.printMap map.grid;
       print_endline ("Deplacements: " ^ (string_of_int stat.moves));
-      print_string "\x1b[1m\n- z/s/d/q pour se déplacer.\n- r pour recommencer le niveau.\n- x pour quitter\nAction : ";
+      print_string "\x1b[1m\n- z/s/d/q pour se déplacer.\n- r pour recommencer le niveau.\n- x pour retourner au menu.\nAction : ";
       flush stdout;
       let action =
       if Sys.os_type = "Unix"  (* Lit l'entrée du terminal *)
