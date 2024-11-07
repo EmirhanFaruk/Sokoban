@@ -52,7 +52,9 @@ struct
 
     let (stat : Player.stat) = { name = get_name (); moves = 0 } in
     while String.length stat.name = 0 || String.length stat.name > 20 do
-        print_endline "Veuillez entrez un nom de longueur entre 1-20. Appuyer sur Entrer pour reessayer...";
+
+        if Sys.os_type <> "Unix"
+            then (print_endline "Veuillez entrez un nom de longueur entre 1-20. Appuyer sur Entrer pour reessayer...");
         stat.name <- get_name ()
     done;
 
