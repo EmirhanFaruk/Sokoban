@@ -1,50 +1,50 @@
-# Ignore binaries and executable files
-*.native
-*.byte
-*.exe
-*.o
-*.cmx
-*.cmi
-*.cmo
-*.cmx*
-*.a
-*.out
-*.opt
-*.prof
-*.annot
-*.dll
-*.so
-*.obj
-
-# Dune/OPAM specific files
+<<<<<<< HEAD
+# Dune build artifacts
 _build/
+*.exe
+*.bc
+*.o
+*.a
+*.cm*
+*.annot
+
+# Editor and IDE files
+*.swp
+*.swo
+*.~*
+*.vscode/
+*.idea/
+
+# OCaml REPL history
+.ocamlinit
+.ocaml_history
+
+# Dune-related files
+dune-project.lock
 .opam/
-*.install
-*.merlin
-*.cmt
-*.cmti
 
-# IDE/Editor specific files
-*~
-\#*\#
-.*.swp
-.idea/
-.vscode/
-
-# Ignore compiled dependencies
-*.deps
+# Logs and temp files
+*.log
+*.tmp
 *.cache
 
-# Ignore log files
-*.log
+# macOS specific files
+.DS_Store
+.AppleDouble
+.LSOverride
 
-# Ignore documentation artifacts
-*.docdir
+# macOS Finder related
+._*
+.Spotlight-V100
+.Trashes
 
-# Generated files for OCaml findlib
-META
+# macOS files that store resource fork and metadata
+.DocumentRevisions-V100/
+.fseventsd/
+.TemporaryItems/
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
 
-# Ignore Makefile products
-Makefile~
 
+sokoban.opam
 .DS_Store

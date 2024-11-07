@@ -1,0 +1,13 @@
+Emirhan(real);0;45
+Emirhan;0;100
+Emirhan(real);0;101
+Emirhan;2;200
+Emirhan(real);5;42
+Emirhan(real);2;42
+Emirhan;5;42
+Emirhan(real);5;2
+Emirhan;6;42
+Emirhan(fake);0;60
+Emirhan(fake);1;55
+Emirhan(gerçek);0;49
+Faruk;0;49
