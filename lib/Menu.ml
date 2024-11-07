@@ -47,11 +47,11 @@ struct
 
     print_endline "    ***     Déplacements possibles     ***";
     print_endline "";
-    print_endline "Nous pouvons pousser les caisses dans les directions suivantes :";
-    print_endline "      - Haut (Z) : vers le haut du labyrinthe.";
-    print_endline "      - Bas (S) : vers le bas du labyrinthe.";
-    print_endline "      - Gauche (Q) : vers la gauche du labyrinthe.";
-    print_endline "      - Droite (D) : vers la droite du labyrinthe.";
+    print_endline "Nous pouvons nous déplacer sur 4 directions grace aux flèches directionnelles :";
+    print_endline "      - Haut (↑) : vers le haut du labyrinthe.";
+    print_endline "      - Bas (↓) : vers le bas du labyrinthe.";
+    print_endline "      - Gauche (←) : vers la gauche du labyrinthe.";
+    print_endline "      - Droite (→) : vers la droite du labyrinthe.";
     print_endline "/!\\ Le déplacement ne peut pas se faire sur les caisses ou les murs. /!\\";
     print_endline "";
 

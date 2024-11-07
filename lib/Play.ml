@@ -83,12 +83,12 @@ struct
     (try
 
     let rec loop () =
-      GameView.showLevel !level;
-      GameView.printMap map.grid;
+      GameView.showLevel !level; (* Affiche le niveau courant *)
+      GameView.printMap map.grid; (* Affiche la carte du niveau courant *)
       print_endline ("Deplacements: " ^ (string_of_int stat.moves));
-      print_string "\x1b[1m\n- z/s/d/q pour se déplacer.\n- r pour recommencer le niveau.\n- x pour retourner au menu.\nAction : ";
+      print_string "\x1b[1m\n- ↑↓←→ flèches directionnelles pour se déplacer.\n- r pour recommencer le niveau.\n- x pour retourner au menu.\nAction : ";
       flush stdout;
-      let action = read_key() in
+      let action = read_key() in (* Lit l'action du joueur *)
 
       match action with
       | 'x' -> ()
