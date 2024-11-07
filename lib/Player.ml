@@ -2,7 +2,7 @@ module Player = struct
   (* Définition du type pour représenter la position du joueur *)
   type pos = { mutable x : int; mutable y : int }
 
-  type stat = { name : string; mutable moves : int }
+  type stat = { mutable name : string; mutable moves : int }
 
   (* Définition du type pour représenter les directions possibles *)
   type direction = Haut | Bas | Droite | Gauche

@@ -40,7 +40,7 @@ struct
         if input_line stdin = "" then ()
       );
     GameView.clear_terminal ();
-    print_string "Entrez votre nom: ";
+    print_string "Entrez votre nom(de longueur entre 1-20): ";
     flush stdout;
     let name = read_line () in
     GameView.clear_terminal ();
@@ -49,7 +49,13 @@ struct
    (* Fonction qui s'occupe de la boucle du jeu *)   
   let play () =
     Canonique.makeCanonique ();
+
     let (stat : Player.stat) = { name = get_name (); moves = 0 } in
+    while String.length stat.name = 0 || String.length stat.name > 20 do
+        print_endline "Veuillez entrez un nom de longueur entre 1-20. Appuyer sur Entrer pour reessayer...";
+        stat.name <- get_name ()
+    done;
+
     Canonique.makeNoCanonique (); (* For the get_name func *)
     let level = ref 0 in
     let filename = "./assert/levels.txt" in
