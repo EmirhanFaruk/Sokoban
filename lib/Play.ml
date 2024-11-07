@@ -73,9 +73,9 @@ struct
           match first_char with
           | 'x' | 'r' | 'X' | 'R' -> first_char (* Capture des touches 'r' et 'x' *)
           | 'Z' | 'z' | 'W' | 'w' -> 'H'  (* Flèche haut *)
-          | 'Q' | 'q' | 'A' | 'a' -> 'B' (* Flèche bas *)
-          | 'S' | 's' -> 'D'  (* Flèche droite *)
-          | 'D' | 'd' -> 'G' (* Flèche gauche *)
+          | 'S' | 's' -> 'B' (* Flèche bas *)
+          | 'D' | 'd' -> 'D'  (* Flèche droite *)
+          | 'Q' | 'q' | 'A' | 'a' -> 'G' (* Flèche gauche *)
           | _ -> ' '   
         else ' '
       
@@ -96,7 +96,7 @@ struct
   let affichageOS systeme =  
     if systeme = "Unix" then 
        "\x1b[1m\n- ↑↓←→ flèches directionnelles pour se déplacer.\n- r pour recommencer le niveau.\n- x pour retourner au menu.\nAction : " 
-    else "\x1b[1m\n- Haut: z/w |Bas: q/a |Droite: s |Gauche: d  pour se déplacer.\n- r pour recommencer le niveau.\n- x pour retourner au menu.\nAction : " 
+    else "\x1b[1m\n- Haut: z/w |Bas: s |Droite: d |Gauche: q/a  pour se déplacer.\n- r pour recommencer le niveau.\n- x pour retourner au menu.\nAction : " 
 
 
 

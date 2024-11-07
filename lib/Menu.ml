@@ -60,10 +60,19 @@ struct
     print_endline "    ***     Déplacements possibles     ***";
     print_endline "";
     print_endline "Nous pouvons nous déplacer sur 4 directions grace aux flèches directionnelles :";
+    print_endline "";
+    print_endline "   Unix :";
     print_endline "      - Haut (↑) : vers le haut du labyrinthe.";
     print_endline "      - Bas (↓) : vers le bas du labyrinthe.";
     print_endline "      - Gauche (←) : vers la gauche du labyrinthe.";
     print_endline "      - Droite (→) : vers la droite du labyrinthe.";
+    print_endline "";
+    print_endline "   Windows :";
+    print_endline "      - Haut (z/w) : vers le haut du labyrinthe.";
+    print_endline "      - Bas (s) : vers le bas du labyrinthe.";
+    print_endline "      - Gauche (q/a) : vers la gauche du labyrinthe.";
+    print_endline "      - Droite (d) : vers la droite du labyrinthe.";
+    print_endline "";
     print_endline "/!\\ Le déplacement ne peut pas se faire sur les caisses ou les murs. /!\\";
     print_endline "";
 
