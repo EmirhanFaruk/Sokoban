@@ -47,7 +47,7 @@ struct
   
 
 
-    let read_unix () =
+    let readUnix () =
       let buf = Bytes.create 3 in
       let n = Unix.read Unix.stdin buf 0 3 in
       if n = 1 then
@@ -65,23 +65,40 @@ struct
       )
       else ' '
     
-      let read_windows () =
+      (* Lecture du *)
+      let readWindows () =
         let user_input = read_line () in
         if String.length user_input > 0 then 
-          user_input.[0]
-        else 
-          ' '
+          let first_char = user_input.[0] in
+          match first_char with
+          | 'x' | 'r' | 'X' | 'R' -> first_char (* Capture des touches 'r' et 'x' *)
+          | 'Z' | 'z' | 'W' | 'w' -> 'H'  (* Flèche haut *)
+          | 'Q' | 'q' | 'A' | 'a' -> 'B' (* Flèche bas *)
+          | 'S' | 's' -> 'D'  (* Flèche droite *)
+          | 'D' | 'd' -> 'G' (* Flèche gauche *)
+          | _ -> ' '   
+        else ' '
       
+      (* Fonction principale qui appelle la bonne fonction en fonction de l'OS afin de donner les déplacements a faire *)
+      let readKey systeme =
+         (* On regarde si on est sur Unix *)
+        if systeme = "Unix" then
+          readUnix () 
+        
+          (* On regarde si on est sur Windows *)
+        else if systeme = "Win32" then
+          readWindows ()  
+        else ' '
 
-    (* Fonction principale qui appelle la bonne fonction en fonction de l'OS *)
-    let read_key () =
-      if Sys.os_type = "Unix" then
-        read_unix ()
-      else if Sys.os_type = "Win32" then
-        read_windows ()
-      else ' '
     
-    
+
+  (* Fonction qui permet d'afficher les touches en fonction de l'OS*)
+  let affichageOS systeme =  
+    if systeme = "Unix" then 
+       "\x1b[1m\n- ↑↓←→ flèches directionnelles pour se déplacer.\n- r pour recommencer le niveau.\n- x pour retourner au menu.\nAction : " 
+    else "\x1b[1m\n- Haut: z/w |Bas: q/a |Droite: s |Gauche: d  pour se déplacer.\n- r pour recommencer le niveau.\n- x pour retourner au menu.\nAction : " 
+
+
 
    (* Fonction qui s'occupe de la boucle du jeu *)   
   let play () =
@@ -93,6 +110,9 @@ struct
     let (player : Player.pos) = { x = 0; y = 0 } in
     let map = GameState.loadMap filename !level player in
     let playerCopy = Player.copyPlayer player in
+    let systeme = Sys.os_type in
+    let affichageTouche = (affichageOS systeme) in
+
 
     (try
 
@@ -100,9 +120,9 @@ struct
       GameView.showLevel !level; (* Affiche le niveau courant *)
       GameView.printMap map.grid; (* Affiche la carte du niveau courant *)
       print_endline ("Deplacements: " ^ (string_of_int stat.moves));
-      print_string "\x1b[1m\n- ↑↓←→ flèches directionnelles pour se déplacer.\n- r pour recommencer le niveau.\n- x pour retourner au menu.\nAction : ";
+      print_string affichageTouche;
       flush stdout;
-      let action = read_key() in (* Lit l'action du joueur *)
+      let action = readKey systeme in (* Lit l'action du joueur *)
 
       match action with
       | 'x'|'X' -> ()
@@ -135,6 +155,7 @@ struct
   with
   | Exit -> ()  (* Gère la sortie normale *)
   | exn -> prerr_endline ("Erreur inattendue : " ^ Printexc.to_string exn)
+
   );
 end
 
