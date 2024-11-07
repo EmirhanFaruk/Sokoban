@@ -3,6 +3,17 @@ struct
   open ScoreboardView
   open Play
   open Canonique
+
+  (*--------------------------------------------------------------- TERMINALE ---------------------------------------------------------------------*)
+
+  (* Fonction pour nettoyer le terminal *)
+  let clear_terminal () =
+    let command =
+    if Sys.os_type = "Unix" then "clear"
+    else "cls" in
+    ignore (Unix.system command)
+
+
   (*----------------------------------------------------------- MENU PRINCIPAL -------------------------------------------------------------------*)
   (* Affiche le menu et retourne le choix de l'utilisateur *)
   let showMenu () = 
@@ -64,16 +75,12 @@ struct
 
     print_endline "  ------[      Amusez vous bien !       ]------";
     print_endline "";
-
+    print_string "\x1b[0m";
+    if Sys.os_type = "Unix" then (print_string "Appuyez sur Entrer pour retourner au menu..."; let _ = read_line () in (); clear_terminal ());
     flush stdout;  (* S'assurer que l'affichage est fait *)
-    print_string "\x1b[0m"
+    if Sys.os_type <> "Unix" then (let _ = read_line () in ())
   
-  (* Fonction pour nettoyer le terminal *)
-  let clear_terminal () =
-    let command = 
-    if Sys.os_type = "Unix" then "clear" 
-    else "cls" in
-    ignore (Unix.system command)
+
   (*------------------------------------------------------ FONCTION PRINCIPALE ----------------------------------------------------------------*)
   
   (* Fonction principale qui affiche le menu et traite le choix du joueur *)
@@ -84,7 +91,7 @@ struct
       let choice = showMenu () in
       (* Gére chaque option en fonction du choix de l'utilisateur *)
       match choice with
-      | '1' -> clear_terminal (); Play.play () (* Démarre le jeu *)
+      | '1' -> clear_terminal (); Play.play (); clear_terminal (); loop () (* Démarre le jeu *)
       | '2' -> clear_terminal (); showRules (); loop ()     (* Affiche les règles *)
       | '3' -> ScoreboardView.scoreboard_menu (); loop() (* Affiche le scoreboard *)
       | '4' -> Canonique.makeCanonique (); print_string "\x1b[1m"; print_endline "Au revoir!"; print_string "\x1b[0m";  exit 0  (* Quitte le programme *)

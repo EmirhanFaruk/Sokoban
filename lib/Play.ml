@@ -63,7 +63,7 @@ struct
       GameView.showLevel !level;
       GameView.printMap map.grid;
       print_endline ("Deplacements: " ^ (string_of_int stat.moves));
-      print_string "\x1b[1m\n- z/s/d/q pour se déplacer.\n- r pour recommencer le niveau.\n- x pour quitter\nAction : ";
+      print_string "\x1b[1m\n- z/s/d/q pour se déplacer.\n- r pour recommencer le niveau.\n- x pour retourner au menu.\nAction : ";
       flush stdout;
       let action =
       if Sys.os_type = "Unix"  (* Lit l'entrée du terminal *)
@@ -77,7 +77,7 @@ struct
         else
           'a' in (* Une lettre au hasard pour que ça fasse rien *)
       match action with
-      | 'x' -> Canonique.makeCanonique ()
+      | 'x' -> ()
       | 'r' -> restart map player playerCopy; Player.reset_stat stat; loop () (* On relance le loop avec la map reset *)
       | 'z' | 's' | 'd' | 'q' as dir ->
           let direction = 
@@ -105,8 +105,8 @@ struct
     loop ()
 
   with
-  | Exit -> Canonique.makeCanonique (); ()  (* Gère la sortie normale *)
-  | exn -> Canonique.makeCanonique (); prerr_endline ("Erreur inattendue : " ^ Printexc.to_string exn)
+  | Exit -> ()  (* Gère la sortie normale *)
+  | exn -> prerr_endline ("Erreur inattendue : " ^ Printexc.to_string exn)
   );
 end
 
