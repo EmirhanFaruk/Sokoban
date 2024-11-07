@@ -105,8 +105,8 @@ struct
     loop ()
 
   with
-  | Exit -> Canonique.makeCanonique (); ()  (* Gère la sortie normale *)
-  | exn -> Canonique.makeCanonique (); prerr_endline ("Erreur inattendue : " ^ Printexc.to_string exn)
+  | Exit -> ()  (* Gère la sortie normale *)
+  | exn -> prerr_endline ("Erreur inattendue : " ^ Printexc.to_string exn)
   );
 end
 
