@@ -64,9 +64,9 @@ struct
 
     print_endline "  ------[      Amusez vous bien !       ]------";
     print_endline "";
-
-    flush stdout;  (* S'assurer que l'affichage est fait *)
     print_string "\x1b[0m";
+    if Sys.os_type = "Unix" then (print_endline "Appuyez entrer pour retourner au menu...");
+    flush stdout;  (* S'assurer que l'affichage est fait *)
     let _ = read_line () in ()
   
   (* Fonction pour nettoyer le terminal *)
