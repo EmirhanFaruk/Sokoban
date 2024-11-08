@@ -2,6 +2,19 @@
 
 Sokoban est un jeu de puzzle classique développé en OCaml, où le joueur doit déplacer des caisses sur des cibles spécifiques dans un environnement à labyrinthe. Ce projet inclut un système de menus et une gestion de modes de terminal (canoniques et non-canoniques) pour une expérience utilisateur optimisée.
 
+
+## Table des matières
+
+- [Aperçu du jeu](#aperçu-du-jeu)
+- [Installation](#installation)
+  - [Installation d'OCaml](#installation-docaml)
+  - [Clonage de Projet et Installation des Dépendances](#clonage-de-projet-et-installation-des-dépendances)
+- [Utilisation](#utilisation)
+- [OS](#os)
+- [Contrôles principaux pendant la partie](#contrôles-principaux-pendant-la-partie)
+- [Remerciements](#remerciements)
+
+
 ## Aperçu du jeu
 
 Dans Sokoban, vous incarnez un personnage qui doit déplacer des caisses vers des emplacements marqués (les cibles) en poussant chaque caisse une par une. Les mouvements doivent être stratégiques, car une fois une caisse coincée dans un coin, elle ne peut plus être déplacée. L'objectif est de placer toutes les caisses sur les cibles du niveau et de le faire avec le moins de mouvement possibles.
