@@ -1,6 +1,8 @@
 (* Module pour gérer l'état du jeu et les cartes *)
 module GameState : sig
 
+  open Player 
+
   (* Type représentant les différents éléments de la carte *)
   type tile = Wall | Ground | Box | BoxGround | Player
 
