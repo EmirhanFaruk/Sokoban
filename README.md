@@ -4,7 +4,7 @@ Sokoban est un jeu de puzzle classique développé en OCaml, où le joueur doit 
 
 ## Aperçu du jeu
 
-Dans Sokoban, vous incarnez un personnage qui doit déplacer des caisses vers des emplacements marqués (les cibles) en poussant chaque caisse une par une. Les mouvements doivent être stratégiques, car une fois une caisse coincée dans un coin, elle ne peut plus être déplacée. L'objectif est de placer toutes les caisses sur les cibles du niveau.
+Dans Sokoban, vous incarnez un personnage qui doit déplacer des caisses vers des emplacements marqués (les cibles) en poussant chaque caisse une par une. Les mouvements doivent être stratégiques, car une fois une caisse coincée dans un coin, elle ne peut plus être déplacée. L'objectif est de placer toutes les caisses sur les cibles du niveau et de le faire avec le moins de mouvement possibles.
 
 ## Installation
 
