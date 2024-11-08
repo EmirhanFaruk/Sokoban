@@ -89,7 +89,7 @@ Dans le jeu, vous pouvez naviguer dans le menus pour ***lancer une nouvelle part
 
 ### OS 
 
-Lors de l'exécution du programme, si vous êtes sous un systeme **Windows**, vous nn'aurait pas accès au mode non canonique du terminale, c'est a dire que chaque entrée que vous donnez au terminale, vous devrez appyer sur ***Entrée*** pour qu'elle soit prise en compte. Sinon le jeu est sous format non canonique et chaque entrée que vous faites au terminal sera prise en compte immédiatement, sauf quand nous vous demanderons de donner un pseudo.
+Lors de l'exécution du programme, si vous êtes sous un systeme **Windows**, vous n'aurez pas accès au mode non canonique du terminale, c'est a dire que chaque entrée que vous donnez au terminale, vous devrez appyer sur ***Entrée*** pour qu'elle soit prise en compte. Sinon le jeu est sous format non canonique et chaque entrée que vous faites au terminal sera prise en compte immédiatement, sauf quand nous vous demanderons de donner un pseudo.
 
 
 ## Contrôles principaux pendant la partie
