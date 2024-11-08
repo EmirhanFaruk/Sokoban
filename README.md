@@ -8,6 +8,27 @@ Dans Sokoban, vous incarnez un personnage qui doit déplacer des caisses vers de
 
 ## Installation
 
+### Installation d'OCamL
+
+- D'abord il faut installer opam:
+    ```bash
+    sudo apt install opam
+    ```
+  
+- Puis on active opam:
+    ```bash
+    opam init
+    ```
+
+- Après avoir activé, on installe OCamL et on change notre envrionnement à celui:
+    ```bash
+    opam switch create 4.14.1
+    eval $(opam env)
+    ```
+
+### Clonage de Projet et Installation des Dépendances
+
+
 1. Clonez le dépôt :
 
     Sous format SSH :
@@ -23,8 +44,20 @@ Dans Sokoban, vous incarnez un personnage qui doit déplacer des caisses vers de
     ```bash
     cd sokoban
     ```
+   
+2. Installer les dépendances:
+    Maintenant on peut installer les dépendances de jeu:
+    ```bash
+    opam install . --deps-only
+    ```
 
-2. Compilez le projet :
+    - Si ça ne marche pas, on peut les installer manuellement:
+    ```bash
+    opam install dune unix
+    ```
+    
+
+3. Compilez le projet :
     ```bash
     dune build
     ```
@@ -50,16 +83,18 @@ Lors de l'exécution du programme, si vous êtes sous un systeme **Windows**, vo
 - **Déplacer le personnage** : 
 
 Sous Unix/Linux nous utilisons les fleches directionnelles:
-    - `↑` : haut
-    - `↓` : bas
-    - `←` : gauche
-    - `→` : droite
+- `↑` : haut
+- `↓` : bas
+- `←` : gauche
+- `→` : droite
 
 Sous Windows, nous utilisons les touches suivante:
-    - `W` ou '`Z` : haut
-    - `S` : bas
-    - `A` ou '`Q`' : gauche
-    - `D` : droite
+- `W` ou `Z` : haut
+- `S` : bas
+- `A` ou `Q` : gauche
+- `D` : droite
+
+
 
 - **Recommencer le niveau** : Avec la touche `R` vous pouvez recommencer le niveau.
 - **Retourner au menu** : Avec la touche `X` vous pouvez recommencer le niveau.
