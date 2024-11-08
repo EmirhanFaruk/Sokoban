@@ -10,17 +10,17 @@ Dans Sokoban, vous incarnez un personnage qui doit déplacer des caisses vers de
 
 ### Installation d'OCamL
 
-- D'abord il faut installer opam:
+1. Pour commencer il faut installer opam:
     ```bash
     sudo apt install opam
     ```
   
-- Puis on active opam:
+2. Puis on active opam:
     ```bash
     opam init
     ```
 
-- Après avoir activé, on installe OCamL et on change notre envrionnement à celui:
+3. Après avoir activé opam, il faut installer OCamL et changer l'envrionnement de celui ci:
     ```bash
     opam switch create 4.14.1
     eval $(opam env)
@@ -46,12 +46,13 @@ Dans Sokoban, vous incarnez un personnage qui doit déplacer des caisses vers de
     ```
    
 2. Installer les dépendances:
-    Maintenant on peut installer les dépendances de jeu:
+
+    Pour installer les dépendances de jeu:
     ```bash
     opam install . --deps-only
     ```
 
-    - Si ça ne marche pas, on peut les installer manuellement:
+    - Si ça ne marche pas, vous pouvez les installer manuellement:
     ```bash
     opam install dune unix
     ```
@@ -93,7 +94,6 @@ Sous Windows, nous utilisons les touches suivante:
 - `S` : bas
 - `A` ou `Q` : gauche
 - `D` : droite
-
 
 
 - **Recommencer le niveau** : Avec la touche `R` vous pouvez recommencer le niveau.
