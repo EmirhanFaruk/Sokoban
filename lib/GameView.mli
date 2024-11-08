@@ -1,5 +1,5 @@
 (* Module pour l'affichage de l'état du jeu *)
-module GameView = sig
+module GameView : sig
 
   (* Convertit une tuile en un caractère (emoji) *)
   val cell_to_emoji : GameState.tile -> string

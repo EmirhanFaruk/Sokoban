@@ -1,5 +1,5 @@
 (* Module pour gérer le menu principal et les interactions *)
-module Menu = sig
+module Menu : sig
 
   (* Fonction pour nettoyer le terminal *)
   val clear_terminal : unit -> unit
