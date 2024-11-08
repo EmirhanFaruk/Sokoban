@@ -1,7 +1,7 @@
 module GameView =
 struct
   open GameState
-  (* Convertit une tuile en un caractère *)
+  (* Convertit une tuile en un caractère (emoji) *)
   let cell_to_emoji (cell : GameState.tile) = 
     match cell with
     | Wall -> "\xF0\x9F\x9F\xA8"

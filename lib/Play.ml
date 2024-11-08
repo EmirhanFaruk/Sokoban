@@ -31,8 +31,8 @@ struct
     map.grid <- GameState.copyMap map.original;
     Player.updatePlayer player (playerCopy.x,playerCopy.y)
 
-
-let contains_only_spaces str =
+ (* Fonction qui vérifie si une chaîne de caractères contient uniquement des espaces *)
+  let contains_only_spaces str =
   let is_space c = c = ' ' in
   let rec check_spaces i =
     if i = String.length str then true
@@ -41,8 +41,7 @@ let contains_only_spaces str =
   in
   check_spaces 0
 
-  (* I HATE 2 SPACE TABS *)
-  (* Avoir le nom de joueur *)
+  (* Fonction qui permet d'avoir le nom de joueur *)
   let rec get_name () =
     if Sys.os_type <> "Unix"
     then
@@ -60,27 +59,27 @@ let contains_only_spaces str =
     else name
   
 
-
-    let readUnix () =
-      let buf = Bytes.create 3 in
-      let n = Unix.read Unix.stdin buf 0 3 in
-      if n = 1 then
-        (* Si un seul caractère est saisi, vérifie s’il s’agit de 'r' ou 'x' *)
-        let key = Bytes.get buf 0 in
-        if key = 'x' || key = 'r' || key = 'X' || key = 'R' then key else ' '
-      else if n = 3 then (
-        (* Sous Unix/Linux, les séquences de flèches sont précédées par \x1b *)
-        match Bytes.sub_string buf 0 3 with
-        | "\x1b[A" -> 'H'  (* Flèche haut *)
-        | "\x1b[B" -> 'B'  (* Flèche bas *)
-        | "\x1b[C" -> 'D'  (* Flèche droite *)
-        | "\x1b[D" -> 'G'  (* Flèche gauche *)
-        | _ -> ' '
-      )
-      else ' '
+  (* Fonction qui lis les entrées clavier sous Unix *)
+  let readUnix () =
+    let buf = Bytes.create 3 in
+    let n = Unix.read Unix.stdin buf 0 3 in
+    if n = 1 then
+      (* Si un seul caractère est saisi, vérifie s’il s’agit de 'r' ou 'x' *)
+      let key = Bytes.get buf 0 in
+      if key = 'x' || key = 'r' || key = 'X' || key = 'R' then key else ' '
+    else if n = 3 then (
+      (* Sous Unix/Linux, les séquences de flèches sont précédées par \x1b *)
+      match Bytes.sub_string buf 0 3 with
+      | "\x1b[A" -> 'H'  (* Flèche haut *)
+      | "\x1b[B" -> 'B'  (* Flèche bas *)
+      | "\x1b[C" -> 'D'  (* Flèche droite *)
+      | "\x1b[D" -> 'G'  (* Flèche gauche *)
+      | _ -> ' '
+    )
+    else ' '
     
-      (* Lecture du *)
-      let readWindows () =
+  (* Fonction qui lis les entrées clavier sous Windows *)
+  let readWindows () =
         let user_input = read_line () in
         if String.length user_input > 0 then 
           let first_char = user_input.[0] in
@@ -93,16 +92,16 @@ let contains_only_spaces str =
           | _ -> ' '   
         else ' '
       
-      (* Fonction principale qui appelle la bonne fonction en fonction de l'OS afin de donner les déplacements a faire *)
-      let readKey systeme =
-         (* On regarde si on est sur Unix *)
-        if systeme = "Unix" then
-          readUnix () 
-        
-          (* On regarde si on est sur Windows *)
-        else if systeme = "Win32" then
-          readWindows ()  
-        else ' '
+  (* Fonction qui appelle la bonne fonction en fonction de l'OS afin de donner les déplacements a faire *)
+  let readKey systeme =
+      (* On regarde si on est sur Unix *)
+    if systeme = "Unix" then
+      readUnix () 
+    
+      (* On regarde si on est sur Windows *)
+    else if systeme = "Win32" then
+      readWindows ()  
+    else ' '
 
     
 
@@ -114,7 +113,7 @@ let contains_only_spaces str =
 
 
 
-   (* Fonction qui s'occupe de la boucle du jeu *)   
+  (* Fonction qui s'occupe de la boucle du jeu *)   
   let play () =
     Canonique.makeCanonique ();
 

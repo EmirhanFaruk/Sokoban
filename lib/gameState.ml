@@ -12,6 +12,9 @@ struct
 
   (* Exception pour signaler qu'un niveau n'a pas été trouvé *)
   exception Level_not_found of int
+
+  (** Exception levée lorsque des coordonnées sont en dehors de la carte *)
+
   exception Isnt_in_the_list of (int * int)
   
   (* Convertir une chaîne en liste de caractères *)
