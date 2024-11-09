@@ -7,7 +7,7 @@ struct
   open Canonique
 
   (* Fonction qui met à jour le niveau au suivant et la map *)
-  let updateMap (level : int ref) (map : GameState.level_map) filename (player: Player.pos)  =
+  let updateMap (level : int ref) (map : GameState.level_map) filename (player: Player.player)  =
     let new_level = !level + 1 in
         (* Charge la nouvelle carte pour le niveau suivant *)
         let new_map = GameState.loadMap filename new_level player in
@@ -27,9 +27,9 @@ struct
     end else level_completed
     
   (* Fonction qui reinitialise la partie *)
-  let restart (map : GameState.level_map) (player : Player.pos) (playerCopy : Player.pos) =
+  let restart (map : GameState.level_map) (player : Player.player) (playerCopy : Player.player) =
     map.grid <- GameState.copyMap map.original;
-    Player.updatePlayer player (playerCopy.x,playerCopy.y)
+    Player.updatePlayerPos player (playerCopy.pos.x,playerCopy.pos.y)
 
 
 let contains_only_spaces str =
@@ -53,10 +53,10 @@ let contains_only_spaces str =
     flush stdout;
     let name = read_line () in
     (* #28 - Nom vide : Désormais il n'est plus possible d'avoir de nom vide, d'avoir un nom de + de 20 caractères, d'avoir un nom contenant seulement des espaces ou d'avoir un nom contenant des ; *)
-    if name = "" then begin print_endline "Erreur : Entrez un nom valide."; get_name () end
+    if name = "" then begin print_endline "Erreur : Entrez un nom pas vide."; get_name () end
     else if String.length name > 20 then begin print_endline "Erreur : Entrez un nom valide."; get_name () end
-    else if contains_only_spaces name then begin print_endline "Erreur : Entrez un nom valide."; get_name () end
-    else if String.contains name ';' then begin print_endline "Erreur : Entrez un nom valide."; get_name () end
+    else if contains_only_spaces name then begin print_endline "Erreur : Entrez un nom avec au moins un caractere visible."; get_name () end
+    else if String.contains name ';' then begin print_endline "Erreur : Entrez un nom sans utiliser ';'."; get_name () end
     else name
   
 
@@ -122,9 +122,10 @@ let contains_only_spaces str =
     Canonique.makeNoCanonique (); (* For the get_name func *)
     let level = ref 0 in
     let filename = "./assert/levels.txt" in
-    let (player : Player.pos) = { x = 0; y = 0 } in
+    let (pos : Player.pos) = { x = 0; y = 0 } in
+    let (player : Player.player) = {pos = pos; stat = stat} in
     let map = GameState.loadMap filename !level player in
-    let playerCopy = Player.copyPlayer player in
+    let playerCopy = Player.copyPlayerPos player in
     let systeme = Sys.os_type in
     let affichageTouche = (affichageOS systeme) in
 
@@ -152,14 +153,14 @@ let contains_only_spaces str =
             | _ -> failwith "Impossible"
           in 
           (* Met à jour la carte en fonction de la direction *)
-          map.grid <- GameState.updateMap map player direction stat;
+          map.grid <- GameState.updateMap map player direction;
           (* Appelle la fonction endGame pour vérifier si le niveau/jeu est terminé *)
           if endGame level map then
             (
             Scoreboard.save_score stat !level;
             Player.reset_stat stat;
             updateMap level map filename player;
-            Player.updatePlayer playerCopy (player.x,player.y))
+            Player.updatePlayerPos playerCopy (player.pos.x,player.pos.y))
           else ();
           loop ()
       | _ -> print_endline "Action non reconnue."; GameView.showLevel !level; loop ()

@@ -24,7 +24,7 @@ struct
     int_of_string level_str
 
   (* Charge une ligne de caractères en une liste de tuiles *)
-  let load_line_to_tiles line y (player: Player.pos) =
+  let load_line_to_tiles line y (player: Player.player) =
     let _, tile_list = List.fold_right (fun c (x, acc) ->
       match c with
       | '#' -> (x - 1, Wall :: acc)
@@ -33,14 +33,14 @@ struct
       | '.' -> (x - 1, BoxGround :: acc)
       | '@' ->
           (* Mettre à jour la position du joueur *)
-          Player.updatePlayer player (x,y);
+          Player.updatePlayerPos player (x,y);
           (x - 1, Player :: acc)
       | _ -> (x - 1, acc)  (* Ignorer les caractères non spécifiés *)
     ) (string_to_char_list line) ((String.length line - 1), []) in
     tile_list
 
   (* Fonction pour charger une carte d'un fichier texte *)
-  let loadMap filename niveau player =
+  let loadMap filename niveau (player : Player.player) =
     (* Principe : Nous cherchons dans filename le niveau demandé en parcourant chaque bloc de niveau.
       Une fois trouvé, nous ajoutons le bloc de niveau dans une liste puis inversons le contenu de la liste
       afin que cela soit dans l'ordre. Si le niveau n'existe pas, on renvoie une erreur. *)
@@ -114,10 +114,10 @@ struct
       | _ -> true
       
   (* Foncition qui met à jour la position du joueur dans la carte *)
-  let updatePlayerPosition list_map (player : Player.pos) new_x new_y current_tile (stat : Player.stat) =
+  let updatePlayerPosition list_map (player : Player.player) new_x new_y current_tile =
     modifyList list_map new_x new_y current_tile;  (* On met à jour la position du joueur dans la map *)
-    Player.updatePlayer player (new_x, new_y);  (* On met à jour les coordonées joueur *)
-    Player.stat_upt stat
+    Player.updatePlayerPos player (new_x, new_y);  (* On met à jour les coordonées joueur *)
+    Player.stat_upt player.stat
 
   (* Fonction qui met à jour l'ancienne case du joueur *)
   let updateOriginalTile list_map old_x old_y =
@@ -130,14 +130,14 @@ struct
       modifyList list_map old_x old_y old_original
 
   (* Fonction qui met à jour la carte, la position du joueur et le mouvement des boîtes *)
-  let updateMap (list_map : level_map) (player : Player.pos) direction (stat : Player.stat) =
+  let updateMap (list_map : level_map) (player : Player.player) direction =
     let (width, height) = get_dim list_map.grid in
     (* On réccupère la position suivante du joueur *)
-    let new_x, new_y = Player.get_next_pos (player.x, player.y) direction (width, height) in
+    let new_x, new_y = Player.get_next_pos (player.pos.x, player.pos.y) direction (width, height) in
 
     (* Si la prochaine position est un chemin *)
     if isPath list_map.grid (new_x, new_y) then
-      let old_x, old_y = player.x, player.y in
+      let old_x, old_y = player.pos.x, player.pos.y in
       let current_tile = list_map.grid.(old_y).(old_x) in
       let next_tile = list_map.grid.(new_y).(new_x) in
 
@@ -154,7 +154,7 @@ struct
           modifyList list_map box_new_x box_new_y box_current_tile;
           
           (* On met à jour la position du joueur *)
-          updatePlayerPosition list_map player new_x new_y current_tile stat;
+          updatePlayerPosition list_map player new_x new_y current_tile;
 
           (* On met à jour de l'ancienne position du joueur *)
           updateOriginalTile list_map old_x old_y
@@ -162,7 +162,7 @@ struct
           isBoxBlocked := true  (* On marque que la boîte est bloquée *)
       else 
         (* On déplace seulement le joueur s'il n'y a pas de boîte *)
-        updatePlayerPosition list_map player new_x new_y current_tile stat;
+        updatePlayerPosition list_map player new_x new_y current_tile;
 
       (* Si la boîte n'est pas bloquée, on met à jour l'ancienne position *)
       if not !isBoxBlocked then
