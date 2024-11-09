@@ -34,8 +34,8 @@ struct
       GameState.modifyList map s.x s.y tile;
       if tile = Tile.Player then
         (if isBefore then Player.stat_down stat
-        else Player.stat_upt stat );
-        Player.updatePlayer player (s.x, s.y)
+        else Player.stat_upt stat;
+        Player.updatePlayer player (s.x, s.y))
       ) liste
 
   (* Fonction pour retourner en arrière *)
