@@ -5,6 +5,8 @@ struct
   open GameView
   open Scoreboard
   open Canonique
+  open Movement
+  open UndoRedo
 
   (* Fonction qui met à jour le niveau au suivant et la map *)
   let updateMap (level : int ref) (map : GameState.level_map) filename (player: Player.pos)  =
@@ -64,6 +66,7 @@ struct
     let (player : Player.pos) = { x = 0; y = 0 } in
     let map = GameState.loadMap filename !level player in
     let playerCopy = Player.copyPlayer player in
+    let (stacks : UndoRedo.stacks)= UndoRedo.initializeStacks () in
 
     (try
 
@@ -71,7 +74,7 @@ struct
       GameView.showLevel !level;
       GameView.printMap map.grid;
       print_endline ("Deplacements: " ^ (string_of_int stat.moves));
-      print_string "\x1b[1m\n- z/s/d/q pour se déplacer.\n- r pour recommencer le niveau.\n- x pour retourner au menu.\nAction : ";
+      print_string "\x1b[1m\n- z/s/d/q pour se déplacer.\n- r pour recommencer le niveau.\n- g pour annuler.\n- h pour rétablir.\n- x pour retourner au menu.\nAction : ";
       flush stdout;
       let action =
       if Sys.os_type = "Unix"  (* Lit l'entrée du terminal *)
@@ -87,6 +90,8 @@ struct
       match action with
       | 'x' -> ()
       | 'r' -> restart map player playerCopy; Player.reset_stat stat; loop () (* On relance le loop avec la map reset *)
+      | 'g' -> UndoRedo.undo map player stacks stat; loop ()
+      | 'h' -> UndoRedo.redo map player stacks stat; loop ()
       | 'z' | 's' | 'd' | 'q' as dir ->
           let direction = 
             match dir with
@@ -97,14 +102,15 @@ struct
             | _ -> failwith "Impossible"
           in 
           (* Met à jour la carte en fonction de la direction *)
-          map.grid <- GameState.updateMap map player direction stat;
+          map.grid <-  Movement.updateMap map player direction stat stacks;
           (* Appelle la fonction endGame pour vérifier si le niveau/jeu est terminé *)
           if endGame level map then
             (
             Scoreboard.save_score stat !level;
             Player.reset_stat stat;
             updateMap level map filename player;
-            Player.updatePlayer playerCopy (player.x,player.y))
+            Player.updatePlayer playerCopy (player.x,player.y);
+            UndoRedo.resetStacks stacks)
           else ();
           loop ()
       | _ -> print_endline "Action non reconnue."; GameView.showLevel !level; loop ()

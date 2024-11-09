@@ -30,4 +30,8 @@ module Player = struct
 
   let stat_upt stat =
     stat.moves <- stat.moves + 1
+
+  let stat_down stat =
+    if(stat.moves > 0) then
+      stat.moves <- stat.moves - 1
 end
