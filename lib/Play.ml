@@ -123,9 +123,9 @@ let contains_only_spaces str =
     let level = ref 0 in
     let filename = "./assert/levels.txt" in
     let (pos : Player.pos) = { x = 0; y = 0 } in
-    let (player : Player.player) = {pos = pos; stat = stat} in
+    let (player : Player.player) = Player.makePlayer pos stat in
     let map = GameState.loadMap filename !level player in
-    let playerCopy = Player.copyPlayerPos player in
+    let playerCopy = Player.copyPlayer player in
     let systeme = Sys.os_type in
     let affichageTouche = (affichageOS systeme) in
 
@@ -142,7 +142,7 @@ let contains_only_spaces str =
 
       match action with
       | 'x'|'X' -> ()
-      | 'r'|'R' -> restart map player playerCopy; Player.reset_stat stat; loop () (* On relance le loop avec la map reset *)
+      | 'r'|'R' -> restart map player playerCopy; Player.reset_stat player.stat; loop () (* On relance le loop avec la map reset *)
       | 'H' | 'B' | 'D' | 'G' as dir ->
           let direction = 
             match dir with
@@ -157,10 +157,10 @@ let contains_only_spaces str =
           (* Appelle la fonction endGame pour vérifier si le niveau/jeu est terminé *)
           if endGame level map then
             (
-            Scoreboard.save_score stat !level;
-            Player.reset_stat stat;
+            Scoreboard.save_score player.stat !level;
+            Player.reset_stat player.stat;
             updateMap level map filename player;
-            Player.updatePlayerPos playerCopy (player.pos.x,player.pos.y))
+            Player.updatePlayerPos playerCopy (player.pos.x, player.pos.y))
           else ();
           loop ()
       | _ -> print_endline "Action non reconnue."; GameView.showLevel !level; loop ()

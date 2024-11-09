@@ -23,10 +23,17 @@ module Player = struct
     player.pos.x <- x;
     player.pos.y <- y
 
-  let copyPlayerPos (player : player) =
-    {x = player.pos.x; y = player.pos.y}
+  let copyPos (pos : pos) =
+    {x = pos.x; y = pos.y}
 
-  let copyPlayerPos
+  let copyStat (stat : stat) =
+    {name = stat.name; moves = stat.moves}
+
+  let makePlayer (pos : pos) (stat : stat) =
+    {pos = copyPos pos; stat = stat}
+
+  let copyPlayer (player : player) =
+    makePlayer (copyPos player.pos) (copyStat player.stat)
 
 
   let reset_stat stat =
