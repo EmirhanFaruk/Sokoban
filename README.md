@@ -109,8 +109,10 @@ Sous Windows, nous utilisons les touches suivante:
 - `D` : droite
 
 
-- **Recommencer le niveau** : Avec la touche `R` vous pouvez recommencer le niveau.
-- **Retourner au menu** : Avec la touche `X` vous pouvez recommencer le niveau.
+- **Recommencer le niveau** : En utilisant la touche `R`.
+- **Annuler un déplacement** : En utilisant la touche `U`.
+- **Rétablir un déplacement** : En utilisant la touche `I`.
+- **Retourner au menu** : En utilisant la touche `X`.
 
 ## Remerciements
 
