@@ -32,33 +32,92 @@ struct
   let restart (map : GameState.level_map) (player : Player.pos) (playerCopy : Player.pos) =
     map.grid <- GameState.copyMap map.original;
     Player.updatePlayer player (playerCopy.x,playerCopy.y)
+  
+  let contains_only_spaces str =
+    let is_space c = c = ' ' in
+    let rec check_spaces i =
+      if i = String.length str then true
+      else if is_space str.[i] then check_spaces (i + 1)
+      else false
+    in
+    check_spaces 0
+    
 
   (* I HATE 2 SPACE TABS *)
   (* Avoir le nom de joueur *)
-  let get_name () =
+  let rec get_name () =
     if Sys.os_type <> "Unix"
     then
       (
         if input_line stdin = "" then ()
       );
-    GameView.clear_terminal ();
     print_string "Entrez votre nom(de longueur entre 1-20): ";
     flush stdout;
-    let name = read_line () in
-    GameView.clear_terminal ();
-    name
+    
+  let name = read_line () in
+    (* #28 - Nom vide : Désormais il n'est plus possible d'avoir de nom vide, d'avoir un nom de + de 20 caractères, d'avoir un nom contenant seulement des espaces ou d'avoir un nom contenant des ; *)
+    if name = "" then begin print_endline "Erreur : Entrez un nom valide."; get_name () end
+    else if String.length name > 20 then begin print_endline "Erreur : Entrez un nom valide."; get_name () end
+    else if contains_only_spaces name then begin print_endline "Erreur : Entrez un nom valide."; get_name () end
+    else if String.contains name ';' then begin print_endline "Erreur : Entrez un nom valide."; get_name () end
+    else name
+
+  let readUnix () =
+    let buf = Bytes.create 3 in
+    let n = Unix.read Unix.stdin buf 0 3 in
+    if n = 1 then
+      (* Si un seul caractère est saisi, vérifie s’il s’agit de 'r' ou 'x' *)
+      let key = Char.uppercase_ascii (Bytes.get buf 0) in
+      if  key = 'X' || key = 'R' || key = 'U' || key = 'I'then key else ' '
+    else if n = 3 then (
+      (* Sous Unix/Linux, les séquences de flèches sont précédées par \x1b *)
+      match Bytes.sub_string buf 0 3 with
+      | "\x1b[A" -> 'H'  (* Flèche haut *)
+      | "\x1b[B" -> 'B'  (* Flèche bas *)
+      | "\x1b[C" -> 'D'  (* Flèche droite *)
+      | "\x1b[D" -> 'G'  (* Flèche gauche *)
+      | _ -> ' '
+    )
+    else ' '
+  
+    (* Lecture du *)
+    let readWindows () =
+      let user_input = read_line () in
+      if String.length user_input > 0 then 
+        let first_char = Char.uppercase_ascii user_input.[0] in
+        match first_char with
+        | 'X' | 'R' | 'U' | 'I' -> first_char (* Capture des touches 'r','x','u' et 'i' *)
+        | 'Z' | 'W'  -> 'H'  (* Flèche haut *)
+        | 'S'  -> 'B' (* Flèche bas *)
+        | 'D' -> 'D'  (* Flèche droite *)
+        | 'Q' | 'A' -> 'G' (* Flèche gauche *)
+        | _ -> ' '   
+      else ' '
+    
+    (* Fonction principale qui appelle la bonne fonction en fonction de l'OS afin de donner les déplacements a faire *)
+    let readKey systeme =
+        (* On regarde si on est sur Unix *)
+      if systeme = "Unix" then
+        readUnix () 
+      
+        (* On regarde si on est sur Windows *)
+      else if systeme = "Win32" then
+        readWindows ()  
+      else ' '
+  
+      
+  
+    (* Fonction qui permet d'afficher les touches en fonction de l'OS*)
+    let affichageOS systeme =  
+      if systeme = "Unix" then 
+         "\x1b[1m\n- ↑↓←→ flèches directionnelles pour se déplacer.\n- r pour recommencer le niveau.\n- u pour annuler. \n- i pour remettre. \n- x pour retourner au menu.\nAction : " 
+      else "\x1b[1m\n- Haut: z/w |Bas: s |Droite: d |Gauche: q/a  pour se déplacer.\n- r pour recommencer le niveau.\n- u pour annuler. \n- i pour remettre.\n- x pour retourner au menu.\nAction : " 
   
    (* Fonction qui s'occupe de la boucle du jeu *)   
   let play () =
     Canonique.makeCanonique ();
 
     let (stat : Player.stat) = { name = get_name (); moves = 0 } in
-    while String.length stat.name = 0 || String.length stat.name > 20 do
-
-        if Sys.os_type <> "Unix"
-            then (print_endline "Veuillez entrez un nom de longueur entre 1-20. Appuyer sur Entrer pour reessayer...");
-        stat.name <- get_name ()
-    done;
 
     Canonique.makeNoCanonique (); (* For the get_name func *)
     let level = ref 0 in
@@ -66,40 +125,33 @@ struct
     let (player : Player.pos) = { x = 0; y = 0 } in
     let map = GameState.loadMap filename !level player in
     let playerCopy = Player.copyPlayer player in
+    let systeme = Sys.os_type in
+    let affichageTouche = (affichageOS systeme) in
     let (stacks : UndoRedo.stacks)= UndoRedo.initializeStacks () in
 
     (try
 
     let rec loop () =
-      GameView.showLevel !level;
-      GameView.printMap map.grid;
+      GameView.showLevel !level; (* Affiche le niveau courant *)
+      GameView.printMap map.grid; (* Affiche la carte du niveau courant *)
       print_endline ("Deplacements: " ^ (string_of_int stat.moves));
-      print_string "\x1b[1m\n- z/s/d/q pour se déplacer.\n- r pour recommencer le niveau.\n- g pour annuler.\n- h pour rétablir.\n- x pour retourner au menu.\nAction : ";
+      print_string affichageTouche;
       flush stdout;
-      let action =
-      if Sys.os_type = "Unix"  (* Lit l'entrée du terminal *)
-      then
-          input_char stdin
-      else
-        let user_input = read_line () in
-        if String.length user_input > 0
-        then
-          user_input.[0]
-        else
-          'a' in (* Une lettre au hasard pour que ça fasse rien *)
-      match action with
-      | 'x' -> ()
-      | 'r' -> restart map player playerCopy; Player.reset_stat stat; loop () (* On relance le loop avec la map reset *)
-      | 'g' -> UndoRedo.undo map player stacks stat; loop ()
-      | 'h' -> UndoRedo.redo map player stacks stat; loop ()
-      | 'z' | 's' | 'd' | 'q' as dir ->
-          let direction = 
-            match dir with
-            | 'z' -> Player.Haut
-            | 's' -> Player.Bas
-            | 'd' -> Player.Droite
-            | 'q' -> Player.Gauche
-            | _ -> failwith "Impossible"
+      let action = readKey systeme in (* Lit l'action du joueur *)
+      match  Char.uppercase_ascii action with
+      | 'X' -> ()
+      | 'R' -> restart map player playerCopy; Player.reset_stat stat; loop () (* On relance le loop avec la map reset *)
+      | 'U' -> UndoRedo.undo map player stacks stat; loop ()
+      | 'I' -> UndoRedo.redo map player stacks stat; loop ()
+      | 'H' | 'B' | 'D' | 'G' as dir ->
+        let direction = 
+          match dir with
+          | 'H' -> Player.Haut
+          | 'B' -> Player.Bas
+          | 'D' -> Player.Droite
+          | 'G' -> Player.Gauche
+          | _ -> failwith "Impossible"
+
           in 
           (* Met à jour la carte en fonction de la direction *)
           map.grid <-  Movement.updateMap map player direction stat stacks;
