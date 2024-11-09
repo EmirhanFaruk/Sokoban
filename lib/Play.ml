@@ -140,7 +140,7 @@ struct
       let action = readKey systeme in (* Lit l'action du joueur *)
       match  Char.uppercase_ascii action with
       | 'X' -> ()
-      | 'R' -> restart map player playerCopy; Player.reset_stat stat; loop () (* On relance le loop avec la map reset *)
+      | 'R' -> restart map player playerCopy; Player.reset_stat stat; UndoRedo.resetStacks stacks; loop () (* On relance le loop avec la map reset *)
       | 'U' -> UndoRedo.undo map player stacks stat; loop ()
       | 'I' -> UndoRedo.redo map player stacks stat; loop ()
       | 'H' | 'B' | 'D' | 'G' as dir ->
