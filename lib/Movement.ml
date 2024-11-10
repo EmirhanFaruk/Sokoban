@@ -16,11 +16,11 @@ let isPath grid (x,y) =
     | _ -> true
 
 (* Foncition qui met à jour la position du joueur dans la carte *)
-let updatePlayerPosition (list_map : GameState.level_map) (player : Player.pos) new_x new_y (stat : Player.stat) =
+let updatePlayerPosition (list_map : GameState.level_map) (player : Player.player) new_x new_y =
   let save_list = (UndoRedo.makeSave new_x new_y (GameState.getTile list_map.grid new_x new_y) Tile.Player) :: [] in
   GameState.modifyList list_map new_x new_y Tile.Player;  (* On met à jour la position du joueur dans la map *)
-  Player.updatePlayer player (new_x, new_y);  (* On met à jour les coordonées joueur *)
-  Player.stat_upt stat;
+  Player.updatePlayerPos player (new_x, new_y);  (* On met à jour les coordonées joueur *)
+  Player.stat_upt player.stat;
   save_list 
 
 (* Fonction qui met à jour l'ancienne case du joueur *)
@@ -40,14 +40,14 @@ let updateOriginalTile (list_map : GameState.level_map) old_x old_y=
   !save_list
 
 (* Fonction qui met à jour la carte, la position du joueur et le mouvement des boîtes *)
-let updateMap (list_map : GameState.level_map) (player : Player.pos) direction (stat : Player.stat) (stacks : UndoRedo.stacks)=
+let updateMap (list_map : GameState.level_map) (player : Player.player) direction (stacks : UndoRedo.stacks)=
   let (width, height) = GameState.get_dim list_map.grid in
   (* On réccupère la position suivante du joueur *)
-  let new_x, new_y = Player.get_next_pos (player.x, player.y) direction (width, height) in
+  let new_x, new_y = Player.get_next_pos (player.pos.x, player.pos.y) direction (width, height) in
 
   (* Si la prochaine position est un chemin *)
   if isPath list_map.grid (new_x, new_y) then
-    let old_x, old_y = player.x, player.y in
+    let old_x, old_y = player.pos.x, player.pos.y in
     let next_tile = list_map.grid.(new_y).(new_x) in
     let save_list = ref [] in
 
@@ -66,7 +66,7 @@ let updateMap (list_map : GameState.level_map) (player : Player.pos) direction (
         GameState.modifyList list_map box_new_x box_new_y box_current_tile;
         
         (* On met à jour la position du joueur *)
-        save_list := List.append (updatePlayerPosition list_map player new_x new_y stat ) !save_list;
+        save_list := List.append (updatePlayerPosition list_map player new_x new_y) !save_list;
 
         (* On met à jour de l'ancienne position du joueur *)
         save_list := List.append (updateOriginalTile list_map old_x old_y ) !save_list
@@ -74,11 +74,11 @@ let updateMap (list_map : GameState.level_map) (player : Player.pos) direction (
         isBoxBlocked := true  (* On marque que la boîte est bloquée *)
     else 
       (* On déplace seulement le joueur s'il n'y a pas de boîte *)
-      save_list := List.append (updatePlayerPosition list_map player new_x new_y stat ) !save_list;
+      save_list := List.append (updatePlayerPosition list_map player new_x new_y) !save_list;
 
     (* Si la boîte n'est pas bloquée, on met à jour l'ancienne position *)
     if not !isBoxBlocked then
-      save_list := List.append (updateOriginalTile list_map old_x old_y ) !save_list; 
+      save_list := List.append (updateOriginalTile list_map old_x old_y) !save_list;
       UndoRedo.addSavesToStack stacks !save_list;
       list_map.grid  (*Carte mise à jour *)
   else

@@ -33,7 +33,7 @@ struct
     stacks.redoStack <- [])
   
   (* Fonction qui met à jour la map selon les sauvegardes *)
-  let update map player stat (liste : save list) isBefore =
+  let update map (player : Player.player) (liste : save list) isBefore =
     (* Pour chaque sauvegarde de la liste on met à jour map *)
     List.iter (fun s -> 
       (* isBefore est un boolean pour savoir si on utilise la fonction pour undo ou redo*)
@@ -43,16 +43,16 @@ struct
       GameState.modifyList map s.x s.y tile; (* mise à jour de la map *)
       (* mise à jour du joueur *)
       if tile = Tile.Player then
-        (if isBefore then Player.stat_down stat
-        else Player.stat_upt stat;
-        Player.updatePlayer player (s.x, s.y))
+        (if isBefore then Player.stat_down player.stat
+        else Player.stat_upt player.stat;
+        Player.updatePlayerPos player (s.x, s.y))
       ) liste
 
   (* Fonction pour retourner en arrière *)
-  let undo map player (stacks : stacks) stat=
+  let undo map (player : Player.player) (stacks : stacks) =
     (* On met à jour la map avec la premiere liste de sauvegarde de la pile*)
     match stacks.undoStack with
-    | h:: t -> update map player stat h true;
+    | h :: t -> update map player h true;
       (* mise à jour des stacks *)
       let new_redo = h :: stacks.redoStack in
       stacks.undoStack <- t;
@@ -60,9 +60,9 @@ struct
     | _ -> ()
   
   (* Fonction pour revenir en avant *)
-  let redo map player (stacks : stacks) stat=
+  let redo map (player : Player.player) (stacks : stacks) =
     match stacks.redoStack with
-    | h :: t -> update map player stat h false;
+    | h :: t -> update map player h false;
       
       let new_undo = h :: stacks.undoStack in
       stacks.undoStack <- new_undo;

@@ -1,7 +1,8 @@
-open Tile
-
 module GameState =
 struct
+  open Tile
+  open Player
+
   (* Type qui représente la liste de la map modifiable quand on veut *)
   type level_map = {
     mutable grid: Tile.tile array array;
@@ -18,7 +19,7 @@ struct
     int_of_string level_str
 
   (* Fonction pour charger une carte d'un fichier texte *)
-  let loadMap filename niveau player =
+  let loadMap filename niveau (player : Player.player) =
     (* Principe : Nous cherchons dans filename le niveau demandé en parcourant chaque bloc de niveau.
       Une fois trouvé, nous ajoutons le bloc de niveau dans une liste puis inversons le contenu de la liste
       afin que cela soit dans l'ordre. Si le niveau n'existe pas, on renvoie une erreur. *)
@@ -82,6 +83,7 @@ struct
         raise (Isnt_in_the_list (x, y))  (* Lever une erreur pour indices invalides *)
       else
         raise (Isnt_in_the_list (x, y))  (* Lever une erreur pour indices invalides *)
+
 
   (* Fonction pour trouver toutes les coordonnées de BoxGround dans la carte d'origine *)
   let find_boxground_positions (map: level_map) =

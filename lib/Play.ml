@@ -9,7 +9,7 @@ struct
   open UndoRedo
 
   (* Fonction qui met à jour le niveau au suivant et la map *)
-  let updateMap (level : int ref) (map : GameState.level_map) filename (player: Player.pos)  =
+  let updateMap (level : int ref) (map : GameState.level_map) filename (player: Player.player)  =
     let new_level = !level + 1 in
         (* Charge la nouvelle carte pour le niveau suivant *)
         let new_map = GameState.loadMap filename new_level player in
@@ -29,9 +29,9 @@ struct
     end else level_completed
     
   (* Fonction qui reinitialise la partie *)
-  let restart (map : GameState.level_map) (player : Player.pos) (playerCopy : Player.pos) =
+  let restart (map : GameState.level_map) (player : Player.player) (playerCopy : Player.player) =
     map.grid <- GameState.copyMap map.original;
-    Player.updatePlayer player (playerCopy.x,playerCopy.y)
+    Player.updatePlayerPos player (playerCopy.pos.x,playerCopy.pos.y)
   
   let contains_only_spaces str =
     let is_space c = c = ' ' in
@@ -41,7 +41,7 @@ struct
       else false
     in
     check_spaces 0
-    
+
   (* Avoir le nom de joueur *)
   let rec get_name () =
     if Sys.os_type <> "Unix"
@@ -54,10 +54,10 @@ struct
     
   let name = read_line () in
     (* #28 - Nom vide : Désormais il n'est plus possible d'avoir de nom vide, d'avoir un nom de + de 20 caractères, d'avoir un nom contenant seulement des espaces ou d'avoir un nom contenant des ; *)
-    if name = "" then begin print_endline "Erreur : Entrez un nom valide."; get_name () end
+    if name = "" then begin print_endline "Erreur : Entrez un nom pas vide."; get_name () end
     else if String.length name > 20 then begin print_endline "Erreur : Entrez un nom valide."; get_name () end
-    else if contains_only_spaces name then begin print_endline "Erreur : Entrez un nom valide."; get_name () end
-    else if String.contains name ';' then begin print_endline "Erreur : Entrez un nom valide."; get_name () end
+    else if contains_only_spaces name then begin print_endline "Erreur : Entrez un nom avec au moins un caractere visible."; get_name () end
+    else if String.contains name ';' then begin print_endline "Erreur : Entrez un nom sans utiliser ';'."; get_name () end
     else name
 
   let readUnix () =
@@ -123,7 +123,8 @@ struct
     Canonique.makeNoCanonique (); (* For the get_name func *)
     let level = ref 0 in
     let filename = "./assert/levels.txt" in
-    let (player : Player.pos) = { x = 0; y = 0 } in
+    let (pos : Player.pos) = { x = 0; y = 0 } in
+    let (player : Player.player) = Player.makePlayer pos stat in
     let map = GameState.loadMap filename !level player in
     let playerCopy = Player.copyPlayer player in
     let systeme = Sys.os_type in
@@ -141,9 +142,9 @@ struct
       let action = readKey systeme in (* Lit l'action du joueur *)
       match  Char.uppercase_ascii action with
       | 'X' -> ()
-      | 'R' -> restart map player playerCopy; Player.reset_stat stat; UndoRedo.resetStacks stacks; loop () (* On relance le loop avec la map reset *)
-      | 'U' -> UndoRedo.undo map player stacks stat; loop ()
-      | 'I' -> UndoRedo.redo map player stacks stat; loop ()
+      | 'R' -> restart map player playerCopy; Player.reset_stat player.stat; UndoRedo.resetStacks stacks; loop () (* On relance le loop avec la map reset *)
+      | 'U' -> UndoRedo.undo map player stacks; loop ()
+      | 'I' -> UndoRedo.redo map player stacks; loop ()
       | 'H' | 'B' | 'D' | 'G' as dir ->
         let direction = 
           match dir with
@@ -155,14 +156,14 @@ struct
 
           in 
           (* Met à jour la carte en fonction de la direction *)
-          map.grid <-  Movement.updateMap map player direction stat stacks;
+          map.grid <-  Movement.updateMap map player direction stacks;
           (* Appelle la fonction endGame pour vérifier si le niveau/jeu est terminé *)
           if endGame level map then
             (
-            Scoreboard.save_score stat !level;
-            Player.reset_stat stat;
+            Scoreboard.save_score player.stat !level;
+            Player.reset_stat player.stat;
             updateMap level map filename player;
-            Player.updatePlayer playerCopy (player.x,player.y);
+            Player.updatePlayerPos playerCopy (player.pos.x, player.pos.y);
             UndoRedo.resetStacks stacks)
           else ();
           loop ()
