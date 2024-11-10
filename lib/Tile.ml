@@ -18,7 +18,7 @@ struct
     List.init (String.length s) (fun i -> s.[i])
 
   (* Charge une ligne de caractères en une liste de tuiles *)
-  let load_line_to_tiles line y (player: Player.pos) =
+  let load_line_to_tiles line y (player: Player.player) =
     let _, tile_list = List.fold_right (fun c (x, acc) ->
       match c with
       | '#' -> (x - 1, Wall :: acc)
@@ -27,7 +27,7 @@ struct
       | '.' -> (x - 1, BoxGround :: acc)
       | '@' ->
           (* Mettre à jour la position du joueur *)
-          Player.updatePlayer player (x,y);
+          Player.updatePlayerPos player (x,y);
           (x - 1, Player :: acc)
       | _ -> (x - 1, acc)  (* Ignorer les caractères non spécifiés *)
     ) (string_to_char_list line) ((String.length line - 1), []) in
