@@ -52,16 +52,17 @@ let updateMap (list_map : GameState.level_map) (player : Player.pos) direction (
     let save_list = ref [] in
 
     let isBoxBlocked = ref false in
-    if next_tile = Box then
+    if next_tile = Box || next_tile = BoxOnBoxGround then
       (* On essaie de déplacer la boîte *)
       let box_new_x, box_new_y = Player.get_next_pos (new_x, new_y) direction (width, height) in
       (* On vérifie si la nouvelle position de la boîte est un chemin valide *)
       if isPath list_map.grid (box_new_x, box_new_y) && not (list_map.grid.(box_new_y).(box_new_x) = Box) then
         (* Ancienne position de la boîte *)
-        let box_current_tile = list_map.grid.(new_y).(new_x) in
+        let box_current_tile = if (GameState.getTile list_map.grid box_new_x box_new_y) = Tile.BoxGround 
+          then Tile.BoxOnBoxGround else Tile.Box in
         
         (* On déplace la boîte *)
-        save_list := (UndoRedo.makeSave box_new_x box_new_y (GameState.getTile list_map.grid box_new_x box_new_y) Box)::!save_list;
+        save_list := (UndoRedo.makeSave box_new_x box_new_y (GameState.getTile list_map.grid box_new_x box_new_y) box_current_tile)::!save_list;
         GameState.modifyList list_map box_new_x box_new_y box_current_tile;
         
         (* On met à jour la position du joueur *)

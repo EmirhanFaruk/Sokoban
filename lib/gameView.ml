@@ -1,7 +1,7 @@
+
 module GameView =
 struct
   open Tile
-
   (* Affichage de la carte par défaut *)
   let printMap (map: Tile.tile array array) =
     Array.iter (fun row ->
