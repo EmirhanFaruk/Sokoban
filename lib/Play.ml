@@ -42,18 +42,6 @@ struct
     in
     check_spaces 0
     
-
-
-let contains_only_spaces str =
-  let is_space c = c = ' ' in
-  let rec check_spaces i =
-    if i = String.length str then true
-    else if is_space str.[i] then check_spaces (i + 1)
-    else false
-  in
-  check_spaces 0
-
-  (* I HATE 2 SPACE TABS *)
   (* Avoir le nom de joueur *)
   let rec get_name () =
     if Sys.os_type <> "Unix"
@@ -122,59 +110,7 @@ let contains_only_spaces str =
       if systeme = "Unix" then 
          "\x1b[1m\n- ↑↓←→ flèches directionnelles pour se déplacer.\n- r pour recommencer le niveau.\n- u pour annuler. \n- i pour remettre. \n- x pour retourner au menu.\nAction : " 
       else "\x1b[1m\n- Haut: z/w |Bas: s |Droite: d |Gauche: q/a  pour se déplacer.\n- r pour recommencer le niveau.\n- u pour annuler. \n- i pour remettre.\n- x pour retourner au menu.\nAction : " 
-  
 
-
-    let readUnix () =
-      let buf = Bytes.create 3 in
-      let n = Unix.read Unix.stdin buf 0 3 in
-      if n = 1 then
-        (* Si un seul caractère est saisi, vérifie s’il s’agit de 'r' ou 'x' *)
-        let key = Bytes.get buf 0 in
-        if key = 'x' || key = 'r' || key = 'X' || key = 'R' then key else ' '
-      else if n = 3 then (
-        (* Sous Unix/Linux, les séquences de flèches sont précédées par \x1b *)
-        match Bytes.sub_string buf 0 3 with
-        | "\x1b[A" -> 'H'  (* Flèche haut *)
-        | "\x1b[B" -> 'B'  (* Flèche bas *)
-        | "\x1b[C" -> 'D'  (* Flèche droite *)
-        | "\x1b[D" -> 'G'  (* Flèche gauche *)
-        | _ -> ' '
-      )
-      else ' '
-    
-      (* Lecture du *)
-      let readWindows () =
-        let user_input = read_line () in
-        if String.length user_input > 0 then 
-          let first_char = user_input.[0] in
-          match first_char with
-          | 'x' | 'r' | 'X' | 'R' -> first_char (* Capture des touches 'r' et 'x' *)
-          | 'Z' | 'z' | 'W' | 'w' -> 'H'  (* Flèche haut *)
-          | 'S' | 's' -> 'B' (* Flèche bas *)
-          | 'D' | 'd' -> 'D'  (* Flèche droite *)
-          | 'Q' | 'q' | 'A' | 'a' -> 'G' (* Flèche gauche *)
-          | _ -> ' '   
-        else ' '
-      
-      (* Fonction principale qui appelle la bonne fonction en fonction de l'OS afin de donner les déplacements a faire *)
-      let readKey systeme =
-         (* On regarde si on est sur Unix *)
-        if systeme = "Unix" then
-          readUnix () 
-        
-          (* On regarde si on est sur Windows *)
-        else if systeme = "Win32" then
-          readWindows ()  
-        else ' '
-
-    
-
-  (* Fonction qui permet d'afficher les touches en fonction de l'OS*)
-  let affichageOS systeme =  
-    if systeme = "Unix" then 
-       "\x1b[1m\n- ↑↓←→ flèches directionnelles pour se déplacer.\n- r pour recommencer le niveau.\n- x pour retourner au menu.\nAction : " 
-    else "\x1b[1m\n- Haut: z/w |Bas: s |Droite: d |Gauche: q/a  pour se déplacer.\n- r pour recommencer le niveau.\n- x pour retourner au menu.\nAction : " 
 
 
 
