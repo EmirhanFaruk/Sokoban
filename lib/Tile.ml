@@ -2,7 +2,7 @@ open Player
 
 module Tile =
 struct
-  type tile = Wall | Ground | Box | BoxGround | Player
+  type tile = Wall | Ground | Box | BoxGround | Player | BoxOnBoxGround
 
   (* Convertit une tuile en un caractère *)
   let cell_to_emoji (cell : tile) = 
@@ -12,6 +12,7 @@ struct
     | Box -> "\xF0\x9F\x93\xA6"
     | BoxGround ->  "\xF0\x9F\x9F\xA9"
     | Player -> "\xF0\x9F\x9A\xB6"
+    | BoxOnBoxGround -> "\xF0\x9F\x90\x92"
   
   (* Convertir une chaîne en liste de caractères *)
   let string_to_char_list s =

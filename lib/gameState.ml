@@ -102,11 +102,13 @@ struct
     let boxground_positions = find_boxground_positions map in
     List.for_all (fun (x, y) ->
       match (map.grid).(y).(x) with
-      | Tile.Box -> true
+      | Tile.BoxOnBoxGround -> true
       | _ -> false
     ) boxground_positions
 
   (* Fonction qui renvoie la copie d'une map*)
   let copyMap map =
     Array.map Array.copy map
-end
+
+
+  end
