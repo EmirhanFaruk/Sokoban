@@ -1,4 +1,3 @@
-
 module GameView =
 struct
   open Tile

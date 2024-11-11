@@ -1,3 +1,4 @@
+(* Module responsable de charger la carte et plupart de ses modifications *)
 module GameState =
 struct
   open Tile

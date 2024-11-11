@@ -1,8 +1,6 @@
-open Player
-
 module Tile =
 struct
-
+  open Player
   type tile = Wall | Ground | Box | BoxGround | Player | BoxOnBoxGround
 
   (* Convertit une tuile en un caractère *)
