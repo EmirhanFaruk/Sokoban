@@ -1,4 +1,7 @@
-(** Module Play : gère la logique principale du jeu Sokoban *)
+open GameState
+open Player
+
+(* Module Play : gère la logique principale du jeu Sokoban *)
 module Play : sig
 
   (* Fonction qui met à jour le niveau au suivant et la map *)

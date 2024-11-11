@@ -1,3 +1,4 @@
+open Tile
 (* Module pour l'affichage de l'état du jeu *)
 module GameView : sig
 

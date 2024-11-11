@@ -1,3 +1,4 @@
+open Player
 (* Module pour définir les objets du jeu *)
 module Tile : sig
 
