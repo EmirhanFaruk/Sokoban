@@ -4,9 +4,9 @@ struct
     open GameView
 
 
-    (* Mettre un string au milieu par rapport au longueur donné.
-       Mettre espace autour de string. Mettre un string plus long
-       que length va lever une exception, il faut l'éviter *)
+    (* Mettre un string au milieu par rapport a la longueur donné.
+       Mettre des espaces autour de string. Mettre un string plus long
+       que length va lever une exception, il faut éviter *)
     let center_text text length =
         let len = String.length text in
         let border = (length - len) / 2 in
@@ -21,9 +21,9 @@ struct
             (String.make border ' ')
 
 
-    (* Afficher le scoreboard de niveau donné.
+    (* Afficher le scoreboard du niveau donné.
        Ça sera affiché comme niveau + 1 pour que ça soit
-       syncronisé avec le jeu *)
+       synchronisé avec le jeu *)
     let print_level_scoreboard level =
         (* Avoir top 10 d'un niveau dans une liste de string *)
         let scores = Scoreboard.get_level_scoreboard level in

@@ -1,10 +1,9 @@
+module Movement =
+struct
 open Tile
 open UndoRedo
 open GameState
 open Player
-
-module Movement =
-struct
 
 (* Fonction qui vérifie si les coordonnées correspondent à un chemin valide *)
 let isPath grid (x,y) =
@@ -12,7 +11,7 @@ let isPath grid (x,y) =
   if x<0 || y<0 || x>= width|| y>= height then false
   else
     match grid.(y).(x) with
-    | Tile.Wall -> false  
+    | Tile.Wall -> false
     | _ -> true
 
 (* Foncition qui met à jour la position du joueur dans la carte *)
@@ -21,7 +20,7 @@ let updatePlayerPosition (list_map : GameState.level_map) (player : Player.playe
   GameState.modifyList list_map new_x new_y Tile.Player;  (* On met à jour la position du joueur dans la map *)
   Player.updatePlayerPos player (new_x, new_y);  (* On met à jour les coordonées joueur *)
   Player.stat_upt player.stat;
-  save_list 
+  save_list
 
 (* Fonction qui met à jour l'ancienne case du joueur *)
 let updateOriginalTile (list_map : GameState.level_map) old_x old_y=
@@ -58,21 +57,21 @@ let updateMap (list_map : GameState.level_map) (player : Player.player) directio
       (* On vérifie si la nouvelle position de la boîte est un chemin valide *)
       if isPath list_map.grid (box_new_x, box_new_y) && not (list_map.grid.(box_new_y).(box_new_x) = Box) then
         (* Ancienne position de la boîte *)
-        let box_current_tile = if (GameState.getTile list_map.grid box_new_x box_new_y) = Tile.BoxGround 
+        let box_current_tile = if (GameState.getTile list_map.grid box_new_x box_new_y) = Tile.BoxGround
           then Tile.BoxOnBoxGround else Tile.Box in
-        
+
         (* On déplace la boîte *)
         save_list := (UndoRedo.makeSave box_new_x box_new_y (GameState.getTile list_map.grid box_new_x box_new_y) box_current_tile)::!save_list;
         GameState.modifyList list_map box_new_x box_new_y box_current_tile;
-        
+
         (* On met à jour la position du joueur *)
         save_list := List.append (updatePlayerPosition list_map player new_x new_y) !save_list;
 
         (* On met à jour de l'ancienne position du joueur *)
         save_list := List.append (updateOriginalTile list_map old_x old_y ) !save_list
-      else 
+      else
         isBoxBlocked := true  (* On marque que la boîte est bloquée *)
-    else 
+    else
       (* On déplace seulement le joueur s'il n'y a pas de boîte *)
       save_list := List.append (updatePlayerPosition list_map player new_x new_y) !save_list;
 

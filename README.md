@@ -67,7 +67,7 @@ Dans Sokoban, vous incarnez un personnage qui doit déplacer des caisses vers de
 
     - Si ça ne marche pas, vous pouvez les installer manuellement:
     ```bash
-    opam install dune unix
+    opam install dune
     ```
     
 
@@ -81,7 +81,7 @@ Dans Sokoban, vous incarnez un personnage qui doit déplacer des caisses vers de
 Lancez le jeu avec la commande suivante :
 
 ```bash
-dune excec sokoban
+dune exec sokoban
 ```
 
 Dans le jeu, vous pouvez naviguer dans le menus pour ***lancer une nouvelle partie***, ***lire les règles***, regarder le ***scoreboard*** et ***quitter le jeu***.
