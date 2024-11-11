@@ -1,9 +1,8 @@
-open GameState
-open Tile
-open Player
-
 module UndoRedo =
 struct
+  open GameState
+  open Tile
+  open Player
 
   (* Type représentant une sauvegarde avec les coordonnées et les tuiles avant et après déplacement *)
   type save = { x : int; y : int; before : Tile.tile; after : Tile.tile }

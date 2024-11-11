@@ -1,9 +1,6 @@
 (** Module Play : gère la logique principale du jeu Sokoban *)
 module Play : sig
 
-  open GameState
-  open Player
-
   (* Fonction qui met à jour le niveau au suivant et la map *)
   val updateMap : int ref -> GameState.level_map -> string -> Player.player -> unit
 

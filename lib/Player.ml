@@ -1,4 +1,5 @@
 module Player = struct
+
   (* Définition du type pour représenter la position du joueur *)
   type pos = { mutable x : int; mutable y : int }
 
@@ -49,7 +50,9 @@ module Player = struct
   let stat_upt stat =
     stat.moves <- stat.moves + 1
 
+  (* Fonction pour diminuer nombre de mouvements du joueur *)
   let stat_down stat =
     if(stat.moves > 0) then
       stat.moves <- stat.moves - 1
+
 end

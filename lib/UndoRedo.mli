@@ -1,5 +1,6 @@
 (* Module pour l'affichage de l'état du jeu *)
 module UndoRedo : sig
+
   (* Type représentant une sauvegarde avec les coordonnées et les tuiles avant et après déplacement *)
   type save = { x : int; y : int; before : Tile.tile; after : Tile.tile }
 
