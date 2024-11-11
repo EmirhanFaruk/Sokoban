@@ -1,5 +1,7 @@
 (* Module pour définir les objets du jeu *)
 module Tile : sig
+  open Player
+
   type tile = Wall | Ground | Box | BoxGround | Player | BoxOnBoxGround
 
   (* Convertit une tuile en un caractère *)

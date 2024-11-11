@@ -1,6 +1,7 @@
+open Player
+
 module Tile =
 struct
-  open Player
 
   type tile = Wall | Ground | Box | BoxGround | Player | BoxOnBoxGround
 
