@@ -5,13 +5,13 @@ module Play : sig
   open Player
 
   (* Fonction qui met à jour le niveau au suivant et la map *)
-  val updateMap : int ref -> GameState.level_map -> string -> Player.pos -> unit
+  val updateMap : int ref -> GameState.level_map -> string -> Player.player -> unit
 
   (* Fonction qui vérifie si le joueur a fini un niveau et le jeu*)
   val endGame : int ref -> GameState.level_map -> bool
 
   (* Fonction qui reinitialise la partie *)
-  val restart : GameState.level_map -> Player.pos -> Player.pos -> unit
+  val restart : GameState.level_map -> Player.player -> Player.player -> unit
 
   (* Fonction qui vérifie si une chaîne de caractères contient uniquement des espaces *)
   val contains_only_spaces : string -> bool

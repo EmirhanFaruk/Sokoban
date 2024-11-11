@@ -3,9 +3,6 @@ module GameView : sig
 
   open GameState
 
-  (* Convertit une tuile en un caractère (emoji) *)
-  val cell_to_emoji : GameState.tile -> string
-
   (* Affichage de la carte par défaut *)
   val printMap : GameState.tile array array -> unit
 

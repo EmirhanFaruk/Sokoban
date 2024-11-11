@@ -2,8 +2,11 @@ module Player = struct
   (* Définition du type pour représenter la position du joueur *)
   type pos = { mutable x : int; mutable y : int }
 
-  (** Définition du type pour représenter les statistiques du joueur *)
+  (* Définition du type pour représenter les statistiques du joueur *)
   type stat = { mutable name : string; mutable moves : int }
+
+  (* Définition l'ensemble de pos et stat: joueur *)
+  type player = { pos : pos; stat : stat }
 
   (* Définition du type pour représenter les directions possibles *)
   type direction = Haut | Bas | Droite | Gauche
@@ -18,19 +21,35 @@ module Player = struct
     | _ -> (x, y)
 
   (* Fonction pour mettre à jour la position du joueur *)
-  let updatePlayer (player : pos) (x, y) =
-    player.x <- x; 
-    player.y <- y
+  let updatePlayerPos (player : player) (x, y) =
+    player.pos.x <- x;
+    player.pos.y <- y
 
-  (* Fonction pour copier un joueur *)
-  let copyPlayer player =
-    {x = player.x; y = player.y}
+  (* Fonction pour copier une position *)
+  let copyPos (pos : pos) =
+    {x = pos.x; y = pos.y}
 
-(* Fonction pour réinitialiser les statistiques du joueur *)
+  (* Fonction pour copier un stat *)
+  let copyStat (stat : stat) =
+    {name = stat.name; moves = stat.moves}
+
+  (* Fonction pour produire un player *)
+  let makePlayer (pos : pos) (stat : stat) =
+    {pos = copyPos pos; stat = stat}
+
+  (* Fonction pour copier un player *)
+  let copyPlayer (player : player) =
+    makePlayer (copyPos player.pos) (copyStat player.stat)
+
+  (* Fonction pour réinitialiser les statistiques du joueur *)
   let reset_stat stat =
     stat.moves <- 0
     
-(* Fonction pour mettre à jour le nombre de mouvements du joueur *)
+  (* Fonction pour mettre à jour le nombre de mouvements du joueur *)
   let stat_upt stat =
     stat.moves <- stat.moves + 1
+
+  let stat_down stat =
+    if(stat.moves > 0) then
+      stat.moves <- stat.moves - 1
 end

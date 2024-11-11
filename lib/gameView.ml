@@ -1,20 +1,12 @@
+
 module GameView =
 struct
-  open GameState
-  (* Convertit une tuile en un caractère (emoji) *)
-  let cell_to_emoji (cell : GameState.tile) = 
-    match cell with
-    | Wall -> "\xF0\x9F\x9F\xA8"
-    | Ground -> "\xE2\xAC\x9B"
-    | Box -> "\xF0\x9F\x93\xA6"
-    | BoxGround ->  "\xF0\x9F\x9F\xA9"
-    | Player -> "\xF0\x9F\x9A\xB6"
-
+  open Tile
   (* Affichage de la carte par défaut *)
-  let printMap (map: GameState.tile array array) =
+  let printMap (map: Tile.tile array array) =
     Array.iter (fun row ->
         print_string "         ";  (* Affiche les espaces au début de la ligne *)
-        Array.iter (fun cell -> print_string (cell_to_emoji cell)) row;  (* Affiche chaque cellule *)
+        Array.iter (fun cell -> print_string (Tile.cell_to_emoji cell)) row;  (* Affiche chaque cellule *)
         print_newline ()) map  (* On passe à la ligne suivante *)
     
   (* Fonction pour nettoyer le terminal *)
