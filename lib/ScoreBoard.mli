@@ -21,7 +21,7 @@ module Scoreboard : sig
   val get_score_data : string -> score array list
 
   (* Transformer le score en string. Ajout d'espaces autour du texte pour ameliorer affichage. *) 
-   val score_to_str : score -> int -> int -> int -> string
+  val score_to_str : score -> int -> int -> int -> string
 
   (* Avoir les 10 premiers elements d'un array *)
   val get_10_els : 'a array -> 'a array
