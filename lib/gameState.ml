@@ -7,7 +7,7 @@ struct
   (* Type qui représente la liste de la map modifiable quand on veut *)
   type level_map = {
     mutable grid: Tile.tile array array;
-    mutable original : Tile.tile array array;
+    mutable original : Tile.tile array array
   }
 
   (* Exception pour signaler qu'un niveau n'a pas été trouvé *)

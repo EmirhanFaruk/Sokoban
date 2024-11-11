@@ -7,7 +7,7 @@ struct
     {
         name: string;
         level: int;
-        mutable moves: int;
+        mutable moves: int
     }
 
     (* Sauvegarder le score dans le fichier *)

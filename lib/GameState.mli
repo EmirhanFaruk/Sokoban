@@ -7,7 +7,7 @@ module GameState : sig
   (* Type représentant une carte de niveau modifiable quand on veut *)
   type level_map = {
     mutable grid: tile array array;
-    mutable original : tile array array;
+    mutable original : tile array array
   }
 
   (* Exception levée lorsqu'un niveau n'est pas trouvé *)

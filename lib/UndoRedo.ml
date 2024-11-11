@@ -10,7 +10,7 @@ struct
   (* Type représentant les piles de undo et redo représenté par une liste de liste de sauvegarde*)
   type stacks = {
     mutable undoStack : save list list;
-    mutable redoStack : save list list;
+    mutable redoStack : save list list
   }
 
   (* Fonction pour initialiser les piles *)
