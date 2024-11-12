@@ -42,6 +42,7 @@ struct
     in
     check_spaces 0
 
+
   (* Avoir le nom de joueur *)
   let rec get_name () =
     if Sys.os_type <> "Unix"
@@ -52,13 +53,13 @@ struct
     print_string "Entrez votre nom(de longueur entre 1-20): ";
     flush stdout;
     
-  let name = read_line () in
-    (* #28 - Nom vide : Désormais il n'est plus possible d'avoir de nom vide, d'avoir un nom de + de 20 caractères, d'avoir un nom contenant seulement des espaces ou d'avoir un nom contenant des ; *)
-    if name = "" then begin print_endline "Erreur : Entrez un nom pas vide."; get_name () end
-    else if String.length name > 20 then begin print_endline "Erreur : Entrez un nom valide."; get_name () end
-    else if contains_only_spaces name then begin print_endline "Erreur : Entrez un nom avec au moins un caractere visible."; get_name () end
-    else if String.contains name ';' then begin print_endline "Erreur : Entrez un nom sans utiliser ';'."; get_name () end
-    else name
+    let name = read_line () in
+      (* #28 - Nom vide : Désormais il n'est plus possible d'avoir de nom vide, d'avoir un nom de + de 20 caractères, d'avoir un nom contenant seulement des espaces ou d'avoir un nom contenant des ; *)
+      if name = "" then begin print_endline "Erreur : Entrez un nom pas vide."; get_name () end
+      else if String.length name > 20 then begin print_endline "Erreur : Entrez un nom valide."; get_name () end
+      else if contains_only_spaces name then begin print_endline "Erreur : Entrez un nom avec au moins un caractere visible."; get_name () end
+      else if String.contains name ';' then begin print_endline "Erreur : Entrez un nom sans utiliser ';'."; get_name () end
+      else name
 
   let readUnix () =
     let buf = Bytes.create 3 in
@@ -77,7 +78,7 @@ struct
       | _ -> ' '
     )
     else ' '
-  
+
     (* Lecture du *)
     let readWindows () =
       let user_input = read_line () in
@@ -109,12 +110,12 @@ struct
     let affichageOS systeme =  
       if systeme = "Unix" then 
          "\x1b[1m\n- ↑↓←→ flèches directionnelles pour se déplacer.\n- r pour recommencer le niveau.\n- u pour annuler. \n- i pour remettre. \n- x pour retourner au menu.\nAction : " 
-      else "\x1b[1m\n- Haut: z/w |Bas: s |Droite: d |Gauche: q/a  pour se déplacer.\n- r pour recommencer le niveau.\n- u pour annuler. \n- i pour remettre.\n- x pour retourner au menu.\nAction : " 
+      else "\x1b[1m\n- Haut: z/w |Bas: s |Droite: d |Gauche: q/a  pour se déplacer.\n- r pour recommencer le niveau.\n- u pour annuler. \n- i pour remettre.\n- x pour retourner au menu.\nAction : "
 
 
 
 
-   (* Fonction qui s'occupe de la boucle du jeu *)   
+  (* Fonction qui s'occupe de la boucle du jeu *)   
   let play () =
     Canonique.makeCanonique ();
 

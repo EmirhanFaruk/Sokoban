@@ -1,5 +1,4 @@
 (library
  (name sokoban_lib)
  (libraries unix str)
- (modules GameState GameView Menu Play Player Canonique Scoreboard ScoreboardView UndoRedo Tile Movement))
-
+ (modules Player Canonique Tile GameView GameState Scoreboard ScoreboardView UndoRedo Movement Play Menu))

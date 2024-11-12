@@ -1,9 +1,8 @@
-open GameState
-open Tile
-open Player
-
 module UndoRedo =
 struct
+  open GameState
+  open Tile
+  open Player
 
   (* Type représentant une sauvegarde avec les coordonnées et les tuiles avant et après déplacement *)
   type save = { x : int; y : int; before : Tile.tile; after : Tile.tile }
@@ -11,7 +10,7 @@ struct
   (* Type représentant les piles de undo et redo représenté par une liste de liste de sauvegarde*)
   type stacks = {
     mutable undoStack : save list list;
-    mutable redoStack : save list list;
+    mutable redoStack : save list list
   }
 
   (* Fonction pour initialiser les piles *)

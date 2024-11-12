@@ -7,7 +7,7 @@ struct
     {
         name: string;
         level: int;
-        mutable moves: int;
+        mutable moves: int
     }
 
     (* Sauvegarder le score dans le fichier *)
@@ -26,7 +26,7 @@ struct
         close_out ochnl
 
 
-    (* Lire le fichier donne *)
+    (* Lire le fichier donné *)
     let read_file filename =
     (* Ouvrir une chaine d'entrée pour lire le fichier *)
     let chnl = open_in filename in
@@ -41,8 +41,8 @@ struct
         in loop ()
 
 
-    (* Transformer liste de string dans une liste de score
-       en le triant par le niveau donne.
+    (* Transformer une liste de string dans une liste de score
+       en le triant par le niveau donné.
        Format de fichier: nom;niveau;deplacement *)
     let list_to_score list level =
         (* Transformer la liste donnée(fait par read_file) dans une liste de score *)
@@ -75,7 +75,7 @@ struct
 
 
 
-    (* Avoir le data de score dans une score array list(liste de array de score) *)
+    (* Avoir la data de score dans une liste d'array de score *)
     let get_score_data filename =
         (* Lire le fichier *)
         let lines = read_file filename in
@@ -93,8 +93,8 @@ struct
 
 
 
-    (* Transformer score en string.
-       Ajouter espace autour d'eux pour ameliorer affichage. *)
+    (* Transformer le score en string.
+       Ajout d'espaces autour du texte pour ameliorer affichage. *)
     let score_to_str score max_name max_move extra_padding =
         (* Calcul des espaces extras par rapport a la longueur du nom *)
         let name_rest =
@@ -122,7 +122,7 @@ struct
         name ^ (String.make extra_padding ' ') ^ score
 
 
-    (* Avoir les premiers 10 elements d'un array *)
+    (* Avoir les 10 premiers elements d'un array *)
     let get_10_els arr =
         let len = Array.length arr in
         (* Produire l'array à renvoyer par rapport au longueur d'array donné *)
@@ -133,7 +133,7 @@ struct
         done;
         res
 
-    (* Mettre top 10 d'un niveau dans une liste de string *)
+    (* Ajouter dans une liste de string les 10 meilleures performance d'un niveau *)
     let get_level_scoreboard level =
         (* Avoir le data de score dans une liste d'array de score *)
         let all_scores = get_score_data "./assert/scores.txt" in
@@ -204,7 +204,7 @@ struct
             []
 
     (* Mettre le resultat de get_level_scoreboard 0-999 dans une liste.
-       Techniquement avoir toutes les scores possibles *)
+       Techniquement avoir tous les scores possibles *)
     let get_levels () =
         let res = ref [] in
         for i = 0 to 999 do

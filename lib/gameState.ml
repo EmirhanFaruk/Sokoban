@@ -1,3 +1,4 @@
+(* Module responsable de charger la carte et plupart de ses modifications *)
 module GameState =
 struct
   open Tile
@@ -6,11 +7,14 @@ struct
   (* Type qui représente la liste de la map modifiable quand on veut *)
   type level_map = {
     mutable grid: Tile.tile array array;
-    mutable original : Tile.tile array array;
+    mutable original : Tile.tile array array
   }
 
   (* Exception pour signaler qu'un niveau n'a pas été trouvé *)
   exception Level_not_found of int
+
+  (** Exception levée lorsque des coordonnées sont en dehors de la carte *)
+
   exception Isnt_in_the_list of (int * int)
 
   (* Extraire le numéro de niveau à partir d'une ligne *)
