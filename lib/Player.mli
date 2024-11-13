@@ -19,12 +19,6 @@ module Player : sig
   (* Fonction pour mettre à jour la position du joueur *)
   val updatePlayerPos : player -> int * int -> unit
 
-  (* Fonction pour copier une position *)
-  val copyPos : pos -> pos
-
-  (* Fonction pour copier un stat *)
-  val copyStat : stat -> stat
-
   (* Fonction pour produire un player *)
   val makePlayer : pos -> stat -> player
 

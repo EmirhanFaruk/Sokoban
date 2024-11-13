@@ -24,9 +24,6 @@ module UndoRedo : sig
   (* Ajouter une liste de sauvegardes à la pile undo et vider la pile redo *)
   val addSavesToStack : stacks -> save list -> unit
 
-  (* Mettre à jour la carte et le joueur selon une liste de sauvegardes *)
-  val update : GameState.level_map -> Player.player -> save list -> bool -> unit
-
   (* Annuler la dernière action (undo) *)
   val undo : GameState.level_map -> Player.player -> stacks -> unit
 
