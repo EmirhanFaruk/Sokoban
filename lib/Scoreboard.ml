@@ -2,7 +2,7 @@ module Scoreboard =
 struct
     open Player
 
-    (* Codes de couleur (deso les daltoniens)*)
+    (* Codes de couleur *)
     let yellow = "\x1b[33m"
     let grey = "\x1b[90m"
     let maroon = "\x1b[38;5;52m"  (* Approximation du marron *)
@@ -21,7 +21,7 @@ struct
     let save_score (stat : Player.stat) level =
         (* Ouvrir une chaine de sortie pour écrire dans le fichier *)
         let ochnl =
-        open_out_gen [Open_append; Open_creat] 0o644 "./assert/scores.txt" in (* doucement sur les perm il y a des mechants comme lucy *)
+        open_out_gen [Open_append; Open_creat] 0o644 "./asset/scores.txt" in
         (* Preparation de string à écrire *)
         let res =
         stat.name ^ ";" ^
@@ -104,10 +104,9 @@ struct
        Ajout d'espaces autour du texte pour ameliorer affichage. *)
     let score_to_str score max_name max_move extra_padding =
         Printf.sprintf "%-*s %*d%s" max_name score.name max_move score.moves (String.make extra_padding ' ')
-        (* Mina vous a menacez pour vous ecrivez autant ???? *)
 
     (* Avoir les 10 premiers elements d'un array *)
-    let get_10_els arr = (* gloire a la Turquie *)
+    let get_10_els arr =
         let len = min 10 (Array.length arr) in
         Array.sub arr 0 len (* On retourne un sous tableau de 10 éléments au maximum *)
 
@@ -115,7 +114,7 @@ struct
     (* Ajouter dans une liste de string les 10 meilleures performance d'un niveau *)
     let get_level_scoreboard level =
         (* Avoir le data de score dans une liste d'array de score *)
-        let all_scores = get_score_data "./assert/scores.txt" in
+        let all_scores = get_score_data "./asset/scores.txt" in
         (* Avoir que les scores avec le niveau voulu.
            Type de variable toujours le même malgré inconvénience *)
         let wanted_list =
@@ -172,7 +171,6 @@ struct
                         | 0 -> yellow
                         | 1 -> grey
                         | 2 -> maroon
-                        (*une couleur pour le dixieme le dernier👀 *)
                         | _ -> ""
                     in
                     if color <> "" then color ^ str ^ reset else str
@@ -197,8 +195,8 @@ struct
 
     (* Mettre le resultat de get_level_scoreboard 0-999 dans une liste.
        Techniquement avoir tous les scores possibles *)
-    let get_levels () = (* "nom de mon futur enfant..., Alexis" *)
-        get_score_data "./assert/scores.txt"
+    let get_levels () =
+        get_score_data "./asset/scores.txt"
         |> List.map (fun arr -> if Array.length arr > 0 then arr.(0).level else -1) 
         |> List.filter (fun level -> level <> -1) 
         |> List.sort_uniq compare 
