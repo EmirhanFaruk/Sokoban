@@ -123,7 +123,7 @@ struct
 
     Canonique.makeNoCanonique (); (* For the get_name func *)
     let level = ref 0 in
-    let filename = "./assert/levels.txt" in
+    let filename = "./asset/levels.txt" in
     let (pos : Player.pos) = { x = 0; y = 0 } in
     let (player : Player.player) = Player.makePlayer pos stat in
     let map = GameState.loadMap filename !level player in
