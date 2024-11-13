@@ -11,5 +11,5 @@ Emirhan(fake);0;60
 Emirhan(fake);1;55
 Emirhan(gerçek);0;49
 Faruk;0;49
-rayan;0;60
-aaaaaaaaaaaaaaaaaaa;0;62
+rayan;0;48
+
