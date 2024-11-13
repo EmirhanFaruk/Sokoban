@@ -30,6 +30,6 @@ module Scoreboard : sig
   val get_level_scoreboard : int -> string list
 
   (* Mettre le resultat de get_level_scoreboard 0-999 dans une liste. Techniquement avoir tous les scores possibles *)
-  val get_levels : unit -> int list
+  val get_levels : unit -> 'a list
 
 end
