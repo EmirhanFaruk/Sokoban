@@ -2,6 +2,13 @@ module Scoreboard =
 struct
     open Player
 
+    (* Codes de couleur (deso les daltoniens)*)
+    let yellow = "\x1b[33m"
+    let grey = "\x1b[90m"
+    let maroon = "\x1b[38;5;52m"  (* Approximation du marron *)
+    let reset = "\x1b[0m"
+
+
     (* Type de score *)
     type score =
     {
@@ -14,7 +21,7 @@ struct
     let save_score (stat : Player.stat) level =
         (* Ouvrir une chaine de sortie pour écrire dans le fichier *)
         let ochnl =
-        open_out_gen [Open_append; Open_creat] 0o666 "./assert/scores.txt" in
+        open_out_gen [Open_append; Open_creat] 0o644 "./assert/scores.txt" in (* doucement sur les perm il y a des mechants comme lucy *)
         (* Preparation de string à écrire *)
         let res =
         stat.name ^ ";" ^
@@ -83,11 +90,11 @@ struct
         let score_arr_list = ref [] in
         for i = 0 to (List.length lines) - 1 do
             (* Transformation de strings de score de niveau i en array de score *)
-        	let score_arr = list_to_score lines i in
-        	if Array.length score_arr <> 0
-        	then
-        	    (* S'il y a des scores existant, on le met dans la variable à renvoyer *)
-        	    score_arr_list := score_arr :: !score_arr_list
+            let score_arr = list_to_score lines i in
+            if Array.length score_arr <> 0
+            then
+                (* S'il y a des scores existant, on le met dans la variable à renvoyer *)
+                score_arr_list := score_arr :: !score_arr_list
         done;
         !score_arr_list
 
@@ -96,42 +103,14 @@ struct
     (* Transformer le score en string.
        Ajout d'espaces autour du texte pour ameliorer affichage. *)
     let score_to_str score max_name max_move extra_padding =
-        (* Calcul des espaces extras par rapport a la longueur du nom *)
-        let name_rest =
-        if max_name > (String.length score.name)
-        then
-            max_name - (String.length score.name)
-        else
-            0
-        in
-
-        (* Calcul des espaces extras par rapport a la longueur du déplacement en string *)
-        let move_rest =
-        if max_move > String.length (string_of_int score.moves)
-        then
-            max_move - String.length (string_of_int score.moves)
-        else
-            0
-        in
-
-        (* Mettre ces espaces calcules entre le nom et le déplacement *)
-        let name = score.name ^ (String.make name_rest ' ') in
-        let score = (String.make move_rest ' ') ^ (string_of_int score.moves) in
-
-        (* Renvoyer le string avec une espace de longueur donné extra entre eux *)
-        name ^ (String.make extra_padding ' ') ^ score
-
+        Printf.sprintf "%-*s %*d%s" max_name score.name max_move score.moves (String.make extra_padding ' ')
+        (* Mina vous a menacez pour vous ecrivez autant ???? *)
 
     (* Avoir les 10 premiers elements d'un array *)
-    let get_10_els arr =
-        let len = Array.length arr in
-        (* Produire l'array à renvoyer par rapport au longueur d'array donné *)
-        let res = Array.make len (arr.(0)) in
-        (* Mettre les élements dans l'array à renvoyer *)
-        for i = 0 to len - 1 do
-        	Array.set res i (arr.(i))
-        done;
-        res
+    let get_10_els arr = (* gloire a la Turquie *)
+        let len = min 10 (Array.length arr) in
+        Array.sub arr 0 len (* On retourne un sous tableau de 10 éléments au maximum *)
+
 
     (* Ajouter dans une liste de string les 10 meilleures performance d'un niveau *)
     let get_level_scoreboard level =
@@ -186,18 +165,31 @@ struct
                 else
                     2 in
 
+                (*ajouter les couleurs en fonction de la position *)
+                let add_color index str =
+                    let color =
+                        match index with
+                        | 0 -> yellow
+                        | 1 -> grey
+                        | 2 -> maroon
+                        (*une couleur pour le dixieme le dernier👀 *)
+                        | _ -> ""
+                    in
+                    if color <> "" then color ^ str ^ reset else str
+                in
 
-                (* Préparation des strings de score avec les espaces calculées *)
-                let res = Array.fold_left
-                (
-                    fun acc score ->
-                    let scstr =
-                    (String.make border ' ') ^
-                    (score_to_str score longest_name_len longest_move_len padding) ^
-                    (String.make border ' ') in
-                    scstr :: acc
-
-                ) [] (Array.of_list top_10_scores) in
+                (* Préparation des strings de score avec les espaces calculées et couleurs *)
+                let res =
+                    top_10_scores
+                    |> List.rev
+                    |> List.mapi (fun idx score ->
+                        let scstr =
+                        (String.make border ' ') ^
+                        (add_color idx (score_to_str score longest_name_len longest_move_len padding)) ^
+                        (String.make border ' ') in
+                        scstr
+                    )
+                in
                 res
             end
         else
@@ -205,13 +197,11 @@ struct
 
     (* Mettre le resultat de get_level_scoreboard 0-999 dans une liste.
        Techniquement avoir tous les scores possibles *)
-    let get_levels () =
-        let res = ref [] in
-        for i = 0 to 999 do
-            if List.length (get_level_scoreboard i) > 0 then
-                res := i :: !res
-        done;
-        !res
-
+    let get_levels () = (* "nom de mon futur enfant..., Alexis" *)
+        get_score_data "./assert/scores.txt"
+        |> List.map (fun arr -> if Array.length arr > 0 then arr.(0).level else -1) 
+        |> List.filter (fun level -> level <> -1) 
+        |> List.sort_uniq compare 
+        |> List.rev (* pour commencer le scorebord au niveau 1 *)
 
 end
