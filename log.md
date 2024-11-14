@@ -25,9 +25,6 @@
   - **Issue 7** : [lien vers issue 7](https://moule.informatique.univ-paris-diderot.fr/buisine/domino_Enzo_Jawad/-/issues/7)
   - **Issue 8** : [lien vers issue 8](https://moule.informatique.univ-paris-diderot.fr/buisine/domino_Enzo_Jawad/-/issues/8)
 
-## Projet Cribbage
-- **Lien du projet** : [Cribbage](https://moule.informatique.univ-paris-diderot.fr/chetouan/cribbagepf)
-
 ## Projet Abalone
 - **Lien du projet** : [Abalone](https://moule.informatique.univ-paris-diderot.fr/cisses/abalone)
   - **Issue 13** : [lien vers issue 13](https://moule.informatique.univ-paris-diderot.fr/cisses/abalone/-/issues/13)
