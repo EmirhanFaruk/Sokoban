@@ -47,6 +47,10 @@
   - **Issue 10** : [lien vers issue 10](https://moule.informatique.univ-paris-diderot.fr/linl/sokoban/-/issues/10)
   - **Issue 13** : [lien vers issue 13](https://moule.informatique.univ-paris-diderot.fr/linl/sokoban/-/issues/13)
 
+## Projet Blocus
+- **Lien du projet** : [Blocus](https://moule.informatique.univ-paris-diderot.fr/mansoury/blokusppf-2024)
+  - **Issue 12** : [lien vers issue 12](https://moule.informatique.univ-paris-diderot.fr/mansoury/blokusppf-2024/-/issues/20)
+  
 ---
 
 # Améliorations du projet Sokoban en réponse aux issues et suggestions
