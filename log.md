@@ -90,3 +90,10 @@
 - **Améliorations des contrôles de jeu** :
   - Compatible pour qwerty et azerty sur Windows.
   - Utilisation des flèches directionnelles sous Unix et macOS.
+
+
+# IA de Sokoban
+
+- On a fait deux tentatives de création d’IA pour résoudre une carte donné
+  La première fois, on a utilisé le parcours en largeur(BFS). Cela a fonctionné pour le premier niveau mais pas pour le deuxième.(branche : Solia)
+- Pour la deuxième fois, on a essayé d'utiliser algorithme de A* afin d'aussi d'optimiser le parcours, mais cela n'a pas marché non plus. On a aussi fait un menu afin de pouvoir voir la solution d'un niveau choisi. (branche : SolutionIA)
