@@ -1,2 +1,4 @@
-(test
- (name test_sokoban))
+(tests
+ (names test_player)
+ (libraries qcheck sokoban_lib)
+ )
