@@ -11,6 +11,7 @@
 
 ## Projet Santorini
 - **Lien du projet** : [Santorini](https://moule.informatique.univ-paris-diderot.fr/beales/santorini)
+  - **Merge Request 19** : [lien vers merge request 19](https://moule.informatique.univ-paris-diderot.fr/beales/santorini/-/merge_requests/19)
   - **Issue 16** : [lien vers issue 16](https://moule.informatique.univ-paris-diderot.fr/beales/santorini/-/issues/16)
   - **Issue 18** : [lien vers issue 18](https://moule.informatique.univ-paris-diderot.fr/beales/santorini/-/issues/18)
   - **Issue 19** : [lien vers issue 19](https://moule.informatique.univ-paris-diderot.fr/beales/santorini/-/issues/19)
@@ -32,10 +33,16 @@
 
 ## Projet Shogi
 - **Lien du projet** : [Shogi](https://moule.informatique.univ-paris-diderot.fr/dufosse/projet-shogi)
-  - **Merge Request 32** : [lien vers la merge request 32](https://moule.informatique.univ-paris-diderot.fr/dufosse/projet-shogi/-/merge_requests/32)
+  - **Merge Request 32** : [lien vers merge request 32](https://moule.informatique.univ-paris-diderot.fr/dufosse/projet-shogi/-/merge_requests/32)
   - **Issue 36** : [lien vers issue 36](https://moule.informatique.univ-paris-diderot.fr/dufosse/projet-shogi/-/issues/36)
   - **Issue 37** : [lien vers issue 37](https://moule.informatique.univ-paris-diderot.fr/dufosse/projet-shogi/-/issues/37)
   - **Issue 38** : [lien vers issue 38](https://moule.informatique.univ-paris-diderot.fr/dufosse/projet-shogi/-/issues/38)
+
+## Projet Unipoly
+- **Lien du projet* : [Unipoly](https://moule.informatique.univ-paris-diderot.fr/koltes/unipoly)
+  - **Issue 28* : [lien vers issue 28](https://moule.informatique.univ-paris-diderot.fr/koltes/unipoly/-/issues/28)
+  - **Issue 29* : [lien vers issue 29](https://moule.informatique.univ-paris-diderot.fr/koltes/unipoly/-/issues/29)
+  - **Issue 30* : [lien vers issue 30](https://moule.informatique.univ-paris-diderot.fr/koltes/unipoly/-/issues/30)
 
 ## Projet Risk OCaml
 - **Lien du projet** : [Risk OCaml](https://moule.informatique.univ-paris-diderot.fr/coulombe/risk_ocaml)
@@ -50,7 +57,9 @@
 
 ## Projet Shogi
 - **Lien du projet** : [PPF5-Veriere-MSC](https://moule.informatique.univ-paris-diderot.fr/mangeant/ppf5-verriere-msc)
-  - **Merge Request 7** : [lien vers la merge request 7](https://moule.informatique.univ-paris-diderot.fr/mangeant/ppf5-verriere-msc/-/merge_requests/7)
+  - **Merge Request 7** : [lien vers merge request 7](https://moule.informatique.univ-paris-diderot.fr/mangeant/ppf5-verriere-msc/-/merge_requests/7)
+  - **Issue 17** : [lien vers issue 17](https://moule.informatique.univ-paris-diderot.fr/mangeant/ppf5-verriere-msc/-/issues/17)
+  - **Issue 18** : [lien vers issue 18](https://moule.informatique.univ-paris-diderot.fr/mangeant/ppf5-verriere-msc/-/issues/18)
   - **Issue 19** : [lien vers issue 19](https://moule.informatique.univ-paris-diderot.fr/mangeant/ppf5-verriere-msc/-/issues/19)
   - **Issue 20** : [lien vers issue 20](https://moule.informatique.univ-paris-diderot.fr/mangeant/ppf5-verriere-msc/-/issues/20)
   - **Issue 21** : [lien vers issue 21](https://moule.informatique.univ-paris-diderot.fr/mangeant/ppf5-verriere-msc/-/issues/21)
