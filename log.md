@@ -14,6 +14,7 @@
   - **Issue 16** : [lien vers issue 16](https://moule.informatique.univ-paris-diderot.fr/beales/santorini/-/issues/16)
   - **Issue 18** : [lien vers issue 18](https://moule.informatique.univ-paris-diderot.fr/beales/santorini/-/issues/18)
   - **Issue 19** : [lien vers issue 19](https://moule.informatique.univ-paris-diderot.fr/beales/santorini/-/issues/19)
+  - **Issue 24** : [lien vers issue 24](https://moule.informatique.univ-paris-diderot.fr/beales/santorini/-/issues/24)
 
 ## Projet Bataille Navale (version alternative)
 - **Lien du projet** : [Bataille Navale (alternative)](https://moule.informatique.univ-paris-diderot.fr/bencheik/Bataille_Navale)
@@ -23,9 +24,6 @@
 - **Lien du projet** : [Domino](https://moule.informatique.univ-paris-diderot.fr/buisine/domino_Enzo_Jawad)
   - **Issue 7** : [lien vers issue 7](https://moule.informatique.univ-paris-diderot.fr/buisine/domino_Enzo_Jawad/-/issues/7)
   - **Issue 8** : [lien vers issue 8](https://moule.informatique.univ-paris-diderot.fr/buisine/domino_Enzo_Jawad/-/issues/8)
-
-## Projet Cribbage
-- **Lien du projet** : [Cribbage](https://moule.informatique.univ-paris-diderot.fr/chetouan/cribbagepf)
 
 ## Projet Abalone
 - **Lien du projet** : [Abalone](https://moule.informatique.univ-paris-diderot.fr/cisses/abalone)
@@ -41,11 +39,43 @@
 
 ## Projet Risk OCaml
 - **Lien du projet** : [Risk OCaml](https://moule.informatique.univ-paris-diderot.fr/coulombe/risk_ocaml)
+  - **Issue 14** : [lien vers issue 14](https://moule.informatique.univ-paris-diderot.fr/coulombe/risk_ocaml/-/issues/14)
 
 ## Projet Sokoban
 - **Projet similaire** : [Sokoban](https://moule.informatique.univ-paris-diderot.fr/linl/sokoban)
   - **Issue 10** : [lien vers issue 10](https://moule.informatique.univ-paris-diderot.fr/linl/sokoban/-/issues/10)
+  - **Issue 11** : [lien vers issue 11](https://moule.informatique.univ-paris-diderot.fr/linl/sokoban/-/issues/11)
+  - **Issue 12** : [lien vers issue 12](https://moule.informatique.univ-paris-diderot.fr/linl/sokoban/-/issues/12)
   - **Issue 13** : [lien vers issue 13](https://moule.informatique.univ-paris-diderot.fr/linl/sokoban/-/issues/13)
+
+## Projet Shogi
+- **Lien du projet** : [PPF5-Veriere-MSC](https://moule.informatique.univ-paris-diderot.fr/mangeant/ppf5-verriere-msc)
+  - **Merge Request 7** : [lien vers la merge request 7](https://moule.informatique.univ-paris-diderot.fr/mangeant/ppf5-verriere-msc/-/merge_requests/7)
+  - **Issue 19** : [lien vers issue 19](https://moule.informatique.univ-paris-diderot.fr/mangeant/ppf5-verriere-msc/-/issues/19)
+  - **Issue 20** : [lien vers issue 20](https://moule.informatique.univ-paris-diderot.fr/mangeant/ppf5-verriere-msc/-/issues/20)
+  - **Issue 21** : [lien vers issue 21](https://moule.informatique.univ-paris-diderot.fr/mangeant/ppf5-verriere-msc/-/issues/21)
+
+## Projet OChess
+- **Lien du projet** : [OChess](https://moule.informatique.univ-paris-diderot.fr/marc-anthony-ocaml/ochess)
+  - **Issue 20** : [lien vers issue 20](https://moule.informatique.univ-paris-diderot.fr/mansoury/blokusppf-2024/-/issues/20)
+
+
+## Projet Blokus
+- **Lien du projet** : [Blokus](https://moule.informatique.univ-paris-diderot.fr/piget/blokus)
+  - **Issue 19** : [lien vers issue 19](https://moule.informatique.univ-paris-diderot.fr/piget/blokus/-/issues/19)
+
+## Projet Quoridor
+- **Lien du projet** : [Quoridor](https://moule.informatique.univ-paris-diderot.fr/tachou/quoridor-ocaml)
+  - **Issue 27** : [lien vers issue 27](https://moule.informatique.univ-paris-diderot.fr/tachou/quoridor-ocaml/-/issues/27)
+  - **Issue 28** : [lien vers issue 28](https://moule.informatique.univ-paris-diderot.fr/tachou/quoridor-ocaml/-/issues/28)
+
+## Projet Russian Roulette
+- **Lien du projet** : [World Championship Russian Roulette](https://moule.informatique.univ-paris-diderot.fr/vidaln/world-championship-russian-roulette)
+  - **Issue 26** : [lien vers issue 26](https://moule.informatique.univ-paris-diderot.fr/vidaln/world-championship-russian-roulette/-/issues/26)
+  - **Issue 27** : [lien vers issue 27](https://moule.informatique.univ-paris-diderot.fr/vidaln/world-championship-russian-roulette/-/issues/27)
+  - **Issue 30** : [lien vers issue 30](https://moule.informatique.univ-paris-diderot.fr/vidaln/world-championship-russian-roulette/-/issues/30)
+  - **Issue 31** : [lien vers issue 31](https://moule.informatique.univ-paris-diderot.fr/vidaln/world-championship-russian-roulette/-/issues/31)
+
 
 ---
 
@@ -60,3 +90,10 @@
 - **Améliorations des contrôles de jeu** :
   - Compatible pour qwerty et azerty sur Windows.
   - Utilisation des flèches directionnelles sous Unix et macOS.
+
+
+# IA de Sokoban
+
+- On a fait deux tentatives de création d’IA pour résoudre une carte donné
+  La première fois, on a utilisé le parcours en largeur(BFS). Cela a fonctionné pour le premier niveau mais pas pour le deuxième. (branche : Solia)
+- Pour la deuxième fois, on a essayé d'utiliser algorithme de A* afin d'aussi d'optimiser le parcours, mais cela n'a pas marché non plus. On a aussi fait un menu afin de pouvoir voir la solution d'un niveau choisi. (branche : SolutionIA)
