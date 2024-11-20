@@ -39,10 +39,10 @@
   - **Issue 38** : [lien vers issue 38](https://moule.informatique.univ-paris-diderot.fr/dufosse/projet-shogi/-/issues/38)
 
 ## Projet Unipoly
-- **Lien du projet* : [Unipoly](https://moule.informatique.univ-paris-diderot.fr/koltes/unipoly)
-  - **Issue 28* : [lien vers issue 28](https://moule.informatique.univ-paris-diderot.fr/koltes/unipoly/-/issues/28)
-  - **Issue 29* : [lien vers issue 29](https://moule.informatique.univ-paris-diderot.fr/koltes/unipoly/-/issues/29)
-  - **Issue 30* : [lien vers issue 30](https://moule.informatique.univ-paris-diderot.fr/koltes/unipoly/-/issues/30)
+- **Lien du projet** : [Unipoly](https://moule.informatique.univ-paris-diderot.fr/koltes/unipoly)
+  - **Issue 28** : [lien vers issue 28](https://moule.informatique.univ-paris-diderot.fr/koltes/unipoly/-/issues/28)
+  - **Issue 29** : [lien vers issue 29](https://moule.informatique.univ-paris-diderot.fr/koltes/unipoly/-/issues/29)
+  - **Issue 30** : [lien vers issue 30](https://moule.informatique.univ-paris-diderot.fr/koltes/unipoly/-/issues/30)
 
 ## Projet Risk OCaml
 - **Lien du projet** : [Risk OCaml](https://moule.informatique.univ-paris-diderot.fr/coulombe/risk_ocaml)
